@@ -12,3 +12,8 @@
 ###> Editor directories and files ###
 .idea
 ###< Editor directories and files ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
