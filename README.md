@@ -30,6 +30,15 @@ php bin/console doctrine:migrations:migrate
 
 ## Run Tests with [PHPUnit](https://phpunit.de/index.html)
 
+First load the fixtures:
+
+```sh
+php bin/console doctrine:fixtures:load --env=test
+```
+
+Then launch the tests:
+
+
 ```sh
 php bin/phpunit
 ```

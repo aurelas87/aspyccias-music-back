@@ -9,9 +9,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
 class Profile
 {
+    const DEFAULT_NAME = 'Aspyccias';
+
     #[ORM\Id]
     #[ORM\Column(length: 9)]
-    private ?string $name = 'Aspyccias';
+    private ?string $name = self::DEFAULT_NAME;
 
     #[ORM\Column(length: 255)]
     private ?string $welcome = null;
