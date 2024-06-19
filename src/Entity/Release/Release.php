@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Release;
 
-use App\Repository\ReleaseRepository;
+use App\Repository\Release\ReleaseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -20,20 +20,26 @@ class Release
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $type = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $title = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $release_date = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
+
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
+    private ?string $descriptionFR = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptionEN = null;
 
     #[ORM\Column(length: 255)]
     private ?string $artwork_front_image = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $artwork_back_image = null;
+
+    #[ORM\OneToMany(targetEntity: ReleaseTranslations::class, mappedBy: 'release')]
+    private Collection $translations;
 
     #[ORM\OneToMany(targetEntity: ReleaseLink::class, mappedBy: 'release')]
     private Collection $links;
@@ -68,18 +74,6 @@ class Release
         return $this;
     }
 
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): static
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
     public function getReleaseDate(): ?\DateTimeInterface
     {
         return $this->release_date;
@@ -92,14 +86,38 @@ class Release
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getTitle(): ?string
     {
-        return $this->description;
+        return $this->title;
     }
 
-    public function setDescription(?string $description): static
+    public function setTitle(string $title): static
     {
-        $this->description = $description;
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getDescriptionFR(): ?string
+    {
+        return $this->descriptionFR;
+    }
+
+    public function setDescriptionFR(?string $descriptionFR): static
+    {
+        $this->descriptionFR = $descriptionFR;
+
+        return $this;
+    }
+
+    public function getDescriptionEN(): ?string
+    {
+        return $this->descriptionEN;
+    }
+
+    public function setDescriptionEN(?string $descriptionEN): static
+    {
+        $this->descriptionEN = $descriptionEN;
 
         return $this;
     }
@@ -126,6 +144,16 @@ class Release
         $this->artwork_back_image = $artwork_back_image;
 
         return $this;
+    }
+
+    public function getTranslations(): Collection
+    {
+        return $this->translations;
+    }
+
+    public function setTranslations(Collection $translations): void
+    {
+        $this->translations = $translations;
     }
 
     public function getLinks(): Collection

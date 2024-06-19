@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Repository;
+namespace App\Repository\Profile;
 
-use App\Entity\Profile;
+use App\Entity\Profile\Profile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,12 +16,12 @@ class ProfileRepository extends ServiceEntityRepository
         parent::__construct($registry, Profile::class);
     }
 
-    public function findProfileByName(string $name): ?Profile
+    public function findProfileByLocale(string $locale): ?Profile
     {
         $qb = $this->createQueryBuilder('p');
 
-        $qb->where($qb->expr()->eq('p.name', ':name'))
-            ->setParameter('name', $name);
+        $qb->where($qb->expr()->eq('p.locale', ':locale'))
+            ->setParameter('locale', $locale);
 
         return $qb->getQuery()->getOneOrNullResult();
     }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Profile;
 
-use App\Repository\ProfileLinkRepository;
+use App\Repository\Profile\ProfileLinkRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,9 +16,6 @@ class ProfileLink
 
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $type = null;
-
-    #[ORM\Column(length: 45)]
-    private ?string $name = null;
 
     #[ORM\Column(length: 255)]
     private ?string $link = null;
@@ -36,18 +33,6 @@ class ProfileLink
     public function setType(int $type): static
     {
         $this->type = $type;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
 
         return $this;
     }

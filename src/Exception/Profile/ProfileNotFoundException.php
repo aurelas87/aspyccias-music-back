@@ -6,8 +6,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ProfileNotFoundException extends NotFoundHttpException
 {
-    public function __construct(string $profileName)
+    public function __construct()
     {
-        parent::__construct('Profile with name "'.$profileName.'" not found');
+        parent::__construct('errors.profile.not_found');
     }
 }

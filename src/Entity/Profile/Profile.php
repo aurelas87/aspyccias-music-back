@@ -1,19 +1,24 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Profile;
 
-use App\Repository\ProfileRepository;
+use App\Repository\Profile\ProfileRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
 class Profile
 {
-    const DEFAULT_NAME = 'Aspyccias';
-
     #[ORM\Id]
-    #[ORM\Column(length: 9)]
-    private ?string $name = self::DEFAULT_NAME;
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    #[Ignore]
+    private ?int $id = null;
+
+    #[ORM\Column(length: 2, unique: true)]
+    #[Ignore]
+    private ?string $locale = null;
 
     #[ORM\Column(length: 255)]
     private ?string $welcome = null;
@@ -21,9 +26,19 @@ class Profile
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
 
-    public function getName(): ?string
+    public function getId(): ?int
     {
-        return $this->name;
+        return $this->id;
+    }
+
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(?string $locale): void
+    {
+        $this->locale = $locale;
     }
 
     public function getWelcome(): ?string

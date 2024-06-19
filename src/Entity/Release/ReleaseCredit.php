@@ -1,30 +1,30 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Release;
 
-use App\Repository\ReleaseLinkRepository;
+use App\Repository\Release\ReleaseCreditRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ReleaseLinkRepository::class)]
-class ReleaseLink
+#[ORM\Entity(repositoryClass: ReleaseCreditRepository::class)]
+class ReleaseCredit
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Release::class, inversedBy: 'links')]
+    #[ORM\ManyToOne(targetEntity: Release::class, inversedBy: 'credits')]
     private ?Release $release = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $type = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $fullName = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $link = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $embedded = null;
 
     public function getId(): ?int
     {
@@ -53,6 +53,18 @@ class ReleaseLink
         return $this;
     }
 
+    public function getFullName(): ?string
+    {
+        return $this->fullName;
+    }
+
+    public function setFullName(string $fullName): static
+    {
+        $this->fullName = $fullName;
+
+        return $this;
+    }
+
     public function getLink(): ?string
     {
         return $this->link;
@@ -61,18 +73,6 @@ class ReleaseLink
     public function setLink(?string $link): static
     {
         $this->link = $link;
-
-        return $this;
-    }
-
-    public function getEmbedded(): ?string
-    {
-        return $this->embedded;
-    }
-
-    public function setEmbedded(?string $embedded): static
-    {
-        $this->embedded = $embedded;
 
         return $this;
     }

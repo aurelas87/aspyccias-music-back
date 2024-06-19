@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Service;
+namespace App\Service\Profile;
 
-use App\Entity\Profile;
+use App\Entity\Profile\Profile;
 use App\Exception\Profile\ProfileNotFoundException;
-use App\Repository\ProfileRepository;
+use App\Repository\Profile\ProfileRepository;
 
 class ProfileService
 {
@@ -15,11 +15,11 @@ class ProfileService
         $this->profileRepository = $profileRepository;
     }
 
-    public function getAspycciasProfile(): Profile
+    public function getProfile(string $locale): Profile
     {
-        $profile = $this->profileRepository->findProfileByName(Profile::DEFAULT_NAME);
+        $profile = $this->profileRepository->findProfileByLocale($locale);
         if (!$profile instanceof Profile) {
-            throw new ProfileNotFoundException(Profile::DEFAULT_NAME);
+            throw new ProfileNotFoundException();
         }
 
         return $profile;

@@ -1,21 +1,24 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\News;
 
-use App\Repository\NewsRepository;
+use App\Repository\News\NewsTranslationsRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: NewsRepository::class)]
-class News
+#[ORM\Entity(repositoryClass: NewsTranslationsRepository::class)]
+class NewsTranslations
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $date = null;
+    #[ORM\ManyToOne(targetEntity: News::class, inversedBy: 'translations')]
+    private ?News $news = null;
+
+    #[ORM\Column(length: 2, unique: true)]
+    private ?string $locale = null;
 
     #[ORM\Column(length: 255)]
     private ?string $title = null;
@@ -23,22 +26,29 @@ class News
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(length: 30)]
-    private ?string $preview_image = null;
-
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getNews(): ?News
     {
-        return $this->date;
+        return $this->news;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setNews(?News $news): void
     {
-        $this->date = $date;
+        $this->news = $news;
+    }
+
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): static
+    {
+        $this->locale = $locale;
 
         return $this;
     }
@@ -63,18 +73,6 @@ class News
     public function setContent(string $content): static
     {
         $this->content = $content;
-
-        return $this;
-    }
-
-    public function getPreviewImage(): ?string
-    {
-        return $this->preview_image;
-    }
-
-    public function setPreviewImage(string $preview_image): static
-    {
-        $this->preview_image = $preview_image;
 
         return $this;
     }

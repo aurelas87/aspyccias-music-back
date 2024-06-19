@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Release;
 
-use App\Repository\ReleaseTrackRepository;
+use App\Repository\Release\ReleaseTrackRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,6 +29,16 @@ class ReleaseTrack
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getRelease(): ?Release
+    {
+        return $this->release;
+    }
+
+    public function setRelease(?Release $release): void
+    {
+        $this->release = $release;
     }
 
     public function getTitle(): ?string
@@ -65,15 +75,5 @@ class ReleaseTrack
         $this->duration = $duration;
 
         return $this;
-    }
-
-    public function getRelease(): ?Release
-    {
-        return $this->release;
-    }
-
-    public function setRelease(?Release $release): void
-    {
-        $this->release = $release;
     }
 }

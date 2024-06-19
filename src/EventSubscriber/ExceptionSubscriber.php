@@ -7,9 +7,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
+    private TranslatorInterface $translator;
+
+    public function __construct(TranslatorInterface $translator)
+    {
+        $this->translator = $translator;
+    }
+
     public function onKernelException(ExceptionEvent $event): void
     {
         $throwable = $event->getThrowable();
@@ -17,7 +25,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             'code' => $throwable instanceof HttpExceptionInterface
                 ? $throwable->getStatusCode()
                 : $throwable->getCode(),
-            'message' => $throwable->getMessage(),
+            'message' => $this->translator->trans($throwable->getMessage()),
         ]);
         $event->setResponse($response);
     }
