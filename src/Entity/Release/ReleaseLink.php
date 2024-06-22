@@ -36,9 +36,11 @@ class ReleaseLink
         return $this->release;
     }
 
-    public function setRelease(?Release $release): void
+    public function setRelease(?Release $release): static
     {
         $this->release = $release;
+
+        return $this;
     }
 
     public function getType(): ?int

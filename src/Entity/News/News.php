@@ -64,8 +64,10 @@ class News
         return $this->translations;
     }
 
-    public function setTranslations(Collection $translations): void
+    public function setTranslations(Collection $translations): static
     {
         $this->translations = $translations;
+
+        return $this;
     }
 }

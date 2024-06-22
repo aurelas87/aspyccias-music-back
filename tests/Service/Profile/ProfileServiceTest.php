@@ -21,16 +21,16 @@ class ProfileServiceTest extends KernelTestCase
     {
         $profile = $this->profileService->getProfile('en');
 
-        static::assertEquals('Welcome', $profile->getWelcome());
-        static::assertEquals('Let me introduce myself', $profile->getDescription());
+        static::assertSame('Welcome', $profile->getWelcome());
+        static::assertSame('Let me introduce myself', $profile->getDescription());
     }
 
     public function testGetProfileInFR(): void
     {
         $profile = $this->profileService->getProfile('fr');
 
-        static::assertEquals('Bienvenue', $profile->getWelcome());
-        static::assertEquals('Je me présente', $profile->getDescription());
+        static::assertSame('Bienvenue', $profile->getWelcome());
+        static::assertSame('Je me présente', $profile->getDescription());
     }
 
     public function testGetProfileThrowsExceptionIfLanguageVersionNotFound(): void
@@ -39,7 +39,7 @@ class ProfileServiceTest extends KernelTestCase
         try {
             $this->profileService->getProfile('de');
         } catch (ProfileNotFoundException $e) {
-            static::assertEquals('errors.profile.not_found', $e->getMessage());
+            static::assertSame('errors.profile.not_found', $e->getMessage());
         }
 
         // Remove profile in "fr" version
@@ -51,7 +51,7 @@ class ProfileServiceTest extends KernelTestCase
         try {
             $this->profileService->getProfile('fr');
         } catch (ProfileNotFoundException $e) {
-            static::assertEquals('errors.profile.not_found', $e->getMessage());
+            static::assertSame('errors.profile.not_found', $e->getMessage());
         }
     }
 }

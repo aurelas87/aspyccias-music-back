@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20240621150727 extends AbstractMigration
+final class Version20240622180718 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -23,7 +23,7 @@ final class Version20240621150727 extends AbstractMigration
         $this->addSql('CREATE TABLE news (id INT AUTO_INCREMENT NOT NULL, date DATETIME NOT NULL, preview_image VARCHAR(30) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE news_translations (id INT AUTO_INCREMENT NOT NULL, news_id INT DEFAULT NULL, locale VARCHAR(2) NOT NULL, title VARCHAR(255) NOT NULL, content LONGTEXT NOT NULL, UNIQUE INDEX UNIQ_20FDB3304180C698 (locale), INDEX IDX_20FDB330B5A459A0 (news_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE profile (id INT AUTO_INCREMENT NOT NULL, locale VARCHAR(2) NOT NULL, welcome VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, UNIQUE INDEX UNIQ_8157AA0F4180C698 (locale), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE profile_link (id INT AUTO_INCREMENT NOT NULL, type SMALLINT NOT NULL, link VARCHAR(255) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE profile_link (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(20) NOT NULL, link VARCHAR(255) NOT NULL, position SMALLINT NOT NULL, UNIQUE INDEX UNIQ_806416655E237E06 (name), UNIQUE INDEX UNIQ_80641665462CE4F5 (position), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE `release` (id INT AUTO_INCREMENT NOT NULL, type SMALLINT NOT NULL, release_date DATETIME NOT NULL, title VARCHAR(255) NOT NULL, description_fr LONGTEXT DEFAULT NULL, description_en LONGTEXT DEFAULT NULL, artwork_front_image VARCHAR(255) NOT NULL, artwork_back_image VARCHAR(255) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE release_credit (id INT AUTO_INCREMENT NOT NULL, release_id INT DEFAULT NULL, type SMALLINT NOT NULL, full_name VARCHAR(255) NOT NULL, link VARCHAR(255) DEFAULT NULL, INDEX IDX_D2231413B12A727D (release_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
         $this->addSql('CREATE TABLE release_link (id INT AUTO_INCREMENT NOT NULL, release_id INT DEFAULT NULL, type SMALLINT NOT NULL, link VARCHAR(255) DEFAULT NULL, embedded LONGTEXT DEFAULT NULL, INDEX IDX_7B5B29E6B12A727D (release_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');

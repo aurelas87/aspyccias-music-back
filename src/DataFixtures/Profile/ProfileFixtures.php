@@ -6,6 +6,9 @@ use App\Entity\Profile\Profile;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ProfileFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void

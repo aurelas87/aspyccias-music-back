@@ -151,9 +151,11 @@ class Release
         return $this->translations;
     }
 
-    public function setTranslations(Collection $translations): void
+    public function setTranslations(Collection $translations): static
     {
         $this->translations = $translations;
+
+        return $this;
     }
 
     public function getLinks(): Collection
@@ -161,9 +163,11 @@ class Release
         return $this->links;
     }
 
-    public function setLinks(Collection $links): void
+    public function setLinks(Collection $links): static
     {
         $this->links = $links;
+
+        return $this;
     }
 
     public function getCredits(): Collection
@@ -171,9 +175,11 @@ class Release
         return $this->credits;
     }
 
-    public function setCredits(Collection $credits): void
+    public function setCredits(Collection $credits): static
     {
         $this->credits = $credits;
+
+        return $this;
     }
 
     public function getTracks(): Collection
@@ -181,8 +187,10 @@ class Release
         return $this->tracks;
     }
 
-    public function setTracks(Collection $tracks): void
+    public function setTracks(Collection $tracks): static
     {
         $this->tracks = $tracks;
+
+        return $this;
     }
 }
