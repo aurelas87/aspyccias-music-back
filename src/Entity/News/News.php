@@ -22,7 +22,7 @@ class News
     #[ORM\Column(length: 30)]
     private ?string $preview_image = null;
 
-    #[ORM\OneToMany(targetEntity: NewsTranslations::class, mappedBy: 'news')]
+    #[ORM\OneToMany(targetEntity: NewsTranslation::class, mappedBy: 'news')]
     private Collection $translations;
 
     public function __construct()

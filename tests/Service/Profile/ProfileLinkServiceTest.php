@@ -4,7 +4,7 @@ namespace App\Tests\Service\Profile;
 
 use App\Entity\Profile\ProfileLink;
 use App\Service\Profile\ProfileLinkService;
-use App\Tests\Controller\Profile\ExpectedProfileLinksTrait;
+use App\Tests\Commons\ExpectedProfileLinksTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ProfileLinkServiceTest extends KernelTestCase

@@ -38,7 +38,7 @@ class Release
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $artwork_back_image = null;
 
-    #[ORM\OneToMany(targetEntity: ReleaseTranslations::class, mappedBy: 'release')]
+    #[ORM\OneToMany(targetEntity: ReleaseTranslation::class, mappedBy: 'release')]
     private Collection $translations;
 
     #[ORM\OneToMany(targetEntity: ReleaseLink::class, mappedBy: 'release')]

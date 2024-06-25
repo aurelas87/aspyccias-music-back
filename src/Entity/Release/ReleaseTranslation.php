@@ -2,12 +2,12 @@
 
 namespace App\Entity\Release;
 
-use App\Repository\Release\ReleaseTranslationsRepository;
+use App\Repository\Release\ReleaseTranslationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ReleaseTranslationsRepository::class)]
-class ReleaseTranslations
+#[ORM\Entity(repositoryClass: ReleaseTranslationRepository::class)]
+class ReleaseTranslation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

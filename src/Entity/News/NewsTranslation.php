@@ -2,12 +2,12 @@
 
 namespace App\Entity\News;
 
-use App\Repository\News\NewsTranslationsRepository;
+use App\Repository\News\NewsTranslationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: NewsTranslationsRepository::class)]
-class NewsTranslations
+#[ORM\Entity(repositoryClass: NewsTranslationRepository::class)]
+class NewsTranslation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

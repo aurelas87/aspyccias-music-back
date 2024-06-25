@@ -3,6 +3,7 @@
 namespace App\Tests\Controller\Profile;
 
 use App\Service\Profile\ProfileLinkService;
+use App\Tests\Commons\ExpectedProfileLinksTrait;
 use App\Tests\Controller\JsonResponseTestCase;
 
 class ProfileLinkControllerTest extends JsonResponseTestCase

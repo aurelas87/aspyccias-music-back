@@ -15,14 +15,4 @@ class ProfileRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Profile::class);
     }
-
-    public function findProfileByLocale(string $locale): ?Profile
-    {
-        $qb = $this->createQueryBuilder('p');
-
-        $qb->where($qb->expr()->eq('p.locale', ':locale'))
-            ->setParameter('locale', $locale);
-
-        return $qb->getQuery()->getOneOrNullResult();
-    }
 }

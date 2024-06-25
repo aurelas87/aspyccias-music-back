@@ -17,7 +17,7 @@ class ProfileService
 
     public function getProfile(string $locale): Profile
     {
-        $profile = $this->profileRepository->findProfileByLocale($locale);
+        $profile = $this->profileRepository->findOneBy(['locale' => $locale]);
         if (!$profile instanceof Profile) {
             throw new ProfileNotFoundException();
         }

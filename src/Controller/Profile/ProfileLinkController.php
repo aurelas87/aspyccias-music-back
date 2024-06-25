@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ProfileLinkController extends AbstractController
 {
-    #[Route('/profile/links', name: 'app_profile_profile_link')]
+    #[Route('/profile/links', name: 'app_profile_link')]
     public function list(ProfileLinkService $profileLinkService): JsonResponse
     {
         return $this->json($profileLinkService->listProfileLinks());
