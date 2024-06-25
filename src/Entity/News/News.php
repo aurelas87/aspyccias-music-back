@@ -22,7 +22,10 @@ class News
     #[ORM\Column(length: 30)]
     private ?string $preview_image = null;
 
-    #[ORM\OneToMany(targetEntity: NewsTranslation::class, mappedBy: 'news')]
+    /**
+     * @var Collection<int, NewsTranslation>
+     */
+    #[ORM\OneToMany(targetEntity: NewsTranslation::class, mappedBy: 'news', orphanRemoval: true)]
     private Collection $translations;
 
     public function __construct()
@@ -59,14 +62,32 @@ class News
         return $this;
     }
 
+    /**
+     * @return Collection<int, NewsTranslation>
+     */
     public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
-    public function setTranslations(Collection $translations): static
+    public function addTranslation(NewsTranslation $translation): static
     {
-        $this->translations = $translations;
+        if (!$this->translations->contains($translation)) {
+            $this->translations->add($translation);
+            $translation->setNews($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTranslation(NewsTranslation $translation): static
+    {
+        if ($this->translations->removeElement($translation)) {
+            // set the owning side to null (unless already changed)
+            if ($translation->getNews() === $this) {
+                $translation->setNews(null);
+            }
+        }
 
         return $this;
     }

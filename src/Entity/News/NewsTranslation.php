@@ -14,7 +14,8 @@ class NewsTranslation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: News::class, inversedBy: 'translations')]
+    #[ORM\ManyToOne(inversedBy: 'translations')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?News $news = null;
 
     #[ORM\Column(length: 2, unique: true)]
@@ -36,9 +37,11 @@ class NewsTranslation
         return $this->news;
     }
 
-    public function setNews(?News $news): void
+    public function setNews(?News $news): static
     {
         $this->news = $news;
+
+        return $this;
     }
 
     public function getLocale(): ?string

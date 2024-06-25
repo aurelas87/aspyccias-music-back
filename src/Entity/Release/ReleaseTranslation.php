@@ -14,7 +14,8 @@ class ReleaseTranslation
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Release::class, inversedBy: 'translations')]
+    #[ORM\ManyToOne(inversedBy: 'translations')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Release $release = null;
 
     #[ORM\Column(length: 2, unique: true)]

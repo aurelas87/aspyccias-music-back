@@ -14,7 +14,8 @@ class ReleaseCredit
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Release::class, inversedBy: 'credits')]
+    #[ORM\ManyToOne(inversedBy: 'credits')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Release $release = null;
 
     #[ORM\Column(type: Types::SMALLINT)]

@@ -14,7 +14,8 @@ class ReleaseLink
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Release::class, inversedBy: 'links')]
+    #[ORM\ManyToOne(inversedBy: 'links')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Release $release = null;
 
     #[ORM\Column(type: Types::SMALLINT)]

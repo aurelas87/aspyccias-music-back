@@ -14,7 +14,8 @@ class ReleaseTrack
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Release::class, inversedBy: 'tracks')]
+    #[ORM\ManyToOne(inversedBy: 'tracks')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Release $release = null;
 
     #[ORM\Column(length: 255)]

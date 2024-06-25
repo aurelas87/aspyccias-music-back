@@ -38,22 +38,35 @@ class Release
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $artwork_back_image = null;
 
-    #[ORM\OneToMany(targetEntity: ReleaseTranslation::class, mappedBy: 'release')]
+    /**
+     * @var Collection<int, ReleaseTranslation>
+     */
+    #[ORM\OneToMany(targetEntity: ReleaseTranslation::class, mappedBy: 'releaseInstance', orphanRemoval: true)]
     private Collection $translations;
 
-    #[ORM\OneToMany(targetEntity: ReleaseLink::class, mappedBy: 'release')]
-    private Collection $links;
-
-    #[ORM\OneToMany(targetEntity: ReleaseCredit::class, mappedBy: 'release')]
+    /**
+     * @var Collection<int, ReleaseCredit>
+     */
+    #[ORM\OneToMany(targetEntity: ReleaseCredit::class, mappedBy: 'releaseInstance', orphanRemoval: true)]
     private Collection $credits;
 
-    #[ORM\OneToMany(targetEntity: ReleaseTrack::class, mappedBy: 'release')]
+    /**
+     * @var Collection<int, ReleaseLink>
+     */
+    #[ORM\OneToMany(targetEntity: ReleaseLink::class, mappedBy: 'releaseInstance', orphanRemoval: true)]
+    private Collection $links;
+
+    /**
+     * @var Collection<int, ReleaseTrack>
+     */
+    #[ORM\OneToMany(targetEntity: ReleaseTrack::class, mappedBy: 'releaseInstance', orphanRemoval: true)]
     private Collection $tracks;
 
     public function __construct()
     {
-        $this->links = new ArrayCollection();
+        $this->translations = new ArrayCollection();
         $this->credits = new ArrayCollection();
+        $this->links = new ArrayCollection();
         $this->tracks = new ArrayCollection();
     }
 
@@ -146,50 +159,122 @@ class Release
         return $this;
     }
 
+    /**
+     * @return Collection<int, ReleaseTranslation>
+     */
     public function getTranslations(): Collection
     {
         return $this->translations;
     }
 
-    public function setTranslations(Collection $translations): static
+    public function addTranslation(ReleaseTranslation $translation): static
     {
-        $this->translations = $translations;
+        if (!$this->translations->contains($translation)) {
+            $this->translations->add($translation);
+            $translation->setRelease($this);
+        }
 
         return $this;
     }
 
-    public function getLinks(): Collection
+    public function removeTranslation(ReleaseTranslation $translation): static
     {
-        return $this->links;
-    }
-
-    public function setLinks(Collection $links): static
-    {
-        $this->links = $links;
+        if ($this->translations->removeElement($translation)) {
+            // set the owning side to null (unless already changed)
+            if ($translation->getRelease() === $this) {
+                $translation->setRelease(null);
+            }
+        }
 
         return $this;
     }
 
+    /**
+     * @return Collection<int, ReleaseCredit>
+     */
     public function getCredits(): Collection
     {
         return $this->credits;
     }
 
-    public function setCredits(Collection $credits): static
+    public function addCredit(ReleaseCredit $credit): static
     {
-        $this->credits = $credits;
+        if (!$this->credits->contains($credit)) {
+            $this->credits->add($credit);
+            $credit->setRelease($this);
+        }
 
         return $this;
     }
 
+    public function removeCredit(ReleaseCredit $credit): static
+    {
+        if ($this->credits->removeElement($credit)) {
+            // set the owning side to null (unless already changed)
+            if ($credit->getRelease() === $this) {
+                $credit->setRelease(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ReleaseLink>
+     */
+    public function getLinks(): Collection
+    {
+        return $this->links;
+    }
+
+    public function addLink(ReleaseLink $link): static
+    {
+        if (!$this->links->contains($link)) {
+            $this->links->add($link);
+            $link->setRelease($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLink(ReleaseLink $link): static
+    {
+        if ($this->links->removeElement($link)) {
+            // set the owning side to null (unless already changed)
+            if ($link->getRelease() === $this) {
+                $link->setRelease(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ReleaseTrack>
+     */
     public function getTracks(): Collection
     {
         return $this->tracks;
     }
 
-    public function setTracks(Collection $tracks): static
+    public function addTrack(ReleaseTrack $track): static
     {
-        $this->tracks = $tracks;
+        if (!$this->tracks->contains($track)) {
+            $this->tracks->add($track);
+            $track->setRelease($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTrack(ReleaseTrack $track): static
+    {
+        if ($this->tracks->removeElement($track)) {
+            // set the owning side to null (unless already changed)
+            if ($track->getRelease() === $this) {
+                $track->setRelease(null);
+            }
+        }
 
         return $this;
     }
