@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
 class News
@@ -14,18 +15,27 @@ class News
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups('list')]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups('default')]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(length: 30)]
+    #[Groups('list')]
     private ?string $preview_image = null;
 
     /**
      * @var Collection<int, NewsTranslation>
      */
-    #[ORM\OneToMany(targetEntity: NewsTranslation::class, mappedBy: 'news', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: NewsTranslation::class,
+        mappedBy: 'news',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    #[Groups(['default'])]
     private Collection $translations;
 
     public function __construct()

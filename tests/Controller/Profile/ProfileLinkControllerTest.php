@@ -23,7 +23,7 @@ class ProfileLinkControllerTest extends JsonResponseTestCase
     {
         $this->client->request('GET', '/profile/links');
 
-        $this->assertJsonResponse($this->expectedProfileLinks);
+        $this->serializerAndAssertJsonResponse($this->expectedProfileLinks);
     }
 
     public function testListProfileLinksIfEmpty(): void
@@ -39,6 +39,6 @@ class ProfileLinkControllerTest extends JsonResponseTestCase
 
         $this->client->request('GET', '/profile/links');
 
-        $this->assertJsonResponse([]);
+        $this->serializerAndAssertJsonResponse([]);
     }
 }

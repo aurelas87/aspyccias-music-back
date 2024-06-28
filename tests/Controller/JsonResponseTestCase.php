@@ -21,7 +21,7 @@ class JsonResponseTestCase extends WebTestCase
         $this->serializer = static::getContainer()->get('serializer');
     }
 
-    protected function assertJsonResponse($expectedContent, int $statusCode = Response::HTTP_OK): void
+    protected function serializerAndAssertJsonResponse($expectedContent, int $statusCode = Response::HTTP_OK): void
     {
         static::assertResponseStatusCodeSame($statusCode);
         static::assertResponseFormatSame('json');

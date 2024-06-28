@@ -24,19 +24,23 @@ class ProfileControllerTest extends JsonResponseTestCase
         // Default language if no ACCEPT_LANGUAGE header sent
         $this->client->request('GET', '/profile');
         $expectedProfile = $this->profileService->getProfile('en');
-        $this->assertJsonResponse($expectedProfile);
+        $this->serializerAndAssertJsonResponse($expectedProfile);
+
+        // en specifically given in the request header
+        $this->client->request(method: 'GET', uri: '/profile', server: ['HTTP_ACCEPT_LANGUAGE' => 'en']);
+        $this->serializerAndAssertJsonResponse($expectedProfile);
 
         // Default language if ACCEPT_LANGUAGE header sent with unsupported language
-        $this->client->request('GET', '/profile', [], [], ['HTTP_ACCEPT_LANGUAGE' => 'de']);
-        $this->assertJsonResponse($expectedProfile);
+        $this->client->request(method: 'GET', uri: '/profile', server: ['HTTP_ACCEPT_LANGUAGE' => 'de']);
+        $this->serializerAndAssertJsonResponse($expectedProfile);
     }
 
     public function testGetProfileInFR(): void
     {
-        $this->client->request('GET', '/profile', [], [], ['HTTP_ACCEPT_LANGUAGE' => 'fr']);
+        $this->client->request(method: 'GET', uri: '/profile', server: ['HTTP_ACCEPT_LANGUAGE' => 'fr']);
 
         $expectedProfile = $this->profileService->getProfile('fr');
-        $this->assertJsonResponse($expectedProfile);
+        $this->serializerAndAssertJsonResponse($expectedProfile);
     }
 
     public function testGetProfileIfNotFound(): void
@@ -47,7 +51,7 @@ class ProfileControllerTest extends JsonResponseTestCase
         $manager->remove($profile);
         $manager->flush();
 
-        $this->client->request('GET', '/profile', [], [], ['HTTP_ACCEPT_LANGUAGE' => 'fr']);
+        $this->client->request(method: 'GET', uri: '/profile', server: ['HTTP_ACCEPT_LANGUAGE' => 'fr']);
 
         $expectedException = new ProfileNotFoundException();
 
@@ -55,7 +59,7 @@ class ProfileControllerTest extends JsonResponseTestCase
         $translator = static::getContainer()->get('translator');
         $translator->setLocale('fr');
 
-        $this->assertJsonResponse(
+        $this->serializerAndAssertJsonResponse(
             [
                 'code' => $expectedException->getStatusCode(),
                 'message' => $translator->trans($expectedException->getMessage()),

@@ -5,26 +5,34 @@ namespace App\Entity\News;
 use App\Repository\News\NewsTranslationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: NewsTranslationRepository::class)]
+#[ORM\UniqueConstraint(fields: ['news', 'locale'])]
 class NewsTranslation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Ignore]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'translations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private ?News $news = null;
 
-    #[ORM\Column(length: 2, unique: true)]
+    #[ORM\Column(length: 2)]
+    #[Ignore]
     private ?string $locale = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('list')]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups('details')]
     private ?string $content = null;
 
     public function getId(): ?int

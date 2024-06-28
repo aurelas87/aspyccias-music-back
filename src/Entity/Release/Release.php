@@ -41,25 +41,45 @@ class Release
     /**
      * @var Collection<int, ReleaseTranslation>
      */
-    #[ORM\OneToMany(targetEntity: ReleaseTranslation::class, mappedBy: 'releaseInstance', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: ReleaseTranslation::class,
+        mappedBy: 'releaseInstance',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $translations;
 
     /**
      * @var Collection<int, ReleaseCredit>
      */
-    #[ORM\OneToMany(targetEntity: ReleaseCredit::class, mappedBy: 'releaseInstance', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: ReleaseCredit::class,
+        mappedBy: 'releaseInstance',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $credits;
 
     /**
      * @var Collection<int, ReleaseLink>
      */
-    #[ORM\OneToMany(targetEntity: ReleaseLink::class, mappedBy: 'releaseInstance', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: ReleaseLink::class,
+        mappedBy: 'releaseInstance',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $links;
 
     /**
      * @var Collection<int, ReleaseTrack>
      */
-    #[ORM\OneToMany(targetEntity: ReleaseTrack::class, mappedBy: 'releaseInstance', orphanRemoval: true)]
+    #[ORM\OneToMany(
+        targetEntity: ReleaseTrack::class,
+        mappedBy: 'releaseInstance',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $tracks;
 
     public function __construct()
