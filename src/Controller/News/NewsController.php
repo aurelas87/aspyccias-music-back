@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class NewsController extends AbstractController
 {
-    #[Route('/news', name: 'app_news')]
+    #[Route('/news', name: 'app_news_list')]
     public function list(Request $request, NewsService $newsService): JsonResponse
     {
         return $this->json(
@@ -25,6 +25,15 @@ class NewsController extends AbstractController
         return $this->json(
             data: $newsService->getLatestNews($request->getLocale()),
             context: ['groups' => ['default', 'list']]
+        );
+    }
+
+    #[Route('/news/{newsId<\d+>}', name: 'app_news_details')]
+    public function newsDetails(int $newsId, Request $request, NewsService $newsService): JsonResponse
+    {
+        return $this->json(
+            data: $newsService->getNewsDetails($newsId, $request->getLocale()),
+            context: ['groups' => ['default', 'details']]
         );
     }
 }

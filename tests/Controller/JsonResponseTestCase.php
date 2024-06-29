@@ -6,7 +6,9 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Translation\Translator;
 
 class JsonResponseTestCase extends WebTestCase
 {
@@ -21,18 +23,49 @@ class JsonResponseTestCase extends WebTestCase
         $this->serializer = static::getContainer()->get('serializer');
     }
 
-    protected function serializerAndAssertJsonResponse($expectedContent, int $statusCode = Response::HTTP_OK): void
-    {
+    protected function serializerAndAssertJsonResponse(
+        $expectedContent,
+        ?array $contextGroups = null,
+        int $statusCode = Response::HTTP_OK
+    ): void {
+        $context = ['json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS];
+
+        if (\is_array($contextGroups)) {
+            $context['groups'] = $contextGroups;
+        }
+
         static::assertResponseStatusCodeSame($statusCode);
         static::assertResponseFormatSame('json');
         static::assertSame(
             $this->serializer->serialize(
                 $expectedContent,
                 'json',
-                ['json_encode_options' => JsonResponse::DEFAULT_ENCODING_OPTIONS]
+                $context
             ),
             $this->client->getResponse()->getContent()
         );
+    }
 
+    public function serializeAndAssertJsonResponseHttpException(HttpException $expectedException, string $locale): void
+    {
+        /** @var Translator $translator */
+        $translator = static::getContainer()->get('translator');
+        $translator->setLocale($locale);
+
+        $this->serializerAndAssertJsonResponse(
+            expectedContent: [
+                'code' => $expectedException->getStatusCode(),
+                'message' => $translator->trans($expectedException->getMessage()),
+            ],
+            statusCode: Response::HTTP_NOT_FOUND
+        );
+    }
+
+    public function dataProviderNotFound(): array
+    {
+        return [
+            'Not found in en' => ['locale' => 'en'],
+            'Not found in fr' => ['locale' => 'fr'],
+        ];
     }
 }

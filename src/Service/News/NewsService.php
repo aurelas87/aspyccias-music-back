@@ -3,6 +3,7 @@
 namespace App\Service\News;
 
 use App\Entity\News\News;
+use App\Exception\News\NewsNotFoundException;
 use App\Helper\PaginationHelper;
 use App\Model\PaginatedList;
 use App\Repository\News\NewsRepository;
@@ -43,5 +44,15 @@ class NewsService
             PaginationHelper::DEFAULT_SORT_FIELD,
             PaginationHelper::DEFAULT_SORT_ORDER
         );
+    }
+
+    public function getNewsDetails(int $newsId, string $locale): ?News
+    {
+        $news = $this->newsRepository->findOneByLocale($newsId, $locale);
+        if (!$news instanceof News) {
+            throw new NewsNotFoundException();
+        }
+
+        return $news;
     }
 }

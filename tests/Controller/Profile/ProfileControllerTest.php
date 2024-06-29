@@ -6,7 +6,6 @@ use App\Exception\Profile\ProfileNotFoundException;
 use App\Service\Profile\ProfileService;
 use App\Tests\Controller\JsonResponseTestCase;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Translation\Translator;
 
 class ProfileControllerTest extends JsonResponseTestCase
 {
@@ -43,28 +42,21 @@ class ProfileControllerTest extends JsonResponseTestCase
         $this->serializerAndAssertJsonResponse($expectedProfile);
     }
 
-    public function testGetProfileIfNotFound(): void
+    /**
+     * @dataProvider dataProviderNotFound
+     */
+    public function testGetProfileNotFound(string $locale): void
     {
         // Remove profile in "fr" version
-        $profile = $this->profileService->getProfile('fr');
+        $profile = $this->profileService->getProfile($locale);
         $manager = static::getContainer()->get('doctrine')->getManager();
         $manager->remove($profile);
         $manager->flush();
 
-        $this->client->request(method: 'GET', uri: '/profile', server: ['HTTP_ACCEPT_LANGUAGE' => 'fr']);
+        $this->client->request(method: 'GET', uri: '/profile', server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
 
         $expectedException = new ProfileNotFoundException();
 
-        /** @var Translator $translator */
-        $translator = static::getContainer()->get('translator');
-        $translator->setLocale('fr');
-
-        $this->serializerAndAssertJsonResponse(
-            [
-                'code' => $expectedException->getStatusCode(),
-                'message' => $translator->trans($expectedException->getMessage()),
-            ],
-            Response::HTTP_NOT_FOUND
-        );
+        $this->serializeAndAssertJsonResponseHttpException($expectedException, $locale, Response::HTTP_NOT_FOUND);
     }
 }

@@ -3,14 +3,15 @@
 namespace App\Tests\Service\News;
 
 use App\Entity\News\News;
+use App\Exception\News\NewsNotFoundException;
 use App\Repository\News\NewsRepository;
 use App\Service\News\NewsService;
-use App\Tests\Commons\ExpectedNewsListTrait;
+use App\Tests\Commons\ExpectedNewsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NewsServiceTest extends KernelTestCase
 {
-    use ExpectedNewsListTrait;
+    use ExpectedNewsTrait;
 
     private NewsService $newsService;
 
@@ -111,5 +112,34 @@ class NewsServiceTest extends KernelTestCase
         $latestNews = $this->newsService->getLatestNews('fr');
 
         static::assertCount(0, $latestNews);
+    }
+
+    public function dataProviderGetNewsDetails(): array
+    {
+        return $this->buildNewsDetailsUseCases();
+    }
+
+    /**
+     * @dataProvider dataProviderGetNewsDetails
+     */
+    public function testGetNewsDetails(string $locale, array $news): void
+    {
+        $newsDetails = $this->newsService->getNewsDetails($news['id'], $locale);
+
+        static::assertSame($news['id'], $newsDetails->getId());
+        static::assertSame($news['date'], $newsDetails->getDate()->format(\DateTimeImmutable::ATOM));
+        static::assertSame($news['preview_image'], $newsDetails->getPreviewImage());
+        static::assertCount(1, $newsDetails->getTranslations());
+        static::assertSame($news['title'], $newsDetails->getTranslations()[0]->getTitle());
+        static::assertSame($news['content'], $newsDetails->getTranslations()[0]->getContent());
+    }
+
+    public function testGetNewsDetailsNotFound(): void
+    {
+        try {
+            $this->newsService->getNewsDetails(14, 'fr');
+        } catch (NewsNotFoundException $e) {
+            static::assertSame('errors.news.not_found', $e->getMessage());
+        }
     }
 }

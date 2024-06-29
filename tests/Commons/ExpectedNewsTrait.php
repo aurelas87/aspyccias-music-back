@@ -5,11 +5,32 @@ namespace App\Tests\Commons;
 use App\DataFixtures\News\NewsFixtures;
 use App\Helper\PaginationHelper;
 
-trait ExpectedNewsListTrait
+trait ExpectedNewsTrait
 {
-    private function buildItemsArray(string $locale, int $nbItems, bool $expectNewsContent, ?int $offset = null): array
+    private function buildNewsItem(int $newsId, string $locale, bool $expectNewsContent): array
     {
-        $items = [];
+        $newsDate = new \DateTimeImmutable(NewsFixtures::START_DATE);
+        if ($newsId > 1) {
+            $newsDate = $newsDate->add(new \DateInterval('P'.($newsId - 1).'D'));
+        }
+
+        $newsItem = [
+            'id' => $newsId,
+            'date' => $newsDate->format(\DateTimeImmutable::ATOM),
+            'preview_image' => 'preview-news-'.$newsId,
+            'title' => ($locale === 'fr' ? "Titre de l'actualité " : 'News Title ').$newsId,
+        ];
+
+        if ($expectNewsContent) {
+            $newsItem['content'] = ($locale === 'fr' ? "Contenu de l'actualité " : 'News Content ').$newsId;
+        }
+
+        return $newsItem;
+    }
+
+    private function buildNewsItemsArray(string $locale, int $nbItems, bool $expectNewsContent, ?int $offset = null): array
+    {
+        $newsItems = [];
 
         for ($indexItem = 0; $indexItem < $nbItems; $indexItem++) {
             $itemId = NewsFixtures::TOTAL_NEWS - $indexItem;
@@ -17,26 +38,10 @@ trait ExpectedNewsListTrait
                 $itemId -= $offset;
             }
 
-            $newsDate = new \DateTimeImmutable(NewsFixtures::START_DATE);
-            if ($itemId > 1) {
-                $newsDate = $newsDate->add(new \DateInterval('P'.($itemId - 1).'D'));
-            }
-
-            $newsItem = [
-                'id' => $itemId,
-                'date' => $newsDate->format(\DateTimeImmutable::ATOM),
-                'preview_image' => 'preview-news-'.$itemId,
-                'title' => ($locale === 'fr' ? "Titre de l'actualité " : 'News Title ').$itemId,
-            ];
-
-            if ($expectNewsContent) {
-                $newsItem['content'] = ($locale === 'fr' ? "Contenu de l'actualité " : 'News Content ').$itemId;
-            }
-
-            $items[] = $newsItem;
+            $newsItems[] = $this->buildNewsItem($itemId, $locale, $expectNewsContent);
         }
 
-        return $items;
+        return $newsItems;
     }
 
     public function buildNewsListPagesUseCases(bool $expectNewsContent = true): array
@@ -56,7 +61,7 @@ trait ExpectedNewsListTrait
                     'locale' => $locale,
                     'offset' => $offset,
                     'nbItems' => $nbItems,
-                    'items' => $this->buildItemsArray($locale, $nbItems, $expectNewsContent, $offset),
+                    'items' => $this->buildNewsItemsArray($locale, $nbItems, $expectNewsContent, $offset),
                     'previous_offset' => $indexPage > 1 ? $offset - PaginationHelper::DEFAULT_LIMIT : null,
                     'next_offset' => $indexPage < $nbPages ? $offset + PaginationHelper::DEFAULT_LIMIT : null,
                 ];
@@ -79,8 +84,24 @@ trait ExpectedNewsListTrait
             $useCases[$useCaseName] = [
                 'locale' => $locale,
                 'nbItems' => $nbItems,
-                'items' => $this->buildItemsArray($locale, $nbItems, $expectNewsContent),
+                'items' => $this->buildNewsItemsArray($locale, $nbItems, $expectNewsContent),
             ];
+        }
+
+        return $useCases;
+    }
+
+    public function buildNewsDetailsUseCases(): array
+    {
+        $useCases = [];
+
+        foreach (['en', 'fr'] as $locale) {
+            foreach ([13, 6, 1] as $newsId) {
+                $useCases["News $newsId $locale"] = [
+                    'locale' => $locale,
+                    'news' => $this->buildNewsItem($newsId, $locale, true),
+                ];
+            }
         }
 
         return $useCases;
