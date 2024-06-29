@@ -67,4 +67,32 @@ class NewsControllerTest extends JsonResponseTestCase
             'items' => [],
         ]);
     }
+
+    public function dataProviderLatestNews(): array
+    {
+        return $this->buildLatestNewsUseCases(false);
+    }
+
+    /**
+     * @dataProvider dataProviderLatestNews
+     */
+    public function testLatestNews(string $locale, int $nbItems, array $items): void {
+        $this->client->request(method: 'GET', uri: '/news/latest', server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
+
+        $this->serializerAndAssertJsonResponse($items);
+    }
+
+    public function testLatestNewsEmpty(): void
+    {
+        $manager = static::getContainer()->get('doctrine')->getManager();
+        $allNews = static::getContainer()->get(NewsRepository::class)->findAll();
+        foreach ($allNews as $news) {
+            $manager->remove($news);
+        }
+        $manager->flush();
+
+        $this->client->request('GET', '/news/latest');
+
+        $this->serializerAndAssertJsonResponse([]);
+    }
 }

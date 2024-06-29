@@ -18,4 +18,13 @@ class NewsController extends AbstractController
             context: ['groups' => ['default', 'list']]
         );
     }
+
+    #[Route('/news/latest', name: 'app_news_latest')]
+    public function latest(Request $request, NewsService $newsService): JsonResponse
+    {
+        return $this->json(
+            data: $newsService->getLatestNews($request->getLocale()),
+            context: ['groups' => ['default', 'list']]
+        );
+    }
 }

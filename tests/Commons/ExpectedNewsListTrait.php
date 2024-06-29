@@ -7,6 +7,38 @@ use App\Helper\PaginationHelper;
 
 trait ExpectedNewsListTrait
 {
+    private function buildItemsArray(string $locale, int $nbItems, bool $expectNewsContent, ?int $offset = null): array
+    {
+        $items = [];
+
+        for ($indexItem = 0; $indexItem < $nbItems; $indexItem++) {
+            $itemId = NewsFixtures::TOTAL_NEWS - $indexItem;
+            if (!\is_null($offset)) {
+                $itemId -= $offset;
+            }
+
+            $newsDate = new \DateTimeImmutable(NewsFixtures::START_DATE);
+            if ($itemId > 1) {
+                $newsDate = $newsDate->add(new \DateInterval('P'.($itemId - 1).'D'));
+            }
+
+            $newsItem = [
+                'id' => $itemId,
+                'date' => $newsDate->format(\DateTimeImmutable::ATOM),
+                'preview_image' => 'preview-news-'.$itemId,
+                'title' => ($locale === 'fr' ? "Titre de l'actualité " : 'News Title ').$itemId,
+            ];
+
+            if ($expectNewsContent) {
+                $newsItem['content'] = ($locale === 'fr' ? "Contenu de l'actualité " : 'News Content ').$itemId;
+            }
+
+            $items[] = $newsItem;
+        }
+
+        return $items;
+    }
+
     public function buildNewsListPagesUseCases(bool $expectNewsContent = true): array
     {
         $useCases = [];
@@ -24,33 +56,31 @@ trait ExpectedNewsListTrait
                     'locale' => $locale,
                     'offset' => $offset,
                     'nbItems' => $nbItems,
-                    'items' => [],
+                    'items' => $this->buildItemsArray($locale, $nbItems, $expectNewsContent, $offset),
                     'previous_offset' => $indexPage > 1 ? $offset - PaginationHelper::DEFAULT_LIMIT : null,
                     'next_offset' => $indexPage < $nbPages ? $offset + PaginationHelper::DEFAULT_LIMIT : null,
                 ];
-
-                for ($indexItem = 0; $indexItem < $nbItems; $indexItem++) {
-                    $itemId = NewsFixtures::TOTAL_NEWS - $indexItem - $offset;
-
-                    $newsDate = new \DateTimeImmutable(NewsFixtures::START_DATE);
-                    if ($itemId > 1) {
-                        $newsDate = $newsDate->add(new \DateInterval('P'.($itemId - 1).'D'));
-                    }
-
-                    $newsItem = [
-                        'id' => $itemId,
-                        'date' => $newsDate->format(\DateTimeImmutable::ATOM),
-                        'preview_image' => 'preview-news-'.$itemId,
-                        'title' => ($locale === 'fr' ? "Titre de l'actualité " : 'News Title ').$itemId,
-                    ];
-
-                    if ($expectNewsContent) {
-                        $newsItem['content'] = ($locale === 'fr' ? "Contenu de l'actualité " : 'News Content ').$itemId;
-                    }
-
-                    $useCases[$useCaseName]['items'][] = $newsItem;
-                }
             }
+        }
+
+        return $useCases;
+    }
+
+    public function buildLatestNewsUseCases(bool $expectNewsContent = true): array
+    {
+        $useCases = [];
+
+        $nbItems = 3;
+
+        // Expect each page in "en" and "fr"
+        foreach (['en', 'fr'] as $locale) {
+            $useCaseName = "Latest $locale";
+
+            $useCases[$useCaseName] = [
+                'locale' => $locale,
+                'nbItems' => $nbItems,
+                'items' => $this->buildItemsArray($locale, $nbItems, $expectNewsContent),
+            ];
         }
 
         return $useCases;

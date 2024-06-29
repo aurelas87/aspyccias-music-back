@@ -2,6 +2,7 @@
 
 namespace App\Service\News;
 
+use App\Entity\News\News;
 use App\Helper\PaginationHelper;
 use App\Model\PaginatedList;
 use App\Repository\News\NewsRepository;
@@ -29,5 +30,18 @@ class NewsService
         );
 
         return $paginationHelper->mapItemsToPaginatedList($newsItems);
+    }
+
+    /**
+     * @return News[]
+     */
+    public function getLatestNews(string $locale): array
+    {
+        return $this->newsRepository->findLatest(
+            $locale,
+            3,
+            PaginationHelper::DEFAULT_SORT_FIELD,
+            PaginationHelper::DEFAULT_SORT_ORDER
+        );
     }
 }

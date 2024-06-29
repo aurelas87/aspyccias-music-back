@@ -47,6 +47,8 @@ class NewsServiceTest extends KernelTestCase
             $currentItem = $newsList->getItems()[$itemIndex];
 
             static::assertTrue($currentItem instanceof News);
+            static::assertSame($items[$itemIndex]['id'], $currentItem->getId());
+            static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeImmutable::ATOM));
             static::assertSame($items[$itemIndex]['preview_image'], $currentItem->getPreviewImage());
             static::assertCount(1, $currentItem->getTranslations());
             static::assertSame($items[$itemIndex]['title'], $currentItem->getTranslations()[0]->getTitle());
@@ -68,5 +70,46 @@ class NewsServiceTest extends KernelTestCase
         static::assertNull($newsList->getPreviousOffset());
         static::assertNull($newsList->getNextOffset());
         static::assertCount(0, $newsList->getItems());
+    }
+
+    public function dataProviderLatestNews(): array
+    {
+        return $this->buildLatestNewsUseCases();
+    }
+
+    /**
+     * @dataProvider dataProviderLatestNews
+     */
+    public function testLatestNews(string $locale, int $nbItems, array $items): void
+    {
+        $latestNews = $this->newsService->getLatestNews($locale);
+
+        static::assertCount($nbItems, $latestNews);
+
+        for ($itemIndex = 0; $itemIndex < \count($latestNews); $itemIndex++) {
+            $currentItem = $latestNews[$itemIndex];
+
+            static::assertTrue($latestNews[$itemIndex] instanceof News);
+            static::assertSame($items[$itemIndex]['id'], $currentItem->getId());
+            static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeImmutable::ATOM));
+            static::assertSame($items[$itemIndex]['preview_image'], $currentItem->getPreviewImage());
+            static::assertCount(1, $currentItem->getTranslations());
+            static::assertSame($items[$itemIndex]['title'], $currentItem->getTranslations()[0]->getTitle());
+            static::assertSame($items[$itemIndex]['content'], $currentItem->getTranslations()[0]->getContent());
+        }
+    }
+
+    public function testLatestNewsEmpty(): void
+    {
+        $manager = static::getContainer()->get('doctrine')->getManager();
+        $allNews = static::getContainer()->get(NewsRepository::class)->findAll();
+        foreach ($allNews as $news) {
+            $manager->remove($news);
+        }
+        $manager->flush();
+
+        $latestNews = $this->newsService->getLatestNews('fr');
+
+        static::assertCount(0, $latestNews);
     }
 }
