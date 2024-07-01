@@ -8,6 +8,7 @@ use App\Repository\News\NewsRepository;
 use App\Service\News\NewsService;
 use App\Tests\Commons\ExpectedNewsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class NewsServiceTest extends KernelTestCase
 {
@@ -20,6 +21,7 @@ class NewsServiceTest extends KernelTestCase
         parent::setUp();
 
         $this->newsService = static::getContainer()->get(NewsService::class);
+        $this->slugger = static::getContainer()->get(SluggerInterface::class);
     }
 
     public function dataProviderNewsList(): array
@@ -48,7 +50,6 @@ class NewsServiceTest extends KernelTestCase
             $currentItem = $newsList->getItems()[$itemIndex];
 
             static::assertTrue($currentItem instanceof News);
-            static::assertSame($items[$itemIndex]['id'], $currentItem->getId());
             static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeImmutable::ATOM));
             static::assertSame($items[$itemIndex]['preview_image'], $currentItem->getPreviewImage());
             static::assertCount(1, $currentItem->getTranslations());
@@ -91,7 +92,7 @@ class NewsServiceTest extends KernelTestCase
             $currentItem = $latestNews[$itemIndex];
 
             static::assertTrue($latestNews[$itemIndex] instanceof News);
-            static::assertSame($items[$itemIndex]['id'], $currentItem->getId());
+            static::assertSame($items[$itemIndex]['slug'], $currentItem->getSlug());
             static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeImmutable::ATOM));
             static::assertSame($items[$itemIndex]['preview_image'], $currentItem->getPreviewImage());
             static::assertCount(1, $currentItem->getTranslations());
@@ -124,9 +125,9 @@ class NewsServiceTest extends KernelTestCase
      */
     public function testGetNewsDetails(string $locale, array $news): void
     {
-        $newsDetails = $this->newsService->getNewsDetails($news['id'], $locale);
+        $newsDetails = $this->newsService->getNewsDetails($news['slug'], $locale);
 
-        static::assertSame($news['id'], $newsDetails->getId());
+        static::assertSame($news['slug'], $newsDetails->getSlug());
         static::assertSame($news['date'], $newsDetails->getDate()->format(\DateTimeImmutable::ATOM));
         static::assertSame($news['preview_image'], $newsDetails->getPreviewImage());
         static::assertCount(1, $newsDetails->getTranslations());
@@ -137,7 +138,7 @@ class NewsServiceTest extends KernelTestCase
     public function testGetNewsDetailsNotFound(): void
     {
         try {
-            $this->newsService->getNewsDetails(14, 'fr');
+            $this->newsService->getNewsDetails('news-title-14', 'fr');
         } catch (NewsNotFoundException $e) {
             static::assertSame('errors.news.not_found', $e->getMessage());
         }

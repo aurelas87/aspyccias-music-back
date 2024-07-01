@@ -36,9 +36,11 @@ class Profile
         return $this->locale;
     }
 
-    public function setLocale(?string $locale): void
+    public function setLocale(?string $locale): static
     {
         $this->locale = $locale;
+
+        return $this;
     }
 
     public function getWelcome(): ?string

@@ -115,11 +115,10 @@ class NewsControllerTest extends JsonResponseTestCase
      */
     public function testNewsDetails(string $locale, array $news): void
     {
-        $this->client->request(method: 'GET', uri: '/news/'.$news['id'], server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
+        $this->client->request(method: 'GET', uri: '/news/'.$news['slug'], server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
 
-        $expectedNewsDetails = $this->newsService->getNewsDetails($news['id'], 'fr');
         $this->serializerAndAssertJsonResponse(
-            expectedContent: $expectedNewsDetails,
+            expectedContent: $news,
             contextGroups: ['default', 'details']
         );
     }
@@ -129,10 +128,10 @@ class NewsControllerTest extends JsonResponseTestCase
      */
     public function testNewsDetailsNotFound(string $locale): void
     {
-        $this->client->request(method: 'GET', uri: '/news/14', server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
+        $this->client->request(method: 'GET', uri: '/news/news-title-14', server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
 
         $expectedException = new NewsNotFoundException();
 
-        $this->serializeAndAssertJsonResponseHttpException($expectedException, $locale, Response::HTTP_NOT_FOUND);
+        $this->serializeAndAssertJsonResponseHttpException($expectedException, $locale);
     }
 }

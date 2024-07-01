@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: NewsRepository::class)]
 class News
@@ -15,8 +16,12 @@ class News
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups('list')]
+    #[Ignore]
     private ?int $id = null;
+
+    #[ORM\Column(length: 255)]
+    #[Groups('default')]
+    private ?string $slug = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups('default')]
@@ -46,6 +51,18 @@ class News
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(?string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 
     public function getDate(): ?\DateTimeInterface

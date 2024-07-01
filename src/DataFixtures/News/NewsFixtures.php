@@ -6,11 +6,18 @@ use App\Entity\News\News;
 use App\Entity\News\NewsTranslation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class NewsFixtures extends Fixture
 {
     public const TOTAL_NEWS = 13;
     public const START_DATE = '2024-06-01T10:15:30Z';
+    private SluggerInterface $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
 
     /**
      * @throws \Exception
@@ -24,23 +31,24 @@ class NewsFixtures extends Fixture
                 $newsDate = $newsDate->add(new \DateInterval('P1D'));
             }
 
+            $englishNewsTitle = "News Title $indexNews";
+
             $news = new News();
-            $news->setDate($newsDate);
-            $news->setPreviewImage("preview-news-$indexNews");
-
-            $news->addTranslation(
-                (new NewsTranslation())
-                    ->setLocale('fr')
-                    ->setTitle("Titre de l'actualité $indexNews")
-                    ->setContent("Contenu de l'actualité $indexNews")
-            );
-
-            $news->addTranslation(
-                (new NewsTranslation())
-                    ->setLocale('en')
-                    ->setTitle("News Title $indexNews")
-                    ->setContent("News Content $indexNews")
-            );
+            $news->setDate($newsDate)
+                ->setSlug($this->slugger->slug($englishNewsTitle)->lower())
+                ->setPreviewImage("preview-news-$indexNews")
+                ->addTranslation(
+                    (new NewsTranslation())
+                        ->setLocale('fr')
+                        ->setTitle("Titre de l'actualité $indexNews")
+                        ->setContent("Contenu de l'actualité $indexNews")
+                )
+                ->addTranslation(
+                    (new NewsTranslation())
+                        ->setLocale('en')
+                        ->setTitle($englishNewsTitle)
+                        ->setContent("News Content $indexNews")
+                );
 
             $manager->persist($news);
         }

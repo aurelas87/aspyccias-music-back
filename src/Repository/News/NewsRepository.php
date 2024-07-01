@@ -63,14 +63,14 @@ class NewsRepository extends ServiceEntityRepository
         return $qb->getQuery()->setMaxResults($limit)->getResult();
     }
 
-    public function findOneByLocale(int $newsId, string $locale): ?News
+    public function findOneBySlugAndLocale(string $slug, string $locale): ?News
     {
         $qb = $this->createQueryBuilder('n');
         $qb->addSelect('t')
             ->innerJoin('n.translations', 't')
-            ->where($qb->expr()->eq('n.id', ':newsId'))
+            ->where($qb->expr()->eq('n.slug', ':slug'))
             ->andWhere($qb->expr()->eq('t.locale', ':locale'))
-            ->setParameter('newsId', $newsId)
+            ->setParameter('slug', $slug)
             ->setParameter('locale', $locale);
 
         return $qb->getQuery()->getOneOrNullResult();

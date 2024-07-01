@@ -57,6 +57,6 @@ class ProfileControllerTest extends JsonResponseTestCase
 
         $expectedException = new ProfileNotFoundException();
 
-        $this->serializeAndAssertJsonResponseHttpException($expectedException, $locale, Response::HTTP_NOT_FOUND);
+        $this->serializeAndAssertJsonResponseHttpException($expectedException, $locale);
     }
 }

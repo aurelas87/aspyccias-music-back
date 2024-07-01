@@ -28,11 +28,11 @@ class NewsController extends AbstractController
         );
     }
 
-    #[Route('/news/{newsId<\d+>}', name: 'app_news_details')]
-    public function newsDetails(int $newsId, Request $request, NewsService $newsService): JsonResponse
+    #[Route('/news/{slug}', name: 'app_news_details')]
+    public function newsDetails(string $slug, Request $request, NewsService $newsService): JsonResponse
     {
         return $this->json(
-            data: $newsService->getNewsDetails($newsId, $request->getLocale()),
+            data: $newsService->getNewsDetails($slug, $request->getLocale()),
             context: ['groups' => ['default', 'details']]
         );
     }

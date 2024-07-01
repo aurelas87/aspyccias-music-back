@@ -14,7 +14,7 @@ final class Version20240625124226 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Refacto news_translation unique index and release_id field to non nullable';
     }
 
     public function up(Schema $schema): void

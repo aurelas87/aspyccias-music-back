@@ -14,7 +14,7 @@ final class Version20240625101040 extends AbstractMigration
 {
     public function getDescription(): string
     {
-        return '';
+        return 'Refacto translations tables';
     }
 
     public function up(Schema $schema): void

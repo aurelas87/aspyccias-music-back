@@ -57,7 +57,7 @@ class JsonResponseTestCase extends WebTestCase
                 'code' => $expectedException->getStatusCode(),
                 'message' => $translator->trans($expectedException->getMessage()),
             ],
-            statusCode: Response::HTTP_NOT_FOUND
+            statusCode: $expectedException->getStatusCode()
         );
     }
 

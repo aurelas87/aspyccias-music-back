@@ -46,9 +46,9 @@ class NewsService
         );
     }
 
-    public function getNewsDetails(int $newsId, string $locale): ?News
+    public function getNewsDetails(string $slug, string $locale): ?News
     {
-        $news = $this->newsRepository->findOneByLocale($newsId, $locale);
+        $news = $this->newsRepository->findOneBySlugAndLocale($slug, $locale);
         if (!$news instanceof News) {
             throw new NewsNotFoundException();
         }
