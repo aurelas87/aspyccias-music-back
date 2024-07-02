@@ -5,6 +5,7 @@ namespace App\Entity\Release;
 use App\Repository\Release\ReleaseTranslationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: ReleaseTranslationRepository::class)]
@@ -27,6 +28,7 @@ class ReleaseTranslation
     private ?string $locale = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups('details')]
     private ?string $description = null;
 
     public function getId(): ?int

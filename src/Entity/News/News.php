@@ -40,7 +40,7 @@ class News
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[Groups(['default'])]
+    #[Groups('default')]
     private Collection $translations;
 
     public function __construct()

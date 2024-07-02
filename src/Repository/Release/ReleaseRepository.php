@@ -34,4 +34,18 @@ class ReleaseRepository extends ServiceEntityRepository
 
         return $qb->getQuery()->getResult();
     }
+
+    public function findOneBySlugLocalized(string $slug, string $locale): ?Release
+    {
+        $qb = $this->createQueryBuilder('r');
+
+        $qb->addSelect('t')
+            ->innerJoin('r.translations', 't')
+            ->where($qb->expr()->eq('r.slug', ':slug'))
+            ->andWhere($qb->expr()->eq('t.locale', ':locale'))
+            ->setParameter('slug', $slug)
+            ->setParameter('locale', $locale);
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

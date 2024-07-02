@@ -51,8 +51,10 @@ class JsonResponseTestCase extends WebTestCase
         /** @var Translator $translator */
         $translator = static::getContainer()->get('translator');
         $translator->setLocale($locale);
+        // Disable fallback to test if the translation exists in this locale
+        $translator->setFallbackLocales([]);
 
-        if ($translator->trans($expectedException->getMessage()) === $expectedException->getMessage()) {
+        if (!$translator->getCatalogue($locale)->has($expectedException->getMessage())) {
             throw new \RuntimeException(
                 \sprintf(
                     'Missing translation for "%s" in "%s" language',

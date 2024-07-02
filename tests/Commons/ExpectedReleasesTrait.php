@@ -104,4 +104,23 @@ trait ExpectedReleasesTrait
 
         return $useCases;
     }
+
+    /**
+     * @throws \Exception
+     */
+    private function buildReleaseDetailsUseCases(): array
+    {
+        $useCases = [];
+
+        foreach (['en', 'fr'] as $locale) {
+            foreach ([9, 6, 1] as $releaseId) {
+                $useCases["Release $releaseId $locale"] = [
+                    'locale' => $locale,
+                    'release' => $this->buildReleaseItem($releaseId, $locale, true),
+                ];
+            }
+        }
+
+        return $useCases;
+    }
 }

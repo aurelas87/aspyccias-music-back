@@ -7,3 +7,4 @@ errors:
     type:
       missing: Missing release type
       invalid: Invalid release type
+    not_found: Release not found

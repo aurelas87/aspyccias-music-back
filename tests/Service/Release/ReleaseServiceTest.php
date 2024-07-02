@@ -3,6 +3,7 @@
 namespace App\Tests\Service\Release;
 
 use App\Entity\Release\Release;
+use App\Exception\Release\ReleaseNotFoundException;
 use App\Model\Release\ReleaseType;
 use App\Repository\Release\ReleaseRepository;
 use App\Service\Release\ReleaseService;
@@ -94,6 +95,39 @@ class ReleaseServiceTest extends KernelTestCase
         } catch (\Throwable $e) {
             static::assertTrue($e instanceof $expectedExceptionClass);
             static::assertSame($expectedExceptionMessage, $e->getMessage());
+        }
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function dataProviderGetReleaseDetails(): array
+    {
+        return $this->buildReleaseDetailsUseCases();
+    }
+
+    /**
+     * @dataProvider dataProviderGetReleaseDetails
+     */
+    public function testGetNewsDetails(string $locale, array $release): void
+    {
+        $releaseDetails = $this->releaseService->getReleaseDetails($release['slug'], $locale);
+
+        static::assertSame($release['slug'], $releaseDetails->getSlug());
+        static::assertSame($release['release_date'], $releaseDetails->getReleaseDate()->format(\DateTimeInterface::ATOM));
+        static::assertSame($release['title'], $releaseDetails->getTitle());
+        static::assertSame($release['artwork_front_image'], $releaseDetails->getArtworkFrontImage());
+        static::assertSame($release['artwork_back_image'], $releaseDetails->getArtworkBackImage());
+        static::assertCount(1, $releaseDetails->getTranslations());
+        static::assertSame($release['description'], $releaseDetails->getTranslations()->first()->getDescription());
+    }
+
+    public function testGetReleaseDetailsNotFound(): void
+    {
+        try {
+            $this->releaseService->getReleaseDetails('release-title-14', 'fr');
+        } catch (ReleaseNotFoundException $e) {
+            static::assertSame('errors.release.not_found', $e->getMessage());
         }
     }
 }

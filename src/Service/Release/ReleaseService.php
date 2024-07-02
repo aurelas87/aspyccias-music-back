@@ -5,6 +5,7 @@ namespace App\Service\Release;
 use App\Entity\Release\Release;
 use App\Exception\Release\InvalidReleaseTypeOptionException;
 use App\Exception\Release\MissingReleaseTypeOptionException;
+use App\Exception\Release\ReleaseNotFoundException;
 use App\Model\Release\ReleaseType;
 use App\Repository\Release\ReleaseRepository;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
@@ -49,5 +50,15 @@ class ReleaseService
         }
 
         return $this->releaseRepository->findByTypeLocalized($options['type'], $locale);
+    }
+
+    public function getReleaseDetails(string $slug, string $locale): Release
+    {
+        $release = $this->releaseRepository->findOneBySlugLocalized($slug, $locale);
+        if (!$release instanceof Release) {
+            throw new ReleaseNotFoundException();
+        }
+
+        return $release;
     }
 }

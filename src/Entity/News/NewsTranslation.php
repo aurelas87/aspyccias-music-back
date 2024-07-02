@@ -28,7 +28,7 @@ class NewsTranslation
     private ?string $locale = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['default', 'list'])]
+    #[Groups('default')]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]

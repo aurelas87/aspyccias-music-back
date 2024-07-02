@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\Release;
 
+use App\Exception\Release\ReleaseNotFoundException;
 use App\Model\Release\ReleaseType;
 use App\Repository\Release\ReleaseRepository;
 use App\Tests\Commons\ExpectedReleasesTrait;
@@ -88,6 +89,47 @@ class ReleaseControllerTest extends JsonResponseTestCase
         );
 
         $expectedException = new $expectedExceptionClass();
+
+        $this->serializeAndAssertJsonResponseHttpException($expectedException, $locale);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function dataProviderReleaseDetails(): array
+    {
+        return $this->buildReleaseDetailsUseCases();
+    }
+
+    /**
+     * @dataProvider dataProviderReleaseDetails
+     */
+    public function testReleaseDetails(string $locale, array $release): void
+    {
+        $this->client->request(
+            method: 'GET',
+            uri: '/releases/'.$release['slug'],
+            server: ['HTTP_ACCEPT_LANGUAGE' => $locale]
+        );
+
+        $this->serializerAndAssertJsonResponse(
+            expectedContent: $release,
+            contextGroups: ['default', 'details']
+        );
+    }
+
+    /**
+     * @dataProvider dataProviderNotFound
+     */
+    public function testReleaseDetailsNotFound(string $locale): void
+    {
+        $this->client->request(
+            method: 'GET',
+            uri: '/releases/release-title-14',
+            server: ['HTTP_ACCEPT_LANGUAGE' => $locale]
+        );
+
+        $expectedException = new ReleaseNotFoundException();
 
         $this->serializeAndAssertJsonResponseHttpException($expectedException, $locale);
     }

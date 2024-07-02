@@ -20,4 +20,13 @@ class ReleaseController extends AbstractController
             context: ['groups' => ['default', 'list']]
         );
     }
+
+    #[Route('/releases/{slug}', name: 'app_release', methods: ['GET'])]
+    public function releaseDetails(string $slug, Request $request, ReleaseService $releaseService): JsonResponse
+    {
+        return $this->json(
+            data: $releaseService->getReleaseDetails($slug, $request->getLocale()),
+            context: ['groups' => ['default', 'details']],
+        );
+    }
 }
