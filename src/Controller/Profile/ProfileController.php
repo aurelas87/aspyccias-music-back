@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ProfileController extends AbstractController
 {
-    #[Route('/profile', name: 'app_profile')]
+    #[Route('/profile', name: 'app_profile', methods: ['GET'])]
     public function get(Request $request, ProfileService $profileService): JsonResponse
     {
         return $this->json($profileService->getProfile($request->getLocale()));

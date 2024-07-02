@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class ReleaseController extends AbstractController
 {
-    #[Route('/releases', name: 'app_release_list')]
+    #[Route('/releases', name: 'app_release_list', methods: ['GET'])]
     public function list(Request $request, ReleaseService $releaseService): JsonResponse
     {
         return $this->json(
