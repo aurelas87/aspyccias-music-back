@@ -43,7 +43,7 @@ class NewsRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function findPaginated(string $locale, int $offset, int $limit, string $sortField, string $sortOrder): array
+    public function findPaginatedLocalized(string $locale, int $offset, int $limit, string $sortField, string $sortOrder): array
     {
         $qb = $this->createFindNewsByLocaleQueryBuilder($locale, $sortField, $sortOrder);
 
@@ -56,14 +56,14 @@ class NewsRepository extends ServiceEntityRepository
     /**
      * @return News[]
      */
-    public function findLatest(string $locale, int $limit, string $sortField, string $sortOrder): array
+    public function findLatestLocalized(string $locale, int $limit, string $sortField, string $sortOrder): array
     {
         $qb = $this->createFindNewsByLocaleQueryBuilder($locale, $sortField, $sortOrder);
 
         return $qb->getQuery()->setMaxResults($limit)->getResult();
     }
 
-    public function findOneBySlugAndLocale(string $slug, string $locale): ?News
+    public function findOneBySlugLocalized(string $slug, string $locale): ?News
     {
         $qb = $this->createQueryBuilder('n');
         $qb->addSelect('t')

@@ -14,7 +14,7 @@ class ProfileServiceTest extends KernelTestCase
     {
         parent::setUp();
 
-        $this->profileService = static::getContainer()->get(ProfileService::class);
+        $this->profileService = $this->getContainer()->get(ProfileService::class);
     }
 
     public function testGetProfileInEN(): void
@@ -44,7 +44,7 @@ class ProfileServiceTest extends KernelTestCase
 
         // Remove profile in "fr" version
         $profile = $this->profileService->getProfile('fr');
-        $manager = static::getContainer()->get('doctrine')->getManager();
+        $manager = $this->getContainer()->get('doctrine')->getManager();
         $manager->remove($profile);
         $manager->flush();
 

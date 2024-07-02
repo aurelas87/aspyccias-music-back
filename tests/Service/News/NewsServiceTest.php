@@ -8,7 +8,6 @@ use App\Repository\News\NewsRepository;
 use App\Service\News\NewsService;
 use App\Tests\Commons\ExpectedNewsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class NewsServiceTest extends KernelTestCase
 {
@@ -20,10 +19,12 @@ class NewsServiceTest extends KernelTestCase
     {
         parent::setUp();
 
-        $this->newsService = static::getContainer()->get(NewsService::class);
-        $this->slugger = static::getContainer()->get(SluggerInterface::class);
+        $this->newsService = $this->getContainer()->get(NewsService::class);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function dataProviderNewsList(): array
     {
         return $this->buildNewsListPagesUseCases();
@@ -47,21 +48,21 @@ class NewsServiceTest extends KernelTestCase
         static::assertCount($nbItems, $newsList->getItems());
 
         for ($itemIndex = 0; $itemIndex < \count($newsList->getItems()); $itemIndex++) {
+            /** @var News $currentItem */
             $currentItem = $newsList->getItems()[$itemIndex];
 
-            static::assertTrue($currentItem instanceof News);
-            static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeImmutable::ATOM));
+            static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeInterface::ATOM));
             static::assertSame($items[$itemIndex]['preview_image'], $currentItem->getPreviewImage());
             static::assertCount(1, $currentItem->getTranslations());
-            static::assertSame($items[$itemIndex]['title'], $currentItem->getTranslations()[0]->getTitle());
-            static::assertSame($items[$itemIndex]['content'], $currentItem->getTranslations()[0]->getContent());
+            static::assertSame($items[$itemIndex]['title'], $currentItem->getTranslations()->first()->getTitle());
+            static::assertSame($items[$itemIndex]['content'], $currentItem->getTranslations()->first()->getContent());
         }
     }
 
     public function testListNewsEmpty(): void
     {
-        $manager = static::getContainer()->get('doctrine')->getManager();
-        $allNews = static::getContainer()->get(NewsRepository::class)->findAll();
+        $manager = $this->getContainer()->get('doctrine')->getManager();
+        $allNews = $this->getContainer()->get(NewsRepository::class)->findAll();
         foreach ($allNews as $news) {
             $manager->remove($news);
         }
@@ -74,6 +75,9 @@ class NewsServiceTest extends KernelTestCase
         static::assertCount(0, $newsList->getItems());
     }
 
+    /**
+     * @throws \Exception
+     */
     public function dataProviderLatestNews(): array
     {
         return $this->buildLatestNewsUseCases();
@@ -93,18 +97,18 @@ class NewsServiceTest extends KernelTestCase
 
             static::assertTrue($latestNews[$itemIndex] instanceof News);
             static::assertSame($items[$itemIndex]['slug'], $currentItem->getSlug());
-            static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeImmutable::ATOM));
+            static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeInterface::ATOM));
             static::assertSame($items[$itemIndex]['preview_image'], $currentItem->getPreviewImage());
             static::assertCount(1, $currentItem->getTranslations());
-            static::assertSame($items[$itemIndex]['title'], $currentItem->getTranslations()[0]->getTitle());
-            static::assertSame($items[$itemIndex]['content'], $currentItem->getTranslations()[0]->getContent());
+            static::assertSame($items[$itemIndex]['title'], $currentItem->getTranslations()->first()->getTitle());
+            static::assertSame($items[$itemIndex]['content'], $currentItem->getTranslations()->first()->getContent());
         }
     }
 
     public function testLatestNewsEmpty(): void
     {
-        $manager = static::getContainer()->get('doctrine')->getManager();
-        $allNews = static::getContainer()->get(NewsRepository::class)->findAll();
+        $manager = $this->getContainer()->get('doctrine')->getManager();
+        $allNews = $this->getContainer()->get(NewsRepository::class)->findAll();
         foreach ($allNews as $news) {
             $manager->remove($news);
         }
@@ -115,6 +119,9 @@ class NewsServiceTest extends KernelTestCase
         static::assertCount(0, $latestNews);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function dataProviderGetNewsDetails(): array
     {
         return $this->buildNewsDetailsUseCases();
@@ -128,11 +135,11 @@ class NewsServiceTest extends KernelTestCase
         $newsDetails = $this->newsService->getNewsDetails($news['slug'], $locale);
 
         static::assertSame($news['slug'], $newsDetails->getSlug());
-        static::assertSame($news['date'], $newsDetails->getDate()->format(\DateTimeImmutable::ATOM));
+        static::assertSame($news['date'], $newsDetails->getDate()->format(\DateTimeInterface::ATOM));
         static::assertSame($news['preview_image'], $newsDetails->getPreviewImage());
         static::assertCount(1, $newsDetails->getTranslations());
-        static::assertSame($news['title'], $newsDetails->getTranslations()[0]->getTitle());
-        static::assertSame($news['content'], $newsDetails->getTranslations()[0]->getContent());
+        static::assertSame($news['title'], $newsDetails->getTranslations()->first()->getTitle());
+        static::assertSame($news['content'], $newsDetails->getTranslations()->first()->getContent());
     }
 
     public function testGetNewsDetailsNotFound(): void

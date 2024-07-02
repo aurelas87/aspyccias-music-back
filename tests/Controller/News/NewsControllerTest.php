@@ -7,7 +7,6 @@ use App\Repository\News\NewsRepository;
 use App\Service\News\NewsService;
 use App\Tests\Commons\ExpectedNewsTrait;
 use App\Tests\Controller\JsonResponseTestCase;
-use Symfony\Component\HttpFoundation\Response;
 
 class NewsControllerTest extends JsonResponseTestCase
 {
@@ -19,9 +18,12 @@ class NewsControllerTest extends JsonResponseTestCase
     {
         parent::setUp();
 
-        $this->newsService = static::getContainer()->get(NewsService::class);
+        $this->newsService = $this->getContainer()->get(NewsService::class);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function dataProviderListNews(): array
     {
         return $this->buildNewsListPagesUseCases(false);
@@ -57,8 +59,8 @@ class NewsControllerTest extends JsonResponseTestCase
 
     public function testListNewsEmpty(): void
     {
-        $manager = static::getContainer()->get('doctrine')->getManager();
-        $allNews = static::getContainer()->get(NewsRepository::class)->findAll();
+        $manager = $this->getContainer()->get('doctrine')->getManager();
+        $allNews = $this->getContainer()->get(NewsRepository::class)->findAll();
         foreach ($allNews as $news) {
             $manager->remove($news);
         }
@@ -73,6 +75,9 @@ class NewsControllerTest extends JsonResponseTestCase
         ]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function dataProviderLatestNews(): array
     {
         return $this->buildLatestNewsUseCases(false);
@@ -93,8 +98,8 @@ class NewsControllerTest extends JsonResponseTestCase
 
     public function testLatestNewsEmpty(): void
     {
-        $manager = static::getContainer()->get('doctrine')->getManager();
-        $allNews = static::getContainer()->get(NewsRepository::class)->findAll();
+        $manager = $this->getContainer()->get('doctrine')->getManager();
+        $allNews = $this->getContainer()->get(NewsRepository::class)->findAll();
         foreach ($allNews as $news) {
             $manager->remove($news);
         }
@@ -105,6 +110,9 @@ class NewsControllerTest extends JsonResponseTestCase
         $this->serializerAndAssertJsonResponse([]);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function dataProviderNewsDetails(): array
     {
         return $this->buildNewsDetailsUseCases();
