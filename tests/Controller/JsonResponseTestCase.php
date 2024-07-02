@@ -52,6 +52,16 @@ class JsonResponseTestCase extends WebTestCase
         $translator = static::getContainer()->get('translator');
         $translator->setLocale($locale);
 
+        if ($translator->trans($expectedException->getMessage()) === $expectedException->getMessage()) {
+            throw new \RuntimeException(
+                \sprintf(
+                    'Missing translation for "%s" in "%s" language',
+                    $expectedException->getMessage(),
+                    $locale
+                )
+            );
+        }
+
         $this->serializerAndAssertJsonResponse(
             expectedContent: [
                 'code' => $expectedException->getStatusCode(),

@@ -5,20 +5,25 @@ namespace App\Entity\Release;
 use App\Repository\Release\ReleaseTranslationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: ReleaseTranslationRepository::class)]
+#[ORM\UniqueConstraint(fields: ['release', 'locale'])]
 class ReleaseTranslation
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Ignore]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'translations')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private ?Release $release = null;
 
-    #[ORM\Column(length: 2, unique: true)]
+    #[ORM\Column(length: 2)]
+    #[Ignore]
     private ?string $locale = null;
 
     #[ORM\Column(type: Types::TEXT)]

@@ -53,7 +53,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    public function buildNewsListPagesUseCases(bool $expectDetails = true): array
+    private function buildNewsListPagesUseCases(bool $expectDetails = true): array
     {
         $useCases = [];
 
@@ -83,7 +83,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    public function buildLatestNewsUseCases(bool $expectDetails = true): array
+    private function buildLatestNewsUseCases(bool $expectDetails = true): array
     {
         $useCases = [];
 
@@ -106,7 +106,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    public function buildNewsDetailsUseCases(): array
+    private function buildNewsDetailsUseCases(): array
     {
         $useCases = [];
 

@@ -1,2 +1,9 @@
-errors.profile.not_found: Profile introuvable
-errors.news.not_found: Actualité introuvable
+errors:
+  profile:
+    not_found: Profile introuvable
+  news:
+    not_found: Actualité introuvable
+  release:
+    type:
+      missing: Type de release manquant
+      invalid: Type de release invalide

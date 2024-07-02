@@ -2,11 +2,14 @@
 
 namespace App\Entity\Release;
 
+use App\Model\Release\ReleaseType;
 use App\Repository\Release\ReleaseRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: ReleaseRepository::class)]
 #[ORM\Table(name: '`release`')]
@@ -15,30 +18,31 @@ class Release
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Ignore]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('default')]
     private ?string $slug = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $type = null;
+    #[ORM\Column(type: Types::SMALLINT, enumType: ReleaseType::class)]
+    #[Ignore]
+    private ?ReleaseType $type = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups('default')]
     private ?\DateTimeInterface $release_date = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('default')]
     private ?string $title = null;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $descriptionFR = null;
-
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $descriptionEN = null;
-
     #[ORM\Column(length: 255)]
+    #[Groups('default')]
     private ?string $artwork_front_image = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('details')]
     private ?string $artwork_back_image = null;
 
     /**
@@ -46,10 +50,11 @@ class Release
      */
     #[ORM\OneToMany(
         targetEntity: ReleaseTranslation::class,
-        mappedBy: 'releaseInstance',
+        mappedBy: 'release',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
+    #[Groups('details')]
     private Collection $translations;
 
     /**
@@ -57,7 +62,7 @@ class Release
      */
     #[ORM\OneToMany(
         targetEntity: ReleaseCredit::class,
-        mappedBy: 'releaseInstance',
+        mappedBy: 'release',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
@@ -68,7 +73,7 @@ class Release
      */
     #[ORM\OneToMany(
         targetEntity: ReleaseLink::class,
-        mappedBy: 'releaseInstance',
+        mappedBy: 'release',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
@@ -79,7 +84,7 @@ class Release
      */
     #[ORM\OneToMany(
         targetEntity: ReleaseTrack::class,
-        mappedBy: 'releaseInstance',
+        mappedBy: 'release',
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
@@ -110,12 +115,12 @@ class Release
         return $this;
     }
 
-    public function getType(): ?int
+    public function getType(): ?ReleaseType
     {
         return $this->type;
     }
 
-    public function setType(int $type): static
+    public function setType(ReleaseType $type): static
     {
         $this->type = $type;
 
@@ -142,30 +147,6 @@ class Release
     public function setTitle(string $title): static
     {
         $this->title = $title;
-
-        return $this;
-    }
-
-    public function getDescriptionFR(): ?string
-    {
-        return $this->descriptionFR;
-    }
-
-    public function setDescriptionFR(?string $descriptionFR): static
-    {
-        $this->descriptionFR = $descriptionFR;
-
-        return $this;
-    }
-
-    public function getDescriptionEN(): ?string
-    {
-        return $this->descriptionEN;
-    }
-
-    public function setDescriptionEN(?string $descriptionEN): static
-    {
-        $this->descriptionEN = $descriptionEN;
 
         return $this;
     }

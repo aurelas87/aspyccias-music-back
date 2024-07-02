@@ -1,2 +1,9 @@
-errors.profile.not_found: Profile not found
-errors.news.not_found: News not found
+errors:
+  profile:
+    not_found: Profile not found
+  news:
+    not_found: News not found
+  release:
+    type:
+      missing: Missing release type
+      invalid: Invalid release type
