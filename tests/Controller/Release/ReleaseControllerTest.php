@@ -17,7 +17,7 @@ class ReleaseControllerTest extends JsonResponseTestCase
      */
     public function dataProviderListReleases(): array
     {
-        return $this->buildReleaseListUseCases(false);
+        return $this->buildReleaseListUseCases();
     }
 
     /**

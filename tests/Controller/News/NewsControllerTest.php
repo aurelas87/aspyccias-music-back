@@ -26,7 +26,7 @@ class NewsControllerTest extends JsonResponseTestCase
      */
     public function dataProviderListNews(): array
     {
-        return $this->buildNewsListPagesUseCases(false);
+        return $this->buildNewsListPagesUseCases();
     }
 
     /**
@@ -80,7 +80,7 @@ class NewsControllerTest extends JsonResponseTestCase
      */
     public function dataProviderLatestNews(): array
     {
-        return $this->buildLatestNewsUseCases(false);
+        return $this->buildLatestNewsUseCases();
     }
 
     /**

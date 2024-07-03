@@ -35,7 +35,7 @@ trait ExpectedReleasesTrait
     /**
      * @throws \Exception
      */
-    private function buildReleaseItem(int $releaseId, string $locale, bool $expectDetails): array
+    private function buildReleaseItem(int $releaseId, string $locale, bool $expectDetails = false): array
     {
         $releaseDate = new \DateTimeImmutable(ReleaseFixture::START_DATE);
         if ($releaseId > 1) {
@@ -62,7 +62,7 @@ trait ExpectedReleasesTrait
     /**
      * @throws \Exception
      */
-    private function buildReleaseListUseCases(bool $expectDetails = true): array
+    private function buildReleaseListUseCases(): array
     {
         $useCases = [];
 
@@ -98,7 +98,7 @@ trait ExpectedReleasesTrait
                     $releaseTypeName = ReleaseType::single->name;
                 }
 
-                $useCases["$releaseTypeName $locale"]['items'][] = $this->buildReleaseItem($indexRelease, $locale, $expectDetails);
+                $useCases["$releaseTypeName $locale"]['items'][] = $this->buildReleaseItem($indexRelease, $locale);
             }
         }
 

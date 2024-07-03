@@ -10,7 +10,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    private function buildNewsItem(int $newsId, string $locale, bool $expectDetails): array
+    private function buildNewsItem(int $newsId, string $locale, bool $expectDetails = false): array
     {
         $newsDate = new \DateTimeImmutable(NewsFixtures::START_DATE);
         if ($newsId > 1) {
@@ -34,7 +34,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    private function buildNewsItemsArray(string $locale, int $nbItems, bool $expectDetails, ?int $offset = null): array
+    private function buildNewsItemsArray(string $locale, int $nbItems, ?int $offset = null): array
     {
         $newsItems = [];
 
@@ -44,7 +44,7 @@ trait ExpectedNewsTrait
                 $itemId -= $offset;
             }
 
-            $newsItems[] = $this->buildNewsItem($itemId, $locale, $expectDetails);
+            $newsItems[] = $this->buildNewsItem($itemId, $locale);
         }
 
         return $newsItems;
@@ -53,7 +53,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    private function buildNewsListPagesUseCases(bool $expectDetails = true): array
+    private function buildNewsListPagesUseCases(): array
     {
         $useCases = [];
 
@@ -70,7 +70,7 @@ trait ExpectedNewsTrait
                     'locale' => $locale,
                     'offset' => $offset,
                     'nbItems' => $nbItems,
-                    'items' => $this->buildNewsItemsArray($locale, $nbItems, $expectDetails, $offset),
+                    'items' => $this->buildNewsItemsArray($locale, $nbItems, $offset),
                     'previous_offset' => $indexPage > 1 ? $offset - PaginationHelper::DEFAULT_LIMIT : null,
                     'next_offset' => $indexPage < $nbPages ? $offset + PaginationHelper::DEFAULT_LIMIT : null,
                 ];
@@ -83,7 +83,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    private function buildLatestNewsUseCases(bool $expectDetails = true): array
+    private function buildLatestNewsUseCases(): array
     {
         $useCases = [];
 
@@ -96,7 +96,7 @@ trait ExpectedNewsTrait
             $useCases[$useCaseName] = [
                 'locale' => $locale,
                 'nbItems' => $nbItems,
-                'items' => $this->buildNewsItemsArray($locale, $nbItems, $expectDetails),
+                'items' => $this->buildNewsItemsArray($locale, $nbItems),
             ];
         }
 

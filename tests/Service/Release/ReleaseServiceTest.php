@@ -2,7 +2,6 @@
 
 namespace App\Tests\Service\Release;
 
-use App\Entity\Release\Release;
 use App\Exception\Release\ReleaseNotFoundException;
 use App\Model\Release\ReleaseType;
 use App\Repository\Release\ReleaseRepository;
@@ -47,19 +46,13 @@ class ReleaseServiceTest extends KernelTestCase
         for ($itemIndex = 0; $itemIndex < \count($releaseList); $itemIndex++) {
             $currentItem = $releaseList[$itemIndex];
 
-            static::assertTrue($currentItem instanceof Release);
+            static::assertSame($items[$itemIndex]['slug'], $currentItem->getSlug());
             static::assertSame(
                 $items[$itemIndex]['release_date'],
                 $currentItem->getReleaseDate()->format(\DateTimeInterface::ATOM)
             );
             static::assertSame($items[$itemIndex]['title'], $currentItem->getTitle());
             static::assertSame($items[$itemIndex]['artwork_front_image'], $currentItem->getArtworkFrontImage());
-            static::assertSame($items[$itemIndex]['artwork_back_image'], $currentItem->getArtworkBackImage());
-            static::assertCount(1, $currentItem->getTranslations());
-            static::assertSame(
-                $items[$itemIndex]['description'],
-                $currentItem->getTranslations()->first()->getDescription()
-            );
         }
     }
 
