@@ -3,13 +3,15 @@
 namespace App\DataFixtures\Release;
 
 use App\Entity\Release\Release;
+use App\Entity\Release\ReleaseCredit;
 use App\Entity\Release\ReleaseTranslation;
 use App\Model\Release\ReleaseType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
-class ReleaseFixture extends Fixture
+class ReleaseFixture extends Fixture implements DependentFixtureInterface
 {
     public const TOTAL_SINGLES = 4;
     public const TOTAL_EPS = 3;
@@ -21,6 +23,48 @@ class ReleaseFixture extends Fixture
     public function __construct(SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
+    }
+
+    private function addCreditsToRelease(Release $release): Release
+    {
+        $release->addCredit(
+            (new ReleaseCredit())
+                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::COMPOSER_CREDIT_TYPE))
+                ->setFullName('John Composer')
+                ->setLink('https://www.aspyccias-music.com')
+        );
+
+        $release->addCredit(
+            (new ReleaseCredit())
+                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::PRODUCER_CREDIT_TYPE))
+                ->setFullName('John Producer')
+        );
+
+        $release->addCredit(
+            (new ReleaseCredit())
+                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::LYRICIST_CREDIT_TYPE))
+                ->setFullName('John Lyricist')
+        );
+
+        $release->addCredit(
+            (new ReleaseCredit())
+                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::EDITOR_CREDIT_TYPE))
+                ->setFullName('John Editor')
+        );
+
+        $release->addCredit(
+            (new ReleaseCredit())
+                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VIOLINIST_CREDIT_TYPE))
+                ->setFullName('John Violinist')
+        );
+
+        $release->addCredit(
+            (new ReleaseCredit())
+                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE))
+                ->setFullName('John Voice')
+        );
+
+        return $release;
     }
 
     private function createRelease(
@@ -49,7 +93,7 @@ class ReleaseFixture extends Fixture
                     ->setDescription("Release description $indexRelease")
             );
 
-        return $release;
+        return $this->addCreditsToRelease($release);
     }
 
     public function load(ObjectManager $manager): void
@@ -74,5 +118,12 @@ class ReleaseFixture extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public function getDependencies()
+    {
+        return [
+            ReleaseCreditTypeFixtures::class,
+        ];
     }
 }

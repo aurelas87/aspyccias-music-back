@@ -43,16 +43,13 @@ class ReleaseServiceTest extends KernelTestCase
 
         static::assertCount($nbItems, $releaseList);
 
-        for ($itemIndex = 0; $itemIndex < \count($releaseList); $itemIndex++) {
-            $currentItem = $releaseList[$itemIndex];
+        foreach ($items as $indexItem => $item) {
+            $currentItem = $releaseList[$indexItem];
 
-            static::assertSame($items[$itemIndex]['slug'], $currentItem->getSlug());
-            static::assertSame(
-                $items[$itemIndex]['release_date'],
-                $currentItem->getReleaseDate()->format(\DateTimeInterface::ATOM)
-            );
-            static::assertSame($items[$itemIndex]['title'], $currentItem->getTitle());
-            static::assertSame($items[$itemIndex]['artwork_front_image'], $currentItem->getArtworkFrontImage());
+            static::assertSame($item['slug'], $currentItem->getSlug());
+            static::assertSame($item['release_date'], $currentItem->getReleaseDate()->format(\DateTimeInterface::ATOM));
+            static::assertSame($item['title'], $currentItem->getTitle());
+            static::assertSame($item['artwork_front_image'], $currentItem->getArtworkFrontImage());
         }
     }
 
@@ -107,12 +104,25 @@ class ReleaseServiceTest extends KernelTestCase
         $releaseDetails = $this->releaseService->getReleaseDetails($release['slug'], $locale);
 
         static::assertSame($release['slug'], $releaseDetails->getSlug());
-        static::assertSame($release['release_date'], $releaseDetails->getReleaseDate()->format(\DateTimeInterface::ATOM));
+        static::assertSame(
+            $release['release_date'],
+            $releaseDetails->getReleaseDate()->format(\DateTimeInterface::ATOM)
+        );
         static::assertSame($release['title'], $releaseDetails->getTitle());
         static::assertSame($release['artwork_front_image'], $releaseDetails->getArtworkFrontImage());
         static::assertSame($release['artwork_back_image'], $releaseDetails->getArtworkBackImage());
+
         static::assertCount(1, $releaseDetails->getTranslations());
         static::assertSame($release['description'], $releaseDetails->getTranslations()->first()->getDescription());
+
+        static::assertCount(\count($release['credits']), $releaseDetails->getCredits());
+        foreach ($release['credits'] as $indexCredit => $credit) {
+            $currentCredit = $releaseDetails->getCredits()->get($indexCredit);
+
+            static::assertSame($credit['type'], $currentCredit->getReleaseCreditType()->getCreditName());
+            static::assertSame($credit['full_name'], $currentCredit->getFullName());
+            static::assertSame($credit['link'], $currentCredit->getLink());
+        }
     }
 
     public function testGetReleaseDetailsNotFound(): void

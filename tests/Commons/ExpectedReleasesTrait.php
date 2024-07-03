@@ -53,6 +53,16 @@ trait ExpectedReleasesTrait
 
         if ($expectDetails) {
             $releaseItem['artwork_back_image'] = "$releaseSlug-back-cover";
+
+            $releaseItem['credits'] = [
+                ['full_name' => 'John Composer', 'link' => 'https://www.aspyccias-music.com', 'type' => 'composer'],
+                ['full_name' => 'John Producer', 'link' => null, 'type' => 'producer'],
+                ['full_name' => 'John Lyricist', 'link' => null, 'type' => 'lyricist'],
+                ['full_name' => 'John Editor', 'link' => null, 'type' => 'editor'],
+                ['full_name' => 'John Violinist', 'link' => null, 'type' => 'violinist'],
+                ['full_name' => 'John Voice', 'link' => null, 'type' => 'voice'],
+            ];
+
             $releaseItem['description'] = ($locale === 'fr' ? 'Description de la sortie ' : 'Release description ').$releaseId;
         }
 

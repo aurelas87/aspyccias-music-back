@@ -47,15 +47,15 @@ class NewsServiceTest extends KernelTestCase
         static::assertSame($nextOffset, $newsList->getNextOffset());
         static::assertCount($nbItems, $newsList->getItems());
 
-        for ($itemIndex = 0; $itemIndex < \count($newsList->getItems()); $itemIndex++) {
+        foreach ($items as $indexItem => $item) {
             /** @var News $currentItem */
-            $currentItem = $newsList->getItems()[$itemIndex];
+            $currentItem = $newsList->getItems()[$indexItem];
 
-            static::assertSame($items[$itemIndex]['slug'], $currentItem->getSlug());
-            static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeInterface::ATOM));
-            static::assertSame($items[$itemIndex]['preview_image'], $currentItem->getPreviewImage());
+            static::assertSame($item['slug'], $currentItem->getSlug());
+            static::assertSame($item['date'], $currentItem->getDate()->format(\DateTimeInterface::ATOM));
+            static::assertSame($item['preview_image'], $currentItem->getPreviewImage());
             static::assertCount(1, $currentItem->getTranslations());
-            static::assertSame($items[$itemIndex]['title'], $currentItem->getTranslations()->first()->getTitle());
+            static::assertSame($item['title'], $currentItem->getTranslations()->first()->getTitle());
         }
     }
 
@@ -92,15 +92,14 @@ class NewsServiceTest extends KernelTestCase
 
         static::assertCount($nbItems, $latestNews);
 
-        for ($itemIndex = 0; $itemIndex < \count($latestNews); $itemIndex++) {
-            $currentItem = $latestNews[$itemIndex];
+        foreach ($items as $indexItem => $item) {
+            $currentItem = $latestNews[$indexItem];
 
-            static::assertTrue($latestNews[$itemIndex] instanceof News);
-            static::assertSame($items[$itemIndex]['slug'], $currentItem->getSlug());
-            static::assertSame($items[$itemIndex]['date'], $currentItem->getDate()->format(\DateTimeInterface::ATOM));
-            static::assertSame($items[$itemIndex]['preview_image'], $currentItem->getPreviewImage());
+            static::assertSame($item['slug'], $currentItem->getSlug());
+            static::assertSame($item['date'], $currentItem->getDate()->format(\DateTimeInterface::ATOM));
+            static::assertSame($item['preview_image'], $currentItem->getPreviewImage());
             static::assertCount(1, $currentItem->getTranslations());
-            static::assertSame($items[$itemIndex]['title'], $currentItem->getTranslations()->first()->getTitle());
+            static::assertSame($item['title'], $currentItem->getTranslations()->first()->getTitle());
         }
     }
 

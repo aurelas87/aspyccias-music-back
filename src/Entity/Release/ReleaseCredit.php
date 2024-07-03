@@ -4,6 +4,8 @@ namespace App\Entity\Release;
 
 use App\Repository\Release\ReleaseCreditRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: ReleaseCreditRepository::class)]
 class ReleaseCredit
@@ -11,16 +13,20 @@ class ReleaseCredit
     #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'credits')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private ?Release $release = null;
 
     #[ORM\Id]
     #[ORM\ManyToOne]
+    #[Groups('details')]
     private ?ReleaseCreditType $releaseCreditType = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('details')]
     private ?string $fullName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('details')]
     private ?string $link = null;
 
     public function getRelease(): ?Release
