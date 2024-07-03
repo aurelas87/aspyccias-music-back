@@ -9,20 +9,15 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: NewsTranslationRepository::class)]
-#[ORM\UniqueConstraint(fields: ['news', 'locale'])]
 class NewsTranslation
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Ignore]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(inversedBy: 'translations')]
     #[ORM\JoinColumn(nullable: false)]
     #[Ignore]
     private ?News $news = null;
 
+    #[ORM\Id]
     #[ORM\Column(length: 2)]
     #[Ignore]
     private ?string $locale = null;
@@ -34,11 +29,6 @@ class NewsTranslation
     #[ORM\Column(type: Types::TEXT)]
     #[Groups('details')]
     private ?string $content = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getNews(): ?News
     {

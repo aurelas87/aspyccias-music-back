@@ -9,20 +9,15 @@ use Symfony\Component\Serializer\Attribute\Groups;
 use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: ReleaseTranslationRepository::class)]
-#[ORM\UniqueConstraint(fields: ['release', 'locale'])]
 class ReleaseTranslation
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Ignore]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(inversedBy: 'translations')]
     #[ORM\JoinColumn(nullable: false)]
     #[Ignore]
     private ?Release $release = null;
 
+    #[ORM\Id]
     #[ORM\Column(length: 2)]
     #[Ignore]
     private ?string $locale = null;
@@ -30,11 +25,6 @@ class ReleaseTranslation
     #[ORM\Column(type: Types::TEXT)]
     #[Groups('details')]
     private ?string $description = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getRelease(): ?Release
     {

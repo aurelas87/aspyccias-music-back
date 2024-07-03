@@ -3,34 +3,25 @@
 namespace App\Entity\Release;
 
 use App\Repository\Release\ReleaseCreditRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ReleaseCreditRepository::class)]
 class ReleaseCredit
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(inversedBy: 'credits')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Release $release = null;
 
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $type = null;
+    #[ORM\Id]
+    #[ORM\ManyToOne]
+    private ?ReleaseCreditType $releaseCreditType = null;
 
     #[ORM\Column(length: 255)]
     private ?string $fullName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $link = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getRelease(): ?Release
     {
@@ -44,14 +35,14 @@ class ReleaseCredit
         return $this;
     }
 
-    public function getType(): ?int
+    public function getReleaseCreditType(): ?ReleaseCreditType
     {
-        return $this->type;
+        return $this->releaseCreditType;
     }
 
-    public function setType(int $type): static
+    public function setReleaseCreditType(ReleaseCreditType $releaseCreditType): static
     {
-        $this->type = $type;
+        $this->releaseCreditType = $releaseCreditType;
 
         return $this;
     }

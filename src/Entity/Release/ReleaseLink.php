@@ -10,14 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 class ReleaseLink
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(inversedBy: 'links')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Release $release = null;
 
+    #[ORM\Id]
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $type = null;
 
@@ -26,11 +23,6 @@ class ReleaseLink
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $embedded = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getRelease(): ?Release
     {

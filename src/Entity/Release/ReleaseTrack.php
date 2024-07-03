@@ -10,14 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
 class ReleaseTrack
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
-
     #[ORM\ManyToOne(inversedBy: 'tracks')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Release $release = null;
 
+    #[ORM\Id]
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
@@ -26,11 +23,6 @@ class ReleaseTrack
 
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $duration = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getRelease(): ?Release
     {
