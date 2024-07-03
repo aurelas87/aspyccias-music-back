@@ -11,12 +11,7 @@ use Symfony\Component\Serializer\Attribute\Ignore;
 class Profile
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    #[Ignore]
-    private ?int $id = null;
-
-    #[ORM\Column(length: 2, unique: true)]
+    #[ORM\Column(length: 2)]
     #[Ignore]
     private ?string $locale = null;
 
@@ -25,11 +20,6 @@ class Profile
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $description = null;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getLocale(): ?string
     {
