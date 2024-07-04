@@ -90,6 +90,7 @@ class Release
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
+    #[Groups('details')]
     private Collection $tracks;
 
     public function __construct()

@@ -5,6 +5,7 @@ namespace App\DataFixtures\Release;
 use App\Entity\Release\Release;
 use App\Entity\Release\ReleaseCredit;
 use App\Entity\Release\ReleaseLink;
+use App\Entity\Release\ReleaseTrack;
 use App\Entity\Release\ReleaseTranslation;
 use App\Model\Release\ReleaseLinkType;
 use App\Model\Release\ReleaseType;
@@ -98,6 +99,37 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         return $release;
     }
 
+    private function addTracksToRelease(Release $release, int $indexRelease): Release
+    {
+        switch ($release->getType()) {
+            case ReleaseType::single:
+            default:
+                $nbTracks = 1;
+                break;
+            case ReleaseType::ep:
+                $nbTracks = 2;
+                break;
+            case ReleaseType::album:
+                $nbTracks = 10;
+                break;
+        }
+
+        $duration = 150; //2min30 and add 1sec to next tracks
+
+        for ($indexTrack = 1; $indexTrack <= $nbTracks; $indexTrack++) {
+            $strTrackPosition = \str_pad($indexTrack, 2, '0', STR_PAD_LEFT);
+
+            $release->addTrack(
+                (new ReleaseTrack())
+                    ->setTitle("Release Track $indexRelease-$strTrackPosition")
+                    ->setPosition($indexTrack)
+                    ->setDuration($indexTrack > 1 ? ++$duration : $duration)
+            );
+        }
+
+        return $release;
+    }
+
     private function createRelease(
         int $indexRelease,
         ReleaseType $releaseType,
@@ -125,7 +157,8 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
             );
 
         $release = $this->addCreditsToRelease($release);
-        return $this->addLinksToRelease($release);
+        $release = $this->addLinksToRelease($release);
+        return $this->addTracksToRelease($release, $indexRelease);
     }
 
     public function load(ObjectManager $manager): void

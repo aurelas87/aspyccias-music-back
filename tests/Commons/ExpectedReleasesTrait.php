@@ -79,6 +79,33 @@ trait ExpectedReleasesTrait
                 ],
             ];
 
+            $releaseItem['tracks'] = [];
+
+            switch ($releaseId) {
+                case 1:
+                default:
+                    $nbTracks = 1;
+                    break;
+                case 6:
+                    $nbTracks = 2;
+                    break;
+                case 9:
+                    $nbTracks = 10;
+                    break;
+            }
+
+            $duration = 150; //2min30 and add 1sec to next tracks
+
+            for ($indexTrack = 1; $indexTrack <= $nbTracks; $indexTrack++) {
+                $strTrackPosition = \str_pad($indexTrack, 2, '0', STR_PAD_LEFT);
+
+                $releaseItem['tracks'][] = [
+                    'title' => "Release Track $releaseId-$strTrackPosition",
+                    'position' => $indexTrack,
+                    'duration' => $indexTrack > 1 ? ++$duration : $duration,
+                ];
+            }
+
             $releaseItem['description'] = ($locale === 'fr' ? 'Description de la sortie ' : 'Release description ').$releaseId;
         }
 
