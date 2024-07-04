@@ -1,0 +1,10 @@
+errors:
+  profile:
+    not_found: Profile introuvable
+  news:
+    not_found: Actualité introuvable
+  release:
+    type:
+      missing: Type de release manquant
+      invalid: Type de release invalide
+    not_found: Release introuvable
