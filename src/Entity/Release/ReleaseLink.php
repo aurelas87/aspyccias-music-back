@@ -2,9 +2,12 @@
 
 namespace App\Entity\Release;
 
+use App\Model\Release\ReleaseLinkType;
 use App\Repository\Release\ReleaseLinkRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
+use Symfony\Component\Serializer\Attribute\Ignore;
 
 #[ORM\Entity(repositoryClass: ReleaseLinkRepository::class)]
 class ReleaseLink
@@ -12,16 +15,20 @@ class ReleaseLink
     #[ORM\Id]
     #[ORM\ManyToOne(inversedBy: 'links')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Ignore]
     private ?Release $release = null;
 
     #[ORM\Id]
-    #[ORM\Column(type: Types::SMALLINT)]
-    private ?int $type = null;
+    #[ORM\Column(type: Types::SMALLINT, enumType: ReleaseLinkType::class)]
+    #[Groups('details')]
+    private ?ReleaseLinkType $type = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('details')]
     private ?string $link = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    #[Groups('details')]
     private ?string $embedded = null;
 
     public function getRelease(): ?Release
@@ -36,12 +43,12 @@ class ReleaseLink
         return $this;
     }
 
-    public function getType(): ?int
+    public function getType(): ?ReleaseLinkType
     {
         return $this->type;
     }
 
-    public function setType(int $type): static
+    public function setType(ReleaseLinkType $type): static
     {
         $this->type = $type;
 

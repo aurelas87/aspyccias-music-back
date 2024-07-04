@@ -63,6 +63,22 @@ trait ExpectedReleasesTrait
                 ['full_name' => 'John Voice', 'link' => null, 'type' => 'voice'],
             ];
 
+            $releaseItem['links'] = [
+                ['type' => 'listen', 'link' => 'https://www.youtube.com/watch?v=kQWUmBwZCKY', 'embedded' => null],
+                ['type' => 'buy', 'link' => 'https://aspyccias.bandcamp.com/track/in-a-spaceship', 'embedded' => null],
+                [
+                    'type' => 'smart_link',
+                    'link' => null,
+                    'embedded' => '<div style="max-width:100%;">'.
+                        '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">'.
+                        '<iframe style="position:absolute;top:0;left:0;" width="100%" height="100%" '.
+                        'src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fcxdvh54nmjqct&theme=light" '.
+                        'frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation '.
+                        'allow-popups allow-popups-to-escape-sandbox" allow="clipboard-read; clipboard-write">'.
+                        '</iframe></div></div>',
+                ],
+            ];
+
             $releaseItem['description'] = ($locale === 'fr' ? 'Description de la sortie ' : 'Release description ').$releaseId;
         }
 

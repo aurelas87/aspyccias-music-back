@@ -4,7 +4,9 @@ namespace App\DataFixtures\Release;
 
 use App\Entity\Release\Release;
 use App\Entity\Release\ReleaseCredit;
+use App\Entity\Release\ReleaseLink;
 use App\Entity\Release\ReleaseTranslation;
+use App\Model\Release\ReleaseLinkType;
 use App\Model\Release\ReleaseType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -67,6 +69,35 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         return $release;
     }
 
+    private function addLinksToRelease(Release $release): Release
+    {
+        $release->addLink(
+            (new ReleaseLink())
+                ->setType(ReleaseLinkType::listen)
+                ->setLink('https://www.youtube.com/watch?v=kQWUmBwZCKY')
+        );
+
+        $release->addLink(
+            (new ReleaseLink())
+                ->setType(ReleaseLinkType::buy)
+                ->setLink('https://aspyccias.bandcamp.com/track/in-a-spaceship')
+        );
+
+        $release->addLink(
+            (new ReleaseLink())
+                ->setType(ReleaseLinkType::smart_link)
+                ->setEmbedded('<div style="max-width:100%;">'.
+                    '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">'.
+                    '<iframe style="position:absolute;top:0;left:0;" width="100%" height="100%" '.
+                    'src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fcxdvh54nmjqct&theme=light" '.
+                    'frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation '.
+                    'allow-popups allow-popups-to-escape-sandbox" allow="clipboard-read; clipboard-write"></iframe>'.
+                    '</div></div>')
+        );
+
+        return $release;
+    }
+
     private function createRelease(
         int $indexRelease,
         ReleaseType $releaseType,
@@ -93,7 +124,8 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
                     ->setDescription("Release description $indexRelease")
             );
 
-        return $this->addCreditsToRelease($release);
+        $release = $this->addCreditsToRelease($release);
+        return $this->addLinksToRelease($release);
     }
 
     public function load(ObjectManager $manager): void

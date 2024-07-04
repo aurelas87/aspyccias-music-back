@@ -123,6 +123,15 @@ class ReleaseServiceTest extends KernelTestCase
             static::assertSame($credit['full_name'], $currentCredit->getFullName());
             static::assertSame($credit['link'], $currentCredit->getLink());
         }
+
+        static::assertCount(\count($release['links']), $releaseDetails->getLinks());
+        foreach ($release['links'] as $indexLink => $link) {
+            $currentLink = $releaseDetails->getLinks()->get($indexLink);
+
+            static::assertSame($link['type'], $currentLink->getType()->name);
+            static::assertSame($link['link'], $currentLink->getLink());
+            static::assertSame($link['embedded'], $currentLink->getEmbedded());
+        }
     }
 
     public function testGetReleaseDetailsNotFound(): void
