@@ -1,4 +1,6 @@
 {
+    "name": "aurelas87/aspyccias-music-back",
+    "version": "0.1.1",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
