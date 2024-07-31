@@ -17,3 +17,7 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+###> image uploads folder ###
+/public/uploads
+###< image uploads folder ###

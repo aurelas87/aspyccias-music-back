@@ -20,7 +20,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
     public const TOTAL_EPS = 3;
     public const TOTAL_ALBUMS = 2;
     public const TOTAL_RELEASES = self::TOTAL_SINGLES + self::TOTAL_EPS + self::TOTAL_ALBUMS;
-    public const START_DATE = '2023-01-01T12:00:00Z';
+    public const START_DATE = '2023-01-01T00:00:00Z';
     private SluggerInterface $slugger;
 
     public function __construct(SluggerInterface $slugger)
