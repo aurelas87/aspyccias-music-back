@@ -3,32 +3,32 @@
 namespace App\Tests\Commons;
 
 use App\DataFixtures\Release\ReleaseFixture;
-use App\Exception\Release\InvalidReleaseTypeOptionException;
-use App\Exception\Release\MissingReleaseTypeOptionException;
+use App\Exception\Release\ReleaseNotFoundException;
 use App\Model\Release\ReleaseType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait ExpectedReleasesTrait
 {
     private const INVALID_TYPE_USE_CASES = [
         'No type sent' => [
-            'queryParameters' => [],
-            'expectedException' => MissingReleaseTypeOptionException::class,
-            'expectedExceptionMessage' => 'errors.release.type.missing',
+            'type' => null,
+            'expectedException' => NotFoundHttpException::class,
+            'expectedExceptionMessage' => 'No route found for "GET http://localhost/releases/"',
         ],
         'Empty type' => [
-            'queryParameters' => ['type' => ''],
-            'expectedException' => InvalidReleaseTypeOptionException::class,
-            'expectedExceptionMessage' => 'errors.release.type.invalid',
+            'type' => '',
+            'expectedException' => NotFoundHttpException::class,
+            'expectedExceptionMessage' => 'No route found for "GET http://localhost/releases/"',
         ],
         'Unknown type' => [
-            'queryParameters' => ['type' => 'unknown'],
-            'expectedException' => InvalidReleaseTypeOptionException::class,
-            'expectedExceptionMessage' => 'errors.release.type.invalid',
+            'type' => 'unknown',
+            'expectedException' => ReleaseNotFoundException::class,
+            'expectedExceptionMessage' => 'errors.release.not_found',
         ],
         'Invalid type' => [
-            'queryParameters' => ['type' => 21],
-            'expectedException' => InvalidReleaseTypeOptionException::class,
-            'expectedExceptionMessage' => 'errors.release.type.invalid',
+            'type' => '21',
+            'expectedException' => ReleaseNotFoundException::class,
+            'expectedExceptionMessage' => 'errors.release.not_found',
         ],
     ];
 
@@ -123,19 +123,19 @@ trait ExpectedReleasesTrait
         foreach (['en', 'fr'] as $locale) {
             $useCases[ReleaseType::single->name." $locale"] = [
                 'locale' => $locale,
-                'type' => ReleaseType::single->name,
+                'type' => ReleaseType::single,
                 'nbItems' => ReleaseFixture::TOTAL_SINGLES,
                 'items' => [],
             ];
             $useCases[ReleaseType::ep->name." $locale"] = [
                 'locale' => $locale,
-                'type' => ReleaseType::ep->name,
+                'type' => ReleaseType::ep,
                 'nbItems' => ReleaseFixture::TOTAL_EPS,
                 'items' => [],
             ];
             $useCases[ReleaseType::album->name." $locale"] = [
                 'locale' => $locale,
-                'type' => ReleaseType::album->name,
+                'type' => ReleaseType::album,
                 'nbItems' => ReleaseFixture::TOTAL_ALBUMS,
                 'items' => [],
             ];

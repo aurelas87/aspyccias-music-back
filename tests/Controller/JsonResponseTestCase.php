@@ -48,26 +48,32 @@ class JsonResponseTestCase extends WebTestCase
 
     public function serializeAndAssertJsonResponseHttpException(HttpException $expectedException, string $locale): void
     {
-        /** @var Translator $translator */
-        $translator = static::getContainer()->get('translator');
-        $translator->setLocale($locale);
-        // Disable fallback to test if the translation exists in this locale
-        $translator->setFallbackLocales([]);
+        if (\str_starts_with($expectedException->getMessage(), 'No route found')) {
+            $expectedMessage = $expectedException->getMessage();
+        } else {
+            /** @var Translator $translator */
+            $translator = static::getContainer()->get('translator');
+            $translator->setLocale($locale);
+            // Disable fallback to test if the translation exists in this locale
+            $translator->setFallbackLocales([]);
 
-        if (!$translator->getCatalogue($locale)->has($expectedException->getMessage())) {
-            throw new \RuntimeException(
-                \sprintf(
-                    'Missing translation for "%s" in "%s" language',
-                    $expectedException->getMessage(),
-                    $locale
-                )
-            );
+            if (!$translator->getCatalogue($locale)->has($expectedException->getMessage())) {
+                throw new \RuntimeException(
+                    \sprintf(
+                        'Missing translation for "%s" in "%s" language',
+                        $expectedException->getMessage(),
+                        $locale
+                    )
+                );
+            }
+
+            $expectedMessage = $translator->trans($expectedException->getMessage());
         }
 
         $this->serializerAndAssertJsonResponse(
             expectedContent: [
                 'code' => $expectedException->getStatusCode(),
-                'message' => $translator->trans($expectedException->getMessage()),
+                'message' => $expectedMessage,
             ],
             statusCode: $expectedException->getStatusCode()
         );

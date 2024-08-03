@@ -130,7 +130,7 @@ class PaginationHelperTest extends TestCase
             'total' => $total,
             'offset' => $total + 1,
             'nbItems' => 0,
-            'expected_previous_offset' => 10,
+            'expected_previous_offset' => 12,
             'expected_next_offset' => null,
         ];
 

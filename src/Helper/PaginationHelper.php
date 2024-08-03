@@ -9,7 +9,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class PaginationHelper
 {
     public const DEFAULT_OFFSET = 0;
-    public const DEFAULT_LIMIT = 5;
+    public const DEFAULT_LIMIT = 6;
     public const DEFAULT_SORT_FIELD = 'date';
     public const DEFAULT_SORT_ORDER = 'desc';
 
@@ -35,7 +35,7 @@ class PaginationHelper
             ->setDefault('offset', self::DEFAULT_OFFSET)
             ->addAllowedTypes('offset', ['int', 'string'])
             ->addNormalizer('offset', function (Options $options, string $value) {
-                $intValue = (int) $value;
+                $intValue = (int)$value;
 
                 if ($value != $intValue) {
                     $value = PaginationHelper::DEFAULT_OFFSET;
@@ -51,8 +51,8 @@ class PaginationHelper
 
     public function calculateMaxOffset(int $total): void
     {
-        $this->maxOffset = $total > self::DEFAULT_LIMIT
-            ? self::DEFAULT_LIMIT * ((int)\round($total / self::DEFAULT_LIMIT) - 1)
+        $this->maxOffset = $total > $this->limit
+            ? $this->limit * ((int)\floor($total / $this->limit))
             : self::DEFAULT_OFFSET;
     }
 

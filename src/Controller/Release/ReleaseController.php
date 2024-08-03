@@ -4,19 +4,24 @@ declare(strict_types=1);
 
 namespace App\Controller\Release;
 
+use App\Model\Release\ReleaseType;
 use App\Service\Release\ReleaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 
 class ReleaseController extends AbstractController
 {
-    #[Route('/releases', name: 'app_release_list', methods: ['GET'])]
-    public function list(Request $request, ReleaseService $releaseService): JsonResponse
-    {
+    #[Route('/releases/{releaseType}', name: 'app_release_list', requirements: ['releaseType' => 'single|ep|album'], methods: ['GET'])]
+    public function list(
+        #[ValueResolver('release_type')] ReleaseType $releaseType,
+        Request $request,
+        ReleaseService $releaseService
+    ): JsonResponse {
         return $this->json(
-            data: $releaseService->listReleases($request->getLocale(), $request->query->all()),
+            data: $releaseService->listReleases($request->getLocale(), $releaseType),
             context: ['groups' => ['default', 'list']]
         );
     }

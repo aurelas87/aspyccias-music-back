@@ -35,11 +35,11 @@ class ReleaseServiceTest extends KernelTestCase
      */
     public function testListReleases(
         string $locale,
-        string $type,
+        ReleaseType $type,
         int $nbItems,
         array $items,
     ): void {
-        $releaseList = $this->releaseService->listReleases($locale, ['type' => $type]);
+        $releaseList = $this->releaseService->listReleases($locale, $type);
 
         static::assertCount($nbItems, $releaseList);
 
@@ -62,7 +62,7 @@ class ReleaseServiceTest extends KernelTestCase
         }
         $manager->flush();
 
-        $releaseList = $this->releaseService->listReleases('fr', ['type' => 'single']);
+        $releaseList = $this->releaseService->listReleases('fr', ReleaseType::single);
 
         static::assertCount(0, $releaseList);
     }
@@ -70,22 +70,6 @@ class ReleaseServiceTest extends KernelTestCase
     public function dataProviderListReleasesWithInvalidType(): array
     {
         return self::INVALID_TYPE_USE_CASES;
-    }
-
-    /**
-     * @dataProvider dataProviderListReleasesWithInvalidType
-     */
-    public function testListReleasesWithInvalidType(
-        array $queryParameters,
-        string $expectedExceptionClass,
-        string $expectedExceptionMessage
-    ): void {
-        try {
-            $this->releaseService->listReleases('fr', $queryParameters);
-        } catch (\Throwable $e) {
-            static::assertTrue($e instanceof $expectedExceptionClass);
-            static::assertSame($expectedExceptionMessage, $e->getMessage());
-        }
     }
 
     /**
