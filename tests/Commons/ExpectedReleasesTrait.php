@@ -64,10 +64,15 @@ trait ExpectedReleasesTrait
             ];
 
             $releaseItem['links'] = [
-                ['type' => 'listen', 'link' => 'https://www.youtube.com/watch?v=kQWUmBwZCKY', 'embedded' => null],
-                ['type' => 'buy', 'link' => 'https://aspyccias.bandcamp.com/track/in-a-spaceship', 'embedded' => null],
+                ['category' => 'listen', 'link' => 'https://www.youtube.com/watch?v=kQWUmBwZCKY', 'embedded' => null, 'name' => 'youtube'],
+                ['category' => 'listen', 'link' => 'https://www.spotify.com', 'embedded' => null, 'name' => 'spotify'],
+                ['category' => 'listen', 'link' => 'https://www.deezer.com', 'embedded' => null, 'name' => 'deezer'],
+                ['category' => 'listen', 'link' => 'https://www.bandcamp.com', 'embedded' => null, 'name' => 'bandcamp'],
+                ['category' => 'buy', 'link' => 'https://aspyccias.bandcamp.com/track/in-a-spaceship', 'embedded' => null, 'name' => 'bandcamp'],
+                ['category' => 'buy', 'link' => 'https://music.apple.com', 'embedded' => null, 'name' => 'apple'],
+                ['category' => 'buy', 'link' => 'https://www.amazon.com', 'embedded' => null, 'name' => 'amazon'],
                 [
-                    'type' => 'smart_link',
+                    'category' => 'smart_link',
                     'link' => null,
                     'embedded' => '<div style="max-width:100%;">'.
                         '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">'.
@@ -76,6 +81,7 @@ trait ExpectedReleasesTrait
                         'frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation '.
                         'allow-popups allow-popups-to-escape-sandbox" allow="clipboard-read; clipboard-write">'.
                         '</iframe></div></div>',
+                    'name' => 'odesli',
                 ],
             ];
 

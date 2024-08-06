@@ -112,7 +112,8 @@ class ReleaseServiceTest extends KernelTestCase
         foreach ($release['links'] as $indexLink => $link) {
             $currentLink = $releaseDetails->getLinks()->get($indexLink);
 
-            static::assertSame($link['type'], $currentLink->getType()->name);
+            static::assertSame($link['category'], $currentLink->getCategory()->name);
+            static::assertSame($link['name'], $currentLink->getReleaseLinkName()->getLinkName());
             static::assertSame($link['link'], $currentLink->getLink());
             static::assertSame($link['embedded'], $currentLink->getEmbedded());
         }

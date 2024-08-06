@@ -7,7 +7,7 @@ use App\Entity\Release\ReleaseCredit;
 use App\Entity\Release\ReleaseLink;
 use App\Entity\Release\ReleaseTrack;
 use App\Entity\Release\ReleaseTranslation;
-use App\Model\Release\ReleaseLinkType;
+use App\Model\Release\ReleaseLinkCategory;
 use App\Model\Release\ReleaseType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -74,19 +74,57 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
     {
         $release->addLink(
             (new ReleaseLink())
-                ->setType(ReleaseLinkType::listen)
+                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::YOUTUBE_LINK_NAME))
+                ->setCategory(ReleaseLinkCategory::listen)
                 ->setLink('https://www.youtube.com/watch?v=kQWUmBwZCKY')
         );
 
         $release->addLink(
             (new ReleaseLink())
-                ->setType(ReleaseLinkType::buy)
+                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::SPOTIFY_LINK_NAME))
+                ->setCategory(ReleaseLinkCategory::listen)
+                ->setLink('https://www.spotify.com')
+        );
+
+        $release->addLink(
+            (new ReleaseLink())
+                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::DEEZER_LINK_NAME))
+                ->setCategory(ReleaseLinkCategory::listen)
+                ->setLink('https://www.deezer.com')
+        );
+
+        $release->addLink(
+            (new ReleaseLink())
+                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::BANDCAMP_LINK_NAME))
+                ->setCategory(ReleaseLinkCategory::listen)
+                ->setLink('https://www.bandcamp.com')
+        );
+
+        $release->addLink(
+            (new ReleaseLink())
+                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::BANDCAMP_LINK_NAME))
+                ->setCategory(ReleaseLinkCategory::buy)
                 ->setLink('https://aspyccias.bandcamp.com/track/in-a-spaceship')
         );
 
         $release->addLink(
             (new ReleaseLink())
-                ->setType(ReleaseLinkType::smart_link)
+                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::APPLE_LINK_NAME))
+                ->setCategory(ReleaseLinkCategory::buy)
+                ->setLink('https://music.apple.com')
+        );
+
+        $release->addLink(
+            (new ReleaseLink())
+                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::AMAZON_LINK_NAME))
+                ->setCategory(ReleaseLinkCategory::buy)
+                ->setLink('https://www.amazon.com')
+        );
+
+        $release->addLink(
+            (new ReleaseLink())
+                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::ODESLI_LINK_NAME))
+                ->setCategory(ReleaseLinkCategory::smart_link)
                 ->setEmbedded('<div style="max-width:100%;">'.
                     '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">'.
                     '<iframe style="position:absolute;top:0;left:0;" width="100%" height="100%" '.

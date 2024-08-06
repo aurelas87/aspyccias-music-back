@@ -8,32 +8,32 @@ use Doctrine\Persistence\ObjectManager;
 
 class ReleaseCreditTypeFixtures extends Fixture
 {
-    public const COMPOSER_CREDIT_TYPE = 'composer-credit-type';
-    public const PRODUCER_CREDIT_TYPE = 'producer-credit-type';
-    public const LYRICIST_CREDIT_TYPE = 'lyricist-credit-type';
-    public const EDITOR_CREDIT_TYPE = 'editor-credit-type';
-    public const VIOLINIST_CREDIT_TYPE = 'violinist-credit-type';
-    public const VOICE_CREDIT_TYPE = 'voice-credit-type';
+    public const COMPOSER_CREDIT_TYPE = 'composer';
+    public const PRODUCER_CREDIT_TYPE = 'producer';
+    public const LYRICIST_CREDIT_TYPE = 'lyricist';
+    public const EDITOR_CREDIT_TYPE = 'editor';
+    public const VIOLINIST_CREDIT_TYPE = 'violinist';
+    public const VOICE_CREDIT_TYPE = 'voice';
 
     public function load(ObjectManager $manager): void
     {
         $composerType = new ReleaseCreditType();
-        $composerType->setCreditName('composer');
+        $composerType->setCreditName(self::COMPOSER_CREDIT_TYPE);
 
         $producerType = new ReleaseCreditType();
-        $producerType->setCreditName('producer');
+        $producerType->setCreditName(self::PRODUCER_CREDIT_TYPE);
 
         $lyricistType = new ReleaseCreditType();
-        $lyricistType->setCreditName('lyricist');
+        $lyricistType->setCreditName(self::LYRICIST_CREDIT_TYPE);
 
         $editorType = new ReleaseCreditType();
-        $editorType->setCreditName('editor');
+        $editorType->setCreditName(self::EDITOR_CREDIT_TYPE);
 
         $violinistType = new ReleaseCreditType();
-        $violinistType->setCreditName('violinist');
+        $violinistType->setCreditName(self::VIOLINIST_CREDIT_TYPE);
 
         $voiceType = new ReleaseCreditType();
-        $voiceType->setCreditName('voice');
+        $voiceType->setCreditName(self::VOICE_CREDIT_TYPE);
 
         $manager->persist($composerType);
         $manager->persist($producerType);

@@ -18,6 +18,7 @@ class ReleaseCredit
 
     #[ORM\Id]
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups('details')]
     private ?ReleaseCreditType $releaseCreditType = null;
 

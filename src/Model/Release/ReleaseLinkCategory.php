@@ -2,7 +2,7 @@
 
 namespace App\Model\Release;
 
-enum ReleaseLinkType: int
+enum ReleaseLinkCategory: int
 {
     case listen = 1;
     case buy = 2;
