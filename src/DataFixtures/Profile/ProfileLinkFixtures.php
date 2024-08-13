@@ -28,10 +28,16 @@ class ProfileLinkFixtures extends Fixture
             ->setLink('https://www.youtube.com')
             ->setPosition(3);
 
+        $spotifyLink = new ProfileLink();
+        $spotifyLink->setName('spotify')
+            ->setLink('https://www.spotify.com')
+            ->setPosition(4);
+
         // Persist not in order to test the order by
         $manager->persist($youtubeLink);
         $manager->persist($facebookLink);
         $manager->persist($instagramLink);
+        $manager->persist($spotifyLink);
 
         $manager->flush();
     }

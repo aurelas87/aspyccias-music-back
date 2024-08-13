@@ -63,8 +63,26 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
 
         $release->addCredit(
             (new ReleaseCredit())
+                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VIOLINIST_CREDIT_TYPE))
+                ->setFullName('John Violinist 2')
+        );
+
+        $release->addCredit(
+            (new ReleaseCredit())
                 ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE))
                 ->setFullName('John Voice')
+        );
+
+        $release->addCredit(
+            (new ReleaseCredit())
+                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE))
+                ->setFullName('John Voice 2')
+        );
+
+        $release->addCredit(
+            (new ReleaseCredit())
+                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE))
+                ->setFullName('John Voice 3')
         );
 
         return $release;
@@ -125,13 +143,12 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
             (new ReleaseLink())
                 ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::ODESLI_LINK_NAME))
                 ->setCategory(ReleaseLinkCategory::smart_link)
-                ->setEmbedded('<div style="max-width:100%;">'.
-                    '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">'.
-                    '<iframe style="position:absolute;top:0;left:0;" width="100%" height="100%" '.
-                    'src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fcxdvh54nmjqct&theme=light" '.
-                    'frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation '.
-                    'allow-popups allow-popups-to-escape-sandbox" allow="clipboard-read; clipboard-write"></iframe>'.
-                    '</div></div>')
+                ->setEmbedded('<div style="max-width:100%;">' .
+                    '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">' .
+                    '<iframe style="position:absolute;top:0;left:0;" width="100%" height="100%" ' .
+                    'src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fcxdvh54nmjqct&theme=dark" frameborder="0" ' .
+                    'allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation allow-popups allow-popups-to-escape-sandbox" ' .
+                    'allow="clipboard-read; clipboard-write"></iframe></div></div>')
         );
 
         return $release;

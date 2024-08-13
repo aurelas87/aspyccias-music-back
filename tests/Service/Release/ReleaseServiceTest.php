@@ -83,7 +83,7 @@ class ReleaseServiceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderGetReleaseDetails
      */
-    public function testGetNewsDetails(string $locale, array $release): void
+    public function testGetReleaseDetails(string $locale, array $release): void
     {
         $releaseDetails = $this->releaseService->getReleaseDetails($release['slug'], $locale);
 
@@ -103,7 +103,7 @@ class ReleaseServiceTest extends KernelTestCase
         foreach ($release['credits'] as $indexCredit => $credit) {
             $currentCredit = $releaseDetails->getCredits()->get($indexCredit);
 
-            static::assertSame($credit['type'], $currentCredit->getReleaseCreditType()->getCreditName());
+            static::assertSame($credit['type'], $currentCredit->getReleaseCreditType()->getTranslations()->first()->getCreditName());
             static::assertSame($credit['full_name'], $currentCredit->getFullName());
             static::assertSame($credit['link'], $currentCredit->getLink());
         }

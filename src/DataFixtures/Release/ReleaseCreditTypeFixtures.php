@@ -3,6 +3,7 @@
 namespace App\DataFixtures\Release;
 
 use App\Entity\Release\ReleaseCreditType;
+use App\Entity\Release\ReleaseCreditTypeTranslation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -18,22 +19,82 @@ class ReleaseCreditTypeFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $composerType = new ReleaseCreditType();
-        $composerType->setCreditName(self::COMPOSER_CREDIT_TYPE);
+        $composerType->setCreditNameKey(self::COMPOSER_CREDIT_TYPE);
+        $composerType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('en')
+                ->setCreditName('Composer')
+        );
+        $composerType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('fr')
+                ->setCreditName('Compositeur')
+        );
 
         $producerType = new ReleaseCreditType();
-        $producerType->setCreditName(self::PRODUCER_CREDIT_TYPE);
+        $producerType->setCreditNameKey(self::PRODUCER_CREDIT_TYPE);
+        $producerType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('en')
+                ->setCreditName('Producer')
+        );
+        $producerType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('fr')
+                ->setCreditName('Producteur')
+        );
 
         $lyricistType = new ReleaseCreditType();
-        $lyricistType->setCreditName(self::LYRICIST_CREDIT_TYPE);
+        $lyricistType->setCreditNameKey(self::LYRICIST_CREDIT_TYPE);
+        $lyricistType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('en')
+                ->setCreditName('Lyricist')
+        );
+        $lyricistType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('fr')
+                ->setCreditName('Parolier')
+        );
 
         $editorType = new ReleaseCreditType();
-        $editorType->setCreditName(self::EDITOR_CREDIT_TYPE);
+        $editorType->setCreditNameKey(self::EDITOR_CREDIT_TYPE);
+        $editorType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('en')
+                ->setCreditName('Editor')
+        );
+        $editorType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('fr')
+                ->setCreditName('Éditeur')
+        );
 
         $violinistType = new ReleaseCreditType();
-        $violinistType->setCreditName(self::VIOLINIST_CREDIT_TYPE);
+        $violinistType->setCreditNameKey(self::VIOLINIST_CREDIT_TYPE);
+        $violinistType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('en')
+                ->setCreditName('Violinist')
+        );
+        $violinistType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('fr')
+                ->setCreditName('Violoniste')
+        );
 
         $voiceType = new ReleaseCreditType();
-        $voiceType->setCreditName(self::VOICE_CREDIT_TYPE);
+        $voiceType->setCreditNameKey(self::VOICE_CREDIT_TYPE);
+        $voiceType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('en')
+                ->setCreditName('Voice')
+        );
+        $voiceType->addTranslation(
+            (new ReleaseCreditTypeTranslation())
+                ->setLocale('fr')
+                ->setCreditName('Chant')
+        );
 
         $manager->persist($composerType);
         $manager->persist($producerType);
