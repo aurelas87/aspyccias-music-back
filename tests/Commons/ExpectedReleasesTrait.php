@@ -3,32 +3,32 @@
 namespace App\Tests\Commons;
 
 use App\DataFixtures\Release\ReleaseFixture;
-use App\Exception\Release\InvalidReleaseTypeOptionException;
-use App\Exception\Release\MissingReleaseTypeOptionException;
+use App\Exception\Release\ReleaseNotFoundException;
 use App\Model\Release\ReleaseType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 trait ExpectedReleasesTrait
 {
     private const INVALID_TYPE_USE_CASES = [
         'No type sent' => [
-            'queryParameters' => [],
-            'expectedException' => MissingReleaseTypeOptionException::class,
-            'expectedExceptionMessage' => 'errors.release.type.missing',
+            'type' => null,
+            'expectedException' => NotFoundHttpException::class,
+            'expectedExceptionMessage' => 'No route found for "GET http://localhost/releases/"',
         ],
         'Empty type' => [
-            'queryParameters' => ['type' => ''],
-            'expectedException' => InvalidReleaseTypeOptionException::class,
-            'expectedExceptionMessage' => 'errors.release.type.invalid',
+            'type' => '',
+            'expectedException' => NotFoundHttpException::class,
+            'expectedExceptionMessage' => 'No route found for "GET http://localhost/releases/"',
         ],
         'Unknown type' => [
-            'queryParameters' => ['type' => 'unknown'],
-            'expectedException' => InvalidReleaseTypeOptionException::class,
-            'expectedExceptionMessage' => 'errors.release.type.invalid',
+            'type' => 'unknown',
+            'expectedException' => ReleaseNotFoundException::class,
+            'expectedExceptionMessage' => 'errors.release.not_found',
         ],
         'Invalid type' => [
-            'queryParameters' => ['type' => 21],
-            'expectedException' => InvalidReleaseTypeOptionException::class,
-            'expectedExceptionMessage' => 'errors.release.type.invalid',
+            'type' => '21',
+            'expectedException' => ReleaseNotFoundException::class,
+            'expectedExceptionMessage' => 'errors.release.not_found',
         ],
     ];
 
@@ -54,28 +54,39 @@ trait ExpectedReleasesTrait
         if ($expectDetails) {
             $releaseItem['artwork_back_image'] = "$releaseSlug-back-cover";
 
+            $violinistCreditType = $locale === 'fr' ? 'Violoniste' : 'Violinist';
+            $voiceCreditType = $locale === 'fr' ? 'Chant' : 'Voice';
+
             $releaseItem['credits'] = [
-                ['full_name' => 'John Composer', 'link' => 'https://www.aspyccias-music.com', 'type' => 'composer'],
-                ['full_name' => 'John Producer', 'link' => null, 'type' => 'producer'],
-                ['full_name' => 'John Lyricist', 'link' => null, 'type' => 'lyricist'],
-                ['full_name' => 'John Editor', 'link' => null, 'type' => 'editor'],
-                ['full_name' => 'John Violinist', 'link' => null, 'type' => 'violinist'],
-                ['full_name' => 'John Voice', 'link' => null, 'type' => 'voice'],
+                ['full_name' => 'John Composer', 'link' => 'https://www.aspyccias-music.com', 'type' => $locale === 'fr' ? 'Compositeur' : 'Composer'],
+                ['full_name' => 'John Producer', 'link' => null, 'type' => $locale === 'fr' ? 'Producteur' : 'Producer'],
+                ['full_name' => 'John Lyricist', 'link' => null, 'type' => $locale === 'fr' ? 'Parolier' : 'Lyricist'],
+                ['full_name' => 'John Editor', 'link' => null, 'type' => $locale === 'fr' ? 'Éditeur' : 'Editor'],
+                ['full_name' => 'John Violinist', 'link' => null, 'type' => $violinistCreditType],
+                ['full_name' => 'John Violinist 2', 'link' => null, 'type' => $violinistCreditType],
+                ['full_name' => 'John Voice', 'link' => null, 'type' => $voiceCreditType],
+                ['full_name' => 'John Voice 2', 'link' => null, 'type' => $voiceCreditType],
+                ['full_name' => 'John Voice 3', 'link' => null, 'type' => $voiceCreditType],
             ];
 
             $releaseItem['links'] = [
-                ['type' => 'listen', 'link' => 'https://www.youtube.com/watch?v=kQWUmBwZCKY', 'embedded' => null],
-                ['type' => 'buy', 'link' => 'https://aspyccias.bandcamp.com/track/in-a-spaceship', 'embedded' => null],
+                ['category' => 'listen', 'link' => 'https://www.youtube.com/watch?v=kQWUmBwZCKY', 'embedded' => null, 'name' => 'youtube'],
+                ['category' => 'listen', 'link' => 'https://www.spotify.com', 'embedded' => null, 'name' => 'spotify'],
+                ['category' => 'listen', 'link' => 'https://www.deezer.com', 'embedded' => null, 'name' => 'deezer'],
+                ['category' => 'listen', 'link' => 'https://www.bandcamp.com', 'embedded' => null, 'name' => 'bandcamp'],
+                ['category' => 'buy', 'link' => 'https://aspyccias.bandcamp.com/track/in-a-spaceship', 'embedded' => null, 'name' => 'bandcamp'],
+                ['category' => 'buy', 'link' => 'https://music.apple.com', 'embedded' => null, 'name' => 'apple'],
+                ['category' => 'buy', 'link' => 'https://www.amazon.com', 'embedded' => null, 'name' => 'amazon'],
                 [
-                    'type' => 'smart_link',
+                    'category' => 'smart_link',
                     'link' => null,
-                    'embedded' => '<div style="max-width:100%;">'.
-                        '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">'.
-                        '<iframe style="position:absolute;top:0;left:0;" width="100%" height="100%" '.
-                        'src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fcxdvh54nmjqct&theme=light" '.
-                        'frameborder="0" allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation '.
-                        'allow-popups allow-popups-to-escape-sandbox" allow="clipboard-read; clipboard-write">'.
-                        '</iframe></div></div>',
+                    'embedded' => '<div style="max-width:100%;">' .
+                        '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">' .
+                        '<iframe style="position:absolute;top:0;left:0;" width="100%" height="100%" ' .
+                        'src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fcxdvh54nmjqct&theme=dark" frameborder="0" ' .
+                        'allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation allow-popups allow-popups-to-escape-sandbox" ' .
+                        'allow="clipboard-read; clipboard-write"></iframe></div></div>',
+                    'name' => 'odesli',
                 ],
             ];
 
@@ -123,19 +134,19 @@ trait ExpectedReleasesTrait
         foreach (['en', 'fr'] as $locale) {
             $useCases[ReleaseType::single->name." $locale"] = [
                 'locale' => $locale,
-                'type' => ReleaseType::single->name,
+                'type' => ReleaseType::single,
                 'nbItems' => ReleaseFixture::TOTAL_SINGLES,
                 'items' => [],
             ];
             $useCases[ReleaseType::ep->name." $locale"] = [
                 'locale' => $locale,
-                'type' => ReleaseType::ep->name,
+                'type' => ReleaseType::ep,
                 'nbItems' => ReleaseFixture::TOTAL_EPS,
                 'items' => [],
             ];
             $useCases[ReleaseType::album->name." $locale"] = [
                 'locale' => $locale,
-                'type' => ReleaseType::album->name,
+                'type' => ReleaseType::album,
                 'nbItems' => ReleaseFixture::TOTAL_ALBUMS,
                 'items' => [],
             ];

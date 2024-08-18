@@ -39,10 +39,14 @@ class ReleaseRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('r');
 
-        $qb->addSelect('t')
+        $qb->addSelect('t', 'c', 'ct', 'ctt')
             ->innerJoin('r.translations', 't')
+            ->leftJoin('r.credits', 'c')
+            ->leftJoin('c.releaseCreditType', 'ct')
+            ->leftJoin('ct.translations', 'ctt')
             ->where($qb->expr()->eq('r.slug', ':slug'))
             ->andWhere($qb->expr()->eq('t.locale', ':locale'))
+            ->andWhere($qb->expr()->eq('ctt.locale', ':locale'))
             ->setParameter('slug', $slug)
             ->setParameter('locale', $locale);
 

@@ -18,7 +18,17 @@ class ReleaseCreditNormalizer implements NormalizerInterface
     {
         $data = $this->normalizer->normalize($object, $format, $context);
 
-        $data['type'] = $data['release_credit_type']['credit_name'];
+        if (!\array_key_exists('release_credit_type', $data)) {
+            throw new \LogicException('The Release Credit data must have a Release Credit Type.');
+        }
+
+        if (!\array_key_exists('translations', $data['release_credit_type'])
+            || \count($data['release_credit_type']['translations']) !== 1
+        ) {
+            throw new \LogicException('The Release Credit Type data must have at least one translation.');
+        }
+
+        $data['type'] = $data['release_credit_type']['translations'][0]['credit_name'];
         unset($data['release_credit_type']);
 
         return $data;

@@ -29,7 +29,7 @@ class Release
     #[Ignore]
     private ?ReleaseType $type = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Groups('default')]
     private ?\DateTimeInterface $release_date = null;
 
@@ -111,7 +111,7 @@ class Release
         return $this->slug;
     }
 
-    public function setSlug(?string $slug): static
+    public function setSlug(string $slug): static
     {
         $this->slug = $slug;
 

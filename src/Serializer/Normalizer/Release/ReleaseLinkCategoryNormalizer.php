@@ -2,10 +2,10 @@
 
 namespace App\Serializer\Normalizer\Release;
 
-use App\Model\Release\ReleaseLinkType;
+use App\Model\Release\ReleaseLinkCategory;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ReleaseLinkTypeNormalizer implements NormalizerInterface
+class ReleaseLinkCategoryNormalizer implements NormalizerInterface
 {
     public function normalize($object, ?string $format = null, array $context = []): string
     {
@@ -14,11 +14,11 @@ class ReleaseLinkTypeNormalizer implements NormalizerInterface
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool
     {
-        return $data instanceof ReleaseLinkType;
+        return $data instanceof ReleaseLinkCategory;
     }
 
     public function getSupportedTypes(?string $format): array
     {
-        return [ReleaseLinkType::class => true];
+        return [ReleaseLinkCategory::class => true];
     }
 }

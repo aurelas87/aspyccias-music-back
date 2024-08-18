@@ -35,7 +35,7 @@ class ProfileLink
         return $this->name;
     }
 
-    public function setName(?string $name): static
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -59,7 +59,7 @@ class ProfileLink
         return $this->position;
     }
 
-    public function setPosition(?int $position): static
+    public function setPosition(int $position): static
     {
         $this->position = $position;
 

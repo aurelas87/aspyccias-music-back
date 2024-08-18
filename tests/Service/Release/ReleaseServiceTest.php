@@ -35,11 +35,11 @@ class ReleaseServiceTest extends KernelTestCase
      */
     public function testListReleases(
         string $locale,
-        string $type,
+        ReleaseType $type,
         int $nbItems,
         array $items,
     ): void {
-        $releaseList = $this->releaseService->listReleases($locale, ['type' => $type]);
+        $releaseList = $this->releaseService->listReleases($locale, $type);
 
         static::assertCount($nbItems, $releaseList);
 
@@ -62,7 +62,7 @@ class ReleaseServiceTest extends KernelTestCase
         }
         $manager->flush();
 
-        $releaseList = $this->releaseService->listReleases('fr', ['type' => 'single']);
+        $releaseList = $this->releaseService->listReleases('fr', ReleaseType::single);
 
         static::assertCount(0, $releaseList);
     }
@@ -70,22 +70,6 @@ class ReleaseServiceTest extends KernelTestCase
     public function dataProviderListReleasesWithInvalidType(): array
     {
         return self::INVALID_TYPE_USE_CASES;
-    }
-
-    /**
-     * @dataProvider dataProviderListReleasesWithInvalidType
-     */
-    public function testListReleasesWithInvalidType(
-        array $queryParameters,
-        string $expectedExceptionClass,
-        string $expectedExceptionMessage
-    ): void {
-        try {
-            $this->releaseService->listReleases('fr', $queryParameters);
-        } catch (\Throwable $e) {
-            static::assertTrue($e instanceof $expectedExceptionClass);
-            static::assertSame($expectedExceptionMessage, $e->getMessage());
-        }
     }
 
     /**
@@ -99,7 +83,7 @@ class ReleaseServiceTest extends KernelTestCase
     /**
      * @dataProvider dataProviderGetReleaseDetails
      */
-    public function testGetNewsDetails(string $locale, array $release): void
+    public function testGetReleaseDetails(string $locale, array $release): void
     {
         $releaseDetails = $this->releaseService->getReleaseDetails($release['slug'], $locale);
 
@@ -119,7 +103,7 @@ class ReleaseServiceTest extends KernelTestCase
         foreach ($release['credits'] as $indexCredit => $credit) {
             $currentCredit = $releaseDetails->getCredits()->get($indexCredit);
 
-            static::assertSame($credit['type'], $currentCredit->getReleaseCreditType()->getCreditName());
+            static::assertSame($credit['type'], $currentCredit->getReleaseCreditType()->getTranslations()->first()->getCreditName());
             static::assertSame($credit['full_name'], $currentCredit->getFullName());
             static::assertSame($credit['link'], $currentCredit->getLink());
         }
@@ -128,7 +112,8 @@ class ReleaseServiceTest extends KernelTestCase
         foreach ($release['links'] as $indexLink => $link) {
             $currentLink = $releaseDetails->getLinks()->get($indexLink);
 
-            static::assertSame($link['type'], $currentLink->getType()->name);
+            static::assertSame($link['category'], $currentLink->getCategory()->name);
+            static::assertSame($link['name'], $currentLink->getReleaseLinkName()->getLinkName());
             static::assertSame($link['link'], $currentLink->getLink());
             static::assertSame($link['embedded'], $currentLink->getEmbedded());
         }
@@ -145,10 +130,9 @@ class ReleaseServiceTest extends KernelTestCase
 
     public function testGetReleaseDetailsNotFound(): void
     {
-        try {
-            $this->releaseService->getReleaseDetails('release-title-14', 'fr');
-        } catch (ReleaseNotFoundException $e) {
-            static::assertSame('errors.release.not_found', $e->getMessage());
-        }
+        static::expectException(ReleaseNotFoundException::class);
+        static::expectExceptionMessageMatches('/^errors\.release\.not_found$/');
+
+        $this->releaseService->getReleaseDetails('release-title-14', 'fr');
     }
 }

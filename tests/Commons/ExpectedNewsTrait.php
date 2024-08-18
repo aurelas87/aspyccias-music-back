@@ -18,7 +18,7 @@ trait ExpectedNewsTrait
         }
 
         $newsItem = [
-            'slug' => "news-title-$newsId",
+            'slug' => $newsDate->format('Y-m-d')."-news-title-$newsId",
             'date' => $newsDate->format(\DateTimeInterface::ATOM),
             'preview_image' => 'preview-news-'.$newsId,
             'title' => ($locale === 'fr' ? "Titre de l'actualité " : 'News Title ').$newsId,

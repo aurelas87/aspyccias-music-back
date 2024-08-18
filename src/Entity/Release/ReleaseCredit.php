@@ -18,9 +18,11 @@ class ReleaseCredit
 
     #[ORM\Id]
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups('details')]
     private ?ReleaseCreditType $releaseCreditType = null;
 
+    #[ORM\Id]
     #[ORM\Column(length: 255)]
     #[Groups('details')]
     private ?string $fullName = null;

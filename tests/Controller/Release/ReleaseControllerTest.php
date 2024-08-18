@@ -25,18 +25,17 @@ class ReleaseControllerTest extends JsonResponseTestCase
      */
     public function testListReleases(
         string $locale,
-        string $type,
+        ReleaseType $type,
         int $nbItems,
         array $items
     ): void {
         $this->client->request(
             method: 'GET',
-            uri: '/releases',
-            parameters: ['type' => $type],
+            uri: '/releases/'.$type->name,
             server: ['HTTP_ACCEPT_LANGUAGE' => $locale]
         );
 
-        $this->serializerAndAssertJsonResponse(
+        $this->serializeAndAssertJsonResponse(
             expectedContent: $items,
             contextGroups: ['default', 'list']
         );
@@ -53,12 +52,11 @@ class ReleaseControllerTest extends JsonResponseTestCase
 
         $this->client->request(
             method: 'GET',
-            uri: '/releases',
-            parameters: ['type' => 'single'],
+            uri: '/releases/single',
             server: ['HTTP_ACCEPT_LANGUAGE' => 'fr']
         );
 
-        $this->serializerAndAssertJsonResponse([]);
+        $this->serializeAndAssertJsonResponse([]);
     }
 
     public function dataProviderListReleasesWithInvalidType(): array
@@ -78,17 +76,22 @@ class ReleaseControllerTest extends JsonResponseTestCase
      */
     public function testListReleasesWithInvalidType(
         string $locale,
-        array $queryParameters,
-        string $expectedExceptionClass
+        ?string $type,
+        string $expectedExceptionClass,
+        string $expectedExceptionMessage
     ): void {
+        $uri = '/releases/';
+        if (!\is_null($type)) {
+            $uri .= $type;
+        }
+
         $this->client->request(
             method: 'GET',
-            uri: '/releases',
-            parameters: $queryParameters,
+            uri: $uri,
             server: ['HTTP_ACCEPT_LANGUAGE' => $locale]
         );
 
-        $expectedException = new $expectedExceptionClass();
+        $expectedException = new $expectedExceptionClass($expectedExceptionMessage);
 
         $this->serializeAndAssertJsonResponseHttpException($expectedException, $locale);
     }
@@ -112,7 +115,7 @@ class ReleaseControllerTest extends JsonResponseTestCase
             server: ['HTTP_ACCEPT_LANGUAGE' => $locale]
         );
 
-        $this->serializerAndAssertJsonResponse(
+        $this->serializeAndAssertJsonResponse(
             expectedContent: $release,
             contextGroups: ['default', 'details']
         );

@@ -26,7 +26,7 @@ class Profile
         return $this->locale;
     }
 
-    public function setLocale(?string $locale): static
+    public function setLocale(string $locale): static
     {
         $this->locale = $locale;
 

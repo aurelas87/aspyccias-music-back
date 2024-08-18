@@ -8,3 +8,5 @@ errors:
       missing: Missing release type
       invalid: Invalid release type
     not_found: Release not found
+  contact:
+    email_delivery: Email could not be sent

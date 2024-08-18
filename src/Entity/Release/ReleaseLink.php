@@ -2,7 +2,7 @@
 
 namespace App\Entity\Release;
 
-use App\Model\Release\ReleaseLinkType;
+use App\Model\Release\ReleaseLinkCategory;
 use App\Repository\Release\ReleaseLinkRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,9 +19,15 @@ class ReleaseLink
     private ?Release $release = null;
 
     #[ORM\Id]
-    #[ORM\Column(type: Types::SMALLINT, enumType: ReleaseLinkType::class)]
+    #[ORM\Column(type: Types::SMALLINT, enumType: ReleaseLinkCategory::class)]
     #[Groups('details')]
-    private ?ReleaseLinkType $type = null;
+    private ?ReleaseLinkCategory $category = null;
+
+    #[ORM\Id]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups('details')]
+    private ?ReleaseLinkName $releaseLinkName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups('details')]
@@ -43,14 +49,26 @@ class ReleaseLink
         return $this;
     }
 
-    public function getType(): ?ReleaseLinkType
+    public function getCategory(): ?ReleaseLinkCategory
     {
-        return $this->type;
+        return $this->category;
     }
 
-    public function setType(ReleaseLinkType $type): static
+    public function setCategory(ReleaseLinkCategory $category): static
     {
-        $this->type = $type;
+        $this->category = $category;
+
+        return $this;
+    }
+
+    public function getReleaseLinkName(): ?ReleaseLinkName
+    {
+        return $this->releaseLinkName;
+    }
+
+    public function setReleaseLinkName(ReleaseLinkName $releaseLinkName): static
+    {
+        $this->releaseLinkName = $releaseLinkName;
 
         return $this;
     }
