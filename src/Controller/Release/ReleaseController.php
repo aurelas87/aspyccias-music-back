@@ -12,9 +12,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/releases')]
 class ReleaseController extends AbstractController
 {
-    #[Route('/releases/{releaseType}', name: 'app_release_list', requirements: ['releaseType' => 'single|ep|album'], methods: ['GET'])]
+    #[Route('/{releaseType}', name: 'app_release_list', requirements: ['releaseType' => 'single|ep|album'], methods: ['GET'])]
     public function list(
         #[ValueResolver('release_type')] ReleaseType $releaseType,
         Request $request,
@@ -26,7 +27,7 @@ class ReleaseController extends AbstractController
         );
     }
 
-    #[Route('/releases/{slug}', name: 'app_release', methods: ['GET'])]
+    #[Route('/{slug}', name: 'app_release', methods: ['GET'])]
     public function releaseDetails(string $slug, Request $request, ReleaseService $releaseService): JsonResponse
     {
         return $this->json(

@@ -142,10 +142,9 @@ class NewsServiceTest extends KernelTestCase
 
     public function testGetNewsDetailsNotFound(): void
     {
-        try {
-            $this->newsService->getNewsDetails('news-title-14', 'fr');
-        } catch (NewsNotFoundException $e) {
-            static::assertSame('errors.news.not_found', $e->getMessage());
-        }
+        static::expectException(NewsNotFoundException::class);
+        static::expectExceptionMessageMatches('/^errors\.news\.not_found$/');
+
+        $this->newsService->getNewsDetails('news-title-14', 'fr');
     }
 }

@@ -130,10 +130,9 @@ class ReleaseServiceTest extends KernelTestCase
 
     public function testGetReleaseDetailsNotFound(): void
     {
-        try {
-            $this->releaseService->getReleaseDetails('release-title-14', 'fr');
-        } catch (ReleaseNotFoundException $e) {
-            static::assertSame('errors.release.not_found', $e->getMessage());
-        }
+        static::expectException(ReleaseNotFoundException::class);
+        static::expectExceptionMessageMatches('/^errors\.release\.not_found$/');
+
+        $this->releaseService->getReleaseDetails('release-title-14', 'fr');
     }
 }

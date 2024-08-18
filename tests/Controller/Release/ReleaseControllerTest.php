@@ -35,7 +35,7 @@ class ReleaseControllerTest extends JsonResponseTestCase
             server: ['HTTP_ACCEPT_LANGUAGE' => $locale]
         );
 
-        $this->serializerAndAssertJsonResponse(
+        $this->serializeAndAssertJsonResponse(
             expectedContent: $items,
             contextGroups: ['default', 'list']
         );
@@ -56,7 +56,7 @@ class ReleaseControllerTest extends JsonResponseTestCase
             server: ['HTTP_ACCEPT_LANGUAGE' => 'fr']
         );
 
-        $this->serializerAndAssertJsonResponse([]);
+        $this->serializeAndAssertJsonResponse([]);
     }
 
     public function dataProviderListReleasesWithInvalidType(): array
@@ -115,7 +115,7 @@ class ReleaseControllerTest extends JsonResponseTestCase
             server: ['HTTP_ACCEPT_LANGUAGE' => $locale]
         );
 
-        $this->serializerAndAssertJsonResponse(
+        $this->serializeAndAssertJsonResponse(
             expectedContent: $release,
             contextGroups: ['default', 'details']
         );

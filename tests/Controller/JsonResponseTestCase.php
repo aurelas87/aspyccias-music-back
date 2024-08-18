@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller;
 
+use App\Helper\ValidationErrorsParser;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,7 +24,7 @@ class JsonResponseTestCase extends WebTestCase
         $this->serializer = static::getContainer()->get('serializer');
     }
 
-    protected function serializerAndAssertJsonResponse(
+    protected function serializeAndAssertJsonResponse(
         $expectedContent,
         ?array $contextGroups = null,
         int $statusCode = Response::HTTP_OK
@@ -48,29 +49,34 @@ class JsonResponseTestCase extends WebTestCase
 
     public function serializeAndAssertJsonResponseHttpException(HttpException $expectedException, string $locale): void
     {
-        if (\str_starts_with($expectedException->getMessage(), 'No route found')) {
-            $expectedMessage = $expectedException->getMessage();
-        } else {
-            /** @var Translator $translator */
-            $translator = static::getContainer()->get('translator');
-            $translator->setLocale($locale);
-            // Disable fallback to test if the translation exists in this locale
-            $translator->setFallbackLocales([]);
+        $validationErrorsParser = new ValidationErrorsParser();
+        $expectedMessage = $validationErrorsParser->getValidationErrors($expectedException);
 
-            if (!$translator->getCatalogue($locale)->has($expectedException->getMessage())) {
-                throw new \RuntimeException(
-                    \sprintf(
-                        'Missing translation for "%s" in "%s" language',
-                        $expectedException->getMessage(),
-                        $locale
-                    )
-                );
+        if (\is_null($expectedMessage)) {
+            if (\str_starts_with($expectedException->getMessage(), 'No route found')) {
+                $expectedMessage = $expectedException->getMessage();
+            } else {
+                /** @var Translator $translator */
+                $translator = static::getContainer()->get('translator');
+                $translator->setLocale($locale);
+                // Disable fallback to test if the translation exists in this locale
+                $translator->setFallbackLocales([]);
+
+                if (!$translator->getCatalogue($locale)->has($expectedException->getMessage())) {
+                    throw new \RuntimeException(
+                        \sprintf(
+                            'Missing translation for "%s" in "%s" language',
+                            $expectedException->getMessage(),
+                            $locale
+                        )
+                    );
+                }
+
+                $expectedMessage = $translator->trans($expectedException->getMessage());
             }
-
-            $expectedMessage = $translator->trans($expectedException->getMessage());
         }
 
-        $this->serializerAndAssertJsonResponse(
+        $this->serializeAndAssertJsonResponse(
             expectedContent: [
                 'code' => $expectedException->getStatusCode(),
                 'message' => $expectedMessage,

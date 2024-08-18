@@ -23,15 +23,15 @@ class ProfileControllerTest extends JsonResponseTestCase
         // Default language if no ACCEPT_LANGUAGE header sent
         $this->client->request('GET', '/profile');
         $expectedProfile = $this->profileService->getProfile('en');
-        $this->serializerAndAssertJsonResponse($expectedProfile);
+        $this->serializeAndAssertJsonResponse($expectedProfile);
 
         // en specifically given in the request header
         $this->client->request(method: 'GET', uri: '/profile', server: ['HTTP_ACCEPT_LANGUAGE' => 'en']);
-        $this->serializerAndAssertJsonResponse($expectedProfile);
+        $this->serializeAndAssertJsonResponse($expectedProfile);
 
         // Default language if ACCEPT_LANGUAGE header sent with unsupported language
         $this->client->request(method: 'GET', uri: '/profile', server: ['HTTP_ACCEPT_LANGUAGE' => 'de']);
-        $this->serializerAndAssertJsonResponse($expectedProfile);
+        $this->serializeAndAssertJsonResponse($expectedProfile);
     }
 
     public function testGetProfileInFR(): void
@@ -39,7 +39,7 @@ class ProfileControllerTest extends JsonResponseTestCase
         $this->client->request(method: 'GET', uri: '/profile', server: ['HTTP_ACCEPT_LANGUAGE' => 'fr']);
 
         $expectedProfile = $this->profileService->getProfile('fr');
-        $this->serializerAndAssertJsonResponse($expectedProfile);
+        $this->serializeAndAssertJsonResponse($expectedProfile);
     }
 
     /**

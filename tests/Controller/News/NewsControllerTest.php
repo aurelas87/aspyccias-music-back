@@ -47,7 +47,7 @@ class NewsControllerTest extends JsonResponseTestCase
             server: ['HTTP_ACCEPT_LANGUAGE' => $locale]
         );
 
-        $this->serializerAndAssertJsonResponse(
+        $this->serializeAndAssertJsonResponse(
             expectedContent: [
                 'previous_offset' => $previousOffset,
                 'next_offset' => $nextOffset,
@@ -68,7 +68,7 @@ class NewsControllerTest extends JsonResponseTestCase
 
         $this->client->request('GET', '/news');
 
-        $this->serializerAndAssertJsonResponse([
+        $this->serializeAndAssertJsonResponse([
             'previous_offset' => null,
             'next_offset' => null,
             'items' => [],
@@ -90,7 +90,7 @@ class NewsControllerTest extends JsonResponseTestCase
     {
         $this->client->request(method: 'GET', uri: '/news/latest', server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
 
-        $this->serializerAndAssertJsonResponse(
+        $this->serializeAndAssertJsonResponse(
             expectedContent: $items,
             contextGroups: ['default', 'list']
         );
@@ -107,7 +107,7 @@ class NewsControllerTest extends JsonResponseTestCase
 
         $this->client->request('GET', '/news/latest');
 
-        $this->serializerAndAssertJsonResponse([]);
+        $this->serializeAndAssertJsonResponse([]);
     }
 
     /**
@@ -125,7 +125,7 @@ class NewsControllerTest extends JsonResponseTestCase
     {
         $this->client->request(method: 'GET', uri: '/news/'.$news['slug'], server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
 
-        $this->serializerAndAssertJsonResponse(
+        $this->serializeAndAssertJsonResponse(
             expectedContent: $news,
             contextGroups: ['default', 'details']
         );
