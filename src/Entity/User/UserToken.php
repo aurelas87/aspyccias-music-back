@@ -22,6 +22,12 @@ class UserToken
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $accessTokenExpirationDate = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $refreshToken = null;
+
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeInterface $refreshTokenExpirationDate = null;
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -54,6 +60,30 @@ class UserToken
     public function setAccessTokenExpirationDate(?\DateTimeInterface $accessTokenExpirationDate): static
     {
         $this->accessTokenExpirationDate = $accessTokenExpirationDate;
+
+        return $this;
+    }
+
+    public function getRefreshToken(): ?string
+    {
+        return $this->refreshToken;
+    }
+
+    public function setRefreshToken(?string $refreshToken): static
+    {
+        $this->refreshToken = $refreshToken;
+
+        return $this;
+    }
+
+    public function getRefreshTokenExpirationDate(): ?\DateTimeInterface
+    {
+        return $this->refreshTokenExpirationDate;
+    }
+
+    public function setRefreshTokenExpirationDate(?\DateTimeInterface $refreshTokenExpirationDate): static
+    {
+        $this->refreshTokenExpirationDate = $refreshTokenExpirationDate;
 
         return $this;
     }

@@ -13,6 +13,26 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        refresh_token:
+            lazy: true
+            stateless: true
+            provider: app_user_provider
+            pattern: ^/admin/token/refresh
+
+            access_token:
+                token_handler: App\Security\AdminRefreshTokenHandler
+                token_extractors: App\Security\AdminRefreshTokenExtractor
+
+        logout:
+            lazy: true
+            stateless: true
+            provider: app_user_provider
+            pattern: ^/admin/logout
+
+            access_token:
+                token_handler: App\Security\LogoutAccessTokenHandler
+                token_extractors: App\Security\AdminAccessTokenExtractor
         admin:
             lazy: true
             stateless: true
@@ -24,16 +44,6 @@ security:
 
             access_token:
                 token_handler: App\Security\AdminAccessTokenHandler
-                token_extractors: App\Security\AdminAccessTokenExtractor
-
-        logout:
-            lazy: true
-            stateless: true
-            provider: app_user_provider
-            pattern: ^/admin/logout
-
-            access_token:
-                token_handler: App\Security\LogoutAccessTokenHandler
                 token_extractors: App\Security\AdminAccessTokenExtractor
 
             # activate different ways to authenticate

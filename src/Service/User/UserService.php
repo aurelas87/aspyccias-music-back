@@ -5,6 +5,7 @@ namespace App\Service\User;
 use App\Entity\User\User;
 use App\Helper\TokenHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class UserService
 {
@@ -20,9 +21,9 @@ class UserService
     /**
      * @throws \Exception
      */
-    public function checkAndCreateUserAccessToken(User $user): void
+    public function checkAndCreateUserToken(User $user): void
     {
-        if (!$this->tokenHelper->isTokenValid($user->getToken())) {
+        if (!$this->tokenHelper->isAccessTokenValid($user->getToken())) {
             $userToken = $this->tokenHelper->generateToken($user->getToken());
 
             $user->setToken($userToken);
@@ -33,10 +34,21 @@ class UserService
 
     public function resetUserToken(User $user): void
     {
-        $user->getToken()
-            ->setAccessToken(null)
-            ->setAccessTokenExpirationDate(null);
+        $this->tokenHelper->resetToken($user->getToken());
 
         $this->entityManager->flush();
+    }
+
+    /**
+     * @throws \Exception
+     */
+    public function checkAndRefreshUserToken(User $user): void
+    {
+        if ($this->tokenHelper->isAccessTokenValid($user->getToken())) {
+            throw new UnauthorizedHttpException('Cannot refresh token');
+        }
+
+        $this->resetUserToken($user);
+        $this->checkAndCreateUserToken($user);
     }
 }

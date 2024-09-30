@@ -2,14 +2,13 @@
 
 namespace App\Security;
 
-use App\Entity\User\UserToken;
 use App\Helper\TokenHelper;
 use App\Repository\User\UserTokenRepository;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\AccessToken\AccessTokenHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 
-class AdminAccessTokenHandler implements AccessTokenHandlerInterface
+class AdminRefreshTokenHandler implements AccessTokenHandlerInterface
 {
     private UserTokenRepository $userTokenRepository;
     private TokenHelper $tokenHelper;
@@ -25,17 +24,15 @@ class AdminAccessTokenHandler implements AccessTokenHandlerInterface
      */
     public function getUserBadgeFrom(#[\SensitiveParameter] string $accessToken): UserBadge
     {
-        $userToken = $this->userTokenRepository->findOneBy(['accessToken' => $accessToken]);
+        $userToken = $this->userTokenRepository->findOneBy(['refreshToken' => $accessToken]);
 
-        if (!$this->isTokenValid($userToken)) {
+        if (
+            $this->tokenHelper->isAccessTokenValid($userToken)
+            || !$this->tokenHelper->isRefreshTokenValid($userToken)
+        ) {
             throw new BadCredentialsException('Invalid token');
         }
 
         return new UserBadge($userToken->getUser()->getEmail());
-    }
-
-    protected function isTokenValid(?UserToken $userToken): bool
-    {
-        return $this->tokenHelper->isAccessTokenValid($userToken);
     }
 }

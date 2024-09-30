@@ -26,7 +26,7 @@ class LoginController extends AbstractController
             ], Response::HTTP_UNAUTHORIZED);
         }
 
-        $userService->checkAndCreateUserAccessToken($user);
+        $userService->checkAndCreateUserToken($user);
 
         return $this->json([
             'user' => $user->getUserIdentifier(),
@@ -44,5 +44,19 @@ class LoginController extends AbstractController
         }
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    /**
+     * @throws \Exception
+     */
+    #[Route('/token/refresh', name: 'app_admin_token_refresh', methods: ['POST'])]
+    public function tokenRefresh(#[CurrentUser] ?User $user, UserService $userService): JsonResponse
+    {
+        $userService->checkAndRefreshUserToken($user);
+
+        return $this->json([
+            'user' => $user->getUserIdentifier(),
+            'token' => $user->getToken(),
+        ]);
     }
 }

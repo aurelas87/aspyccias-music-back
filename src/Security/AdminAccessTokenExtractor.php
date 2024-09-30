@@ -18,7 +18,7 @@ class AdminAccessTokenExtractor implements AccessTokenExtractorInterface
     public function __construct(
         RouterInterface $router,
         string $headerParameter = 'Authorization',
-        string $tokenType = 'Bearer',
+        string $tokenType = 'Bearer'
     ) {
         $this->router = $router;
 
@@ -32,8 +32,7 @@ class AdminAccessTokenExtractor implements AccessTokenExtractorInterface
 
     public function extractAccessToken(Request $request): ?string
     {
-        $routeAdminLogin = $this->router->getRouteCollection()->get('app_admin_login');
-        if ($routeAdminLogin && $request->getPathInfo() === $routeAdminLogin->getPath()) {
+        if (!$this->isRouteSupported($request)) {
             return null;
         }
 
@@ -46,5 +45,15 @@ class AdminAccessTokenExtractor implements AccessTokenExtractorInterface
         }
 
         throw new BadCredentialsException('Invalid credentials');
+    }
+
+    protected function isRouteSupported(Request $request): bool
+    {
+        $routeAdminLogin = $this->router->getRouteCollection()->get('app_admin_login');
+        if ($routeAdminLogin && $request->getPathInfo() === $routeAdminLogin->getPath()) {
+            return false;
+        }
+
+        return true;
     }
 }
