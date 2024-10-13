@@ -20,8 +20,8 @@ class EmailSender
 
     public function prepareEmail(EmailDTO $emailDTO): void
     {
-        $this->emailSubject = $emailDTO->getSubject();
-        $this->emailBody = $emailDTO->getMessage();
+        $this->emailSubject = $emailDTO->subject;
+        $this->emailBody = $emailDTO->message;
 
         $this->emailBody = $this->htmlSanitizer->sanitize($this->emailBody);
         $this->emailBody = \preg_replace('/((?<!\r)\n|\r(?!\n))/', "\r\n", $this->emailBody);
@@ -29,11 +29,11 @@ class EmailSender
         $this->additionalHeaders = [
             'From' => \sprintf(
                 '%s %s <%s>',
-                $emailDTO->getFirstName(),
-                $emailDTO->getLastName(),
-                $emailDTO->getEmailAddress()
+                $emailDTO->firstName,
+                $emailDTO->lastName,
+                $emailDTO->emailAddress
             ),
-            'Reply-To' => $emailDTO->getEmailAddress()
+            'Reply-To' => $emailDTO->emailAddress
         ];
     }
 

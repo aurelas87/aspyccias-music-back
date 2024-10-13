@@ -21,6 +21,7 @@ class ContactController extends AbstractController
         EmailService $emailService
     ): JsonResponse {
         $emailService->sendEmail($emailDTO);
+
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 }
