@@ -13,6 +13,12 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/admin/profile')]
 class AdminProfileController extends AbstractController
 {
+    #[Route('', name: 'app_admin_profile', methods: ['GET'])]
+    public function get(ProfileService $profileService): JsonResponse
+    {
+        return $this->json($profileService->getProfileForAdmin());
+    }
+
     #[Route('', name: 'app_admin_profile_edit', methods: ['PUT'])]
     public function edit(
         #[MapRequestPayload(acceptFormat: 'json')] ProfileDTO $profileDTO,

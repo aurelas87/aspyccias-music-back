@@ -7,17 +7,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 readonly class ProfileDTO
 {
     public function __construct(
-        #[Assert\Length(max: 255)]
-        public string $welcomeFr,
+        #[Assert\NotNull]
+        public ProfileTranslationsDTO $fr,
 
-        #[Assert\NotBlank]
-        public string $descriptionFr,
-
-        #[Assert\Length(max: 255)]
-        public string $welcomeEn,
-
-        #[Assert\NotBlank]
-        public string $descriptionEn,
+        #[Assert\NotNull]
+        public ProfileTranslationsDTO $en,
     ) {
     }
 }
