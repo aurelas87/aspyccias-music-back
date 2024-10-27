@@ -8,10 +8,10 @@ readonly class ProfileDTO
 {
     public function __construct(
         #[Assert\NotNull]
-        public ProfileTranslationsDTO $fr,
+        public ?ProfileTranslationsDTO $fr,
 
         #[Assert\NotNull]
-        public ProfileTranslationsDTO $en,
+        public ?ProfileTranslationsDTO $en,
     ) {
     }
 }

@@ -8,10 +8,10 @@ readonly class ProfileTranslationsDTO
 {
     public function __construct(
         #[Assert\Length(max: 255)]
-        public string $welcome,
+        public string $welcome = '',
 
         #[Assert\NotBlank]
-        public string $description,
+        public string $description = '',
     ) {
     }
 }
