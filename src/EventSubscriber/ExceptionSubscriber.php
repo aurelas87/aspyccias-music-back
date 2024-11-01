@@ -3,8 +3,10 @@
 namespace App\EventSubscriber;
 
 use App\Helper\ValidationErrorsParser;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -29,17 +31,27 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $validationErrors = $this->validationErrorsParser->getValidationErrors($throwable);
 
         $errorMessage = $throwable->getMessage();
+        $status = null;
 
         if ($throwable instanceof UnprocessableEntityHttpException) {
             $errorMessage = 'Invalid request content';
         }
 
-        $response = new JsonResponse([
+        if ($throwable instanceof UniqueConstraintViolationException) {
+            $errorMessage = 'Entity already exists';
+            $status = Response::HTTP_CONFLICT;
+        }
+
+        $responseData = [
             'code' => $throwable instanceof HttpExceptionInterface
                 ? $throwable->getStatusCode()
                 : $throwable->getCode(),
             'message' => $validationErrors ?: $this->translator->trans($errorMessage),
-        ]);
+        ];
+
+        $response = \is_null($status)
+            ? new JsonResponse($responseData)
+            : new JsonResponse($responseData, $status);
 
         $event->setResponse($response);
     }
