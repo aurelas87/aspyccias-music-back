@@ -15,4 +15,12 @@ class ProfileLinkRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, ProfileLink::class);
     }
+
+    public function findMaxPosition(): int
+    {
+        $qb = $this->createQueryBuilder('pl');
+        $qb->select($qb->expr()->max('pl.position'));
+
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }
