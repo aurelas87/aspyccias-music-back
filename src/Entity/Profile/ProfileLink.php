@@ -5,7 +5,7 @@ namespace App\Entity\Profile;
 use App\Repository\Profile\ProfileLinkRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Serializer\Attribute\Ignore;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ProfileLinkRepository::class)]
 class ProfileLink
@@ -13,16 +13,19 @@ class ProfileLink
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Ignore]
+    #[Groups('admin')]
     private ?int $id = null;
 
     #[ORM\Column(length: 20, unique: true)]
+    #[Groups('default')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('default')]
     private ?string $link = null;
 
     #[ORM\Column(type: Types::SMALLINT, unique: true)]
+    #[Groups('default')]
     private ?int $position = null;
 
     public function getId(): ?int
