@@ -1,6 +1,8 @@
 errors:
   profile:
     not_found: Profile introuvable
+    link:
+      not_found: Lien de profile introuvable
   news:
     not_found: Actualité introuvable
   release:

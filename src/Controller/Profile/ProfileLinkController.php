@@ -13,6 +13,9 @@ class ProfileLinkController extends AbstractController
     #[Route('', name: 'app_profile_link', methods: ['GET'])]
     public function list(ProfileLinkService $profileLinkService): JsonResponse
     {
-        return $this->json($profileLinkService->listProfileLinks());
+        return $this->json(
+            data: $profileLinkService->listProfileLinks(),
+            context: ['groups' => ['default']]
+        );
     }
 }

@@ -36,4 +36,12 @@ class ProfileLinkService
         $this->entityManager->persist($profileLink);
         $this->entityManager->flush();
     }
+
+    public function editProfileLink(ProfileLink $profileLink, ProfileLinkDTO $profileLinkDTO): void
+    {
+        $profileLink->setName($profileLinkDTO->name)
+            ->setLink($profileLinkDTO->link);
+
+        $this->entityManager->flush();
+    }
 }

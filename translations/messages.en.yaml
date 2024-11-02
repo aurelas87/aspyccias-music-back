@@ -1,6 +1,8 @@
 errors:
   profile:
     not_found: Profile not found
+    link:
+      not_found: Profile link not found
   news:
     not_found: News not found
   release:
