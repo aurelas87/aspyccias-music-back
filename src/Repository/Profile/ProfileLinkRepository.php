@@ -21,6 +21,6 @@ class ProfileLinkRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('pl');
         $qb->select($qb->expr()->max('pl.position'));
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return $qb->getQuery()->getSingleScalarResult() ?? 0;
     }
 }

@@ -51,4 +51,14 @@ class AdminProfileLinkController extends AbstractController
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
+
+    #[Route('/{profileLink}', name: 'app_admin_profile_link_delete', methods: ['DELETE'])]
+    public function delete(
+        #[ValueResolver('profile_link')] ProfileLink $profileLink,
+        ProfileLinkService $profileLinkService
+    ): JsonResponse {
+        $profileLinkService->deleteProfileLink($profileLink);
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
 }

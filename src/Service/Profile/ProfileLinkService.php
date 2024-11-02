@@ -5,6 +5,7 @@ namespace App\Service\Profile;
 use App\Entity\Profile\ProfileLink;
 use App\Model\Profile\ProfileLinkDTO;
 use App\Repository\Profile\ProfileLinkRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ProfileLinkService
@@ -41,6 +42,26 @@ class ProfileLinkService
     {
         $profileLink->setName($profileLinkDTO->name)
             ->setLink($profileLinkDTO->link);
+
+        $this->entityManager->flush();
+    }
+
+    public function deleteProfileLink(ProfileLink $profileLink): void
+    {
+        $deletedPosition = $profileLink->getPosition();
+
+        $this->entityManager->remove($profileLink);
+        $this->entityManager->flush();
+
+        $criteria = new Criteria();
+        $criteria->where(Criteria::expr()->gt('position', $deletedPosition));
+        $profileLinksToFix = $this->profileLinkRepository->matching($criteria);
+
+        $newPosition = $deletedPosition;
+        foreach ($profileLinksToFix as $profileLinkToFix) {
+            $profileLinkToFix->setPosition($newPosition);
+            $newPosition++;
+        }
 
         $this->entityManager->flush();
     }
