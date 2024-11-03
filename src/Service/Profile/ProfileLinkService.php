@@ -3,6 +3,7 @@
 namespace App\Service\Profile;
 
 use App\Entity\Profile\ProfileLink;
+use App\Model\DirectionType;
 use App\Model\Profile\ProfileLinkDTO;
 use App\Repository\Profile\ProfileLinkRepository;
 use Doctrine\Common\Collections\Criteria;
@@ -43,6 +44,35 @@ class ProfileLinkService
         $profileLink->setName($profileLinkDTO->name)
             ->setLink($profileLinkDTO->link);
 
+        $this->entityManager->flush();
+    }
+
+    public function moveProfileLink(ProfileLink $profileLink, DirectionType $direction): void
+    {
+        $currentPosition = $profileLink->getPosition();
+        $maxPosition = $this->profileLinkRepository->findMaxPosition();
+
+        if ($direction === DirectionType::up) {
+            if ($currentPosition === 1) {
+                return;
+            }
+
+            $newPosition = $currentPosition - 1;
+        } else {
+            if ($currentPosition === $maxPosition) {
+                return;
+            }
+
+            $newPosition = $currentPosition + 1;
+        }
+
+        $profileLink->setPosition($maxPosition + 1);
+
+        $profileLinkToSwitchWith = $this->profileLinkRepository->findOneBy(['position' => $newPosition]);
+        $profileLinkToSwitchWith->setPosition($currentPosition);
+        $this->entityManager->flush();
+
+        $profileLink->setPosition($newPosition);
         $this->entityManager->flush();
     }
 
