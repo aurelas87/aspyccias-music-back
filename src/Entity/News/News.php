@@ -28,7 +28,7 @@ class News
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(length: 30)]
-    #[Groups('default')]
+    #[Groups('image')]
     private ?string $preview_image = null;
 
     /**

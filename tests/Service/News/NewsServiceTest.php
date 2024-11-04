@@ -41,7 +41,7 @@ class NewsServiceTest extends KernelTestCase
         ?int $previousOffset,
         ?int $nextOffset
     ): void {
-        $newsList = $this->newsService->listNews($locale, ['offset' => $offset]);
+        $newsList = $this->newsService->listNews(['offset' => $offset], $locale);
 
         static::assertSame($previousOffset, $newsList->getPreviousOffset());
         static::assertSame($nextOffset, $newsList->getNextOffset());
@@ -68,7 +68,7 @@ class NewsServiceTest extends KernelTestCase
         }
         $manager->flush();
 
-        $newsList = $this->newsService->listNews('fr', []);
+        $newsList = $this->newsService->listNews([], 'fr');
 
         static::assertNull($newsList->getPreviousOffset());
         static::assertNull($newsList->getNextOffset());

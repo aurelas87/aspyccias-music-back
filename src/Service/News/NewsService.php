@@ -17,20 +17,25 @@ class NewsService
         $this->newsRepository = $newsRepository;
     }
 
-    public function listNews(string $locale, array $options): PaginatedList
+    public function listNews(array $options, ?string $locale = null, ?bool $isAdmin = false): PaginatedList
     {
         $paginationHelper = new PaginationHelper();
-        $paginationHelper->parseQueryParameters($options);
+        $paginationHelper->parseQueryParameters($options, $isAdmin);
 
         $newsItems = $this->newsRepository->findPaginatedLocalized(
-            $locale,
             $paginationHelper->getOffset(),
             $paginationHelper->getLimit(),
             PaginationHelper::DEFAULT_SORT_FIELD,
             PaginationHelper::DEFAULT_SORT_ORDER,
+            $locale,
         );
 
         return $paginationHelper->mapItemsToPaginatedList($newsItems);
+    }
+
+    public function listNewsForAdmin(array $options): PaginatedList
+    {
+        return $this->listNews($options, null, true);
     }
 
     /**
@@ -39,10 +44,10 @@ class NewsService
     public function getLatestNews(string $locale): array
     {
         return $this->newsRepository->findLatestLocalized(
-            $locale,
             3,
             PaginationHelper::DEFAULT_SORT_FIELD,
-            PaginationHelper::DEFAULT_SORT_ORDER
+            PaginationHelper::DEFAULT_SORT_ORDER,
+            $locale
         );
     }
 

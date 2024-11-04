@@ -15,8 +15,8 @@ class NewsController extends AbstractController
     public function list(Request $request, NewsService $newsService): JsonResponse
     {
         return $this->json(
-            data: $newsService->listNews($request->getLocale(), $request->query->all()),
-            context: ['groups' => ['default', 'list']]
+            data: $newsService->listNews($request->query->all(), $request->getLocale()),
+            context: ['groups' => ['default', 'image', 'list']]
         );
     }
 
@@ -25,7 +25,7 @@ class NewsController extends AbstractController
     {
         return $this->json(
             data: $newsService->getLatestNews($request->getLocale()),
-            context: ['groups' => ['default', 'list']]
+            context: ['groups' => ['default', 'image', 'list']]
         );
     }
 
@@ -34,7 +34,7 @@ class NewsController extends AbstractController
     {
         return $this->json(
             data: $newsService->getNewsDetails($slug, $request->getLocale()),
-            context: ['groups' => ['default', 'details']]
+            context: ['groups' => ['default', 'image', 'details']]
         );
     }
 }

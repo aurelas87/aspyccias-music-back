@@ -15,7 +15,7 @@ use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\EnumRequirement;
 
-#[Route('admin/profile/links')]
+#[Route('/admin/profile/links')]
 class AdminProfileLinkController extends AbstractController
 {
     #[Route(path: '', name: 'app_admin_profile_link_list', methods: ['GET'])]
