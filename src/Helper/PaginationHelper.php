@@ -76,7 +76,7 @@ class PaginationHelper
     {
         $nextOffset = $this->offset + $this->limit;
 
-        return $nextOffset > $total ? null : $nextOffset;
+        return $nextOffset >= $total ? null : $nextOffset;
     }
 
     public function mapItemsToPaginatedList($newsItems): PaginatedList

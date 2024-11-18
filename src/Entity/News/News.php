@@ -19,7 +19,7 @@ class News
     #[Ignore]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Groups('default')]
     private ?string $slug = null;
 
