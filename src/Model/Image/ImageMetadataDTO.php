@@ -14,7 +14,7 @@ readonly class ImageMetadataDTO
             expression: 'this.resourceType !== "profile"',
             constraints: [new Assert\NotBlank]
         )]
-        public ?string $resourceSlug,
+        public string $resourceSlug = '',
     ) {
     }
 }
