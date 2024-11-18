@@ -3,9 +3,11 @@
 namespace App\Service\Profile;
 
 use App\Entity\Profile\ProfileLink;
+use App\Exception\Profile\ProfileLinkNotFoundException;
 use App\Model\DirectionType;
 use App\Model\Profile\ProfileLinkDTO;
 use App\Repository\Profile\ProfileLinkRepository;
+use App\Service\EntitySanitizer;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -13,17 +15,32 @@ class ProfileLinkService
 {
     private ProfileLinkRepository $profileLinkRepository;
     private EntityManagerInterface $entityManager;
+    private EntitySanitizer $entitySanitizer;
 
-    public function __construct(ProfileLinkRepository $profileLinkRepository, EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        ProfileLinkRepository $profileLinkRepository,
+        EntityManagerInterface $entityManager,
+        EntitySanitizer $entitySanitizer
+    ) {
         $this->profileLinkRepository = $profileLinkRepository;
         $this->entityManager = $entityManager;
+        $this->entitySanitizer = $entitySanitizer;
     }
 
     /** @return ProfileLink[] */
     public function listProfileLinks(): array
     {
         return $this->profileLinkRepository->findBy([], ['position' => 'ASC']);
+    }
+
+    public function getProfileLinkForAdmin(string $name): ProfileLink
+    {
+        $profileLink = $this->profileLinkRepository->findOneBy(['name' => $name]);
+        if (!$profileLink instanceof ProfileLink) {
+            throw new ProfileLinkNotFoundException();
+        }
+
+        return $profileLink;
     }
 
     public function addProfileLink(ProfileLinkDTO $profileLinkDTO): void
@@ -35,6 +52,8 @@ class ProfileLinkService
             ->setLink($profileLinkDTO->link)
             ->setPosition(++$maxPosition);
 
+        $this->entitySanitizer->sanitizeEntity($profileLink);
+
         $this->entityManager->persist($profileLink);
         $this->entityManager->flush();
     }
@@ -43,6 +62,8 @@ class ProfileLinkService
     {
         $profileLink->setName($profileLinkDTO->name)
             ->setLink($profileLinkDTO->link);
+
+        $this->entitySanitizer->sanitizeEntity($profileLink);
 
         $this->entityManager->flush();
     }

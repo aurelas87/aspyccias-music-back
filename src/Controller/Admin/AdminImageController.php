@@ -13,10 +13,10 @@ use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\File;
 
-#[Route('/admin/image')]
-class ImageController extends AbstractController
+#[Route(path: '/admin/image')]
+class AdminImageController extends AbstractController
 {
-    #[Route('', name: 'app_admin_image_upload', methods: ['POST'])]
+    #[Route(path: '', name: 'app_admin_image_upload', methods: ['POST'])]
     public function upload(
         #[MapRequestPayload] ImageMetadataDTO $imageDTO,
         #[MapUploadedFile([new File(mimeTypes: ['image/jpeg'])])] UploadedFile $image,

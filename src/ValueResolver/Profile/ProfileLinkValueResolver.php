@@ -34,6 +34,6 @@ readonly class ProfileLinkValueResolver implements ValueResolverInterface
             throw new ProfileLinkNotFoundException();
         }
 
-        return [$this->profileLinkRepository->findOneBy(['name' => $value])];
+        return [$profileLink];
     }
 }

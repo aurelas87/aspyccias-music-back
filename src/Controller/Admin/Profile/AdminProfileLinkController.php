@@ -5,7 +5,6 @@ namespace App\Controller\Admin\Profile;
 use App\Entity\Profile\ProfileLink;
 use App\Model\DirectionType;
 use App\Model\Profile\ProfileLinkDTO;
-use App\Repository\Profile\ProfileLinkRepository;
 use App\Service\Profile\ProfileLinkService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +14,7 @@ use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\EnumRequirement;
 
-#[Route('/admin/profile/links')]
+#[Route(path: '/admin/profile/links')]
 class AdminProfileLinkController extends AbstractController
 {
     #[Route(path: '', name: 'app_admin_profile_link_list', methods: ['GET'])]
@@ -35,10 +34,10 @@ class AdminProfileLinkController extends AbstractController
     }
 
     #[Route(path: '/{name}', name: 'app_admin_profile_link_details', methods: ['GET'])]
-    public function get(string $name, ProfileLinkRepository $profileLinkRepository): JsonResponse
+    public function get(string $name, ProfileLinkService $profileLinkService): JsonResponse
     {
         return $this->json(
-            data: $profileLinkRepository->findOneBy(['name' => $name]),
+            data: $profileLinkService->getProfileLinkForAdmin($name),
             context: ['groups' => ['default', 'admin']]
         );
     }

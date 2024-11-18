@@ -33,6 +33,10 @@ class NewsNormalizer implements NormalizerInterface
         } else {
             foreach ($data['translations'] as $translation) {
                 $data['title_'.$translation['locale']] = $translation['title'];
+
+                if (\in_array('details', $context['groups'], true)) {
+                    $data['content_'.$translation['locale']] = $translation['content'];
+                }
             }
         }
 

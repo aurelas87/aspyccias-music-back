@@ -53,7 +53,6 @@ class NewsServiceTest extends KernelTestCase
 
             static::assertSame($item['slug'], $currentItem->getSlug());
             static::assertSame($item['date'], $currentItem->getDate()->format(\DateTimeInterface::ATOM));
-            static::assertSame($item['preview_image'], $currentItem->getPreviewImage());
             static::assertCount(1, $currentItem->getTranslations());
             static::assertSame($item['title'], $currentItem->getTranslations()->first()->getTitle());
         }
@@ -97,7 +96,6 @@ class NewsServiceTest extends KernelTestCase
 
             static::assertSame($item['slug'], $currentItem->getSlug());
             static::assertSame($item['date'], $currentItem->getDate()->format(\DateTimeInterface::ATOM));
-            static::assertSame($item['preview_image'], $currentItem->getPreviewImage());
             static::assertCount(1, $currentItem->getTranslations());
             static::assertSame($item['title'], $currentItem->getTranslations()->first()->getTitle());
         }
@@ -134,7 +132,6 @@ class NewsServiceTest extends KernelTestCase
 
         static::assertSame($news['slug'], $newsDetails->getSlug());
         static::assertSame($news['date'], $newsDetails->getDate()->format(\DateTimeInterface::ATOM));
-        static::assertSame($news['preview_image'], $newsDetails->getPreviewImage());
         static::assertCount(1, $newsDetails->getTranslations());
         static::assertSame($news['title'], $newsDetails->getTranslations()->first()->getTitle());
         static::assertSame($news['content'], $newsDetails->getTranslations()->first()->getContent());

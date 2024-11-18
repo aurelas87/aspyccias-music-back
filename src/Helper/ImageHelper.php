@@ -5,7 +5,7 @@ namespace App\Helper;
 readonly class ImageHelper
 {
     const DEFAULT_IMAGE_EXTENSION = '.jpg';
-    const PROFILE_MAIN_IMAGE_NAME = 'profile-main'.self::DEFAULT_IMAGE_EXTENSION;
+    const PROFILE_MAIN_IMAGE_NAME = 'profile-main';
 
     public function __construct(private string $imagesPath)
     {

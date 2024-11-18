@@ -14,7 +14,7 @@ use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Requirement\EnumRequirement;
 
-#[Route('/releases')]
+#[Route(path: '/releases')]
 class ReleaseController extends AbstractController
 {
     #[Route(

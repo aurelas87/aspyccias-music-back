@@ -8,10 +8,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/news')]
+#[Route(path: '/news')]
 class NewsController extends AbstractController
 {
-    #[Route('', name: 'app_news_list', methods: ['GET'])]
+    #[Route(path: '', name: 'app_news_list', methods: ['GET'])]
     public function list(Request $request, NewsService $newsService): JsonResponse
     {
         return $this->json(
@@ -20,7 +20,7 @@ class NewsController extends AbstractController
         );
     }
 
-    #[Route('/latest', name: 'app_news_latest', methods: ['GET'])]
+    #[Route(path: '/latest', name: 'app_news_latest', methods: ['GET'])]
     public function latest(Request $request, NewsService $newsService): JsonResponse
     {
         return $this->json(
@@ -29,7 +29,7 @@ class NewsController extends AbstractController
         );
     }
 
-    #[Route('/{slug}', name: 'app_news_details', methods: ['GET'])]
+    #[Route(path: '/{slug}', name: 'app_news_details', methods: ['GET'])]
     public function newsDetails(string $slug, Request $request, NewsService $newsService): JsonResponse
     {
         return $this->json(

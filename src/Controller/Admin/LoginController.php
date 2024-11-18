@@ -17,7 +17,7 @@ class LoginController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('/login', name: 'app_admin_login', methods: ['POST'])]
+    #[Route(path: '/login', name: 'app_admin_login', methods: ['POST'])]
     public function login(#[CurrentUser] ?User $user, UserService $userService): JsonResponse
     {
         if (null === $user) {
@@ -34,7 +34,7 @@ class LoginController extends AbstractController
         ]);
     }
 
-    #[Route('/logout', name: 'app_admin_logout', methods: ['POST'])]
+    #[Route(path: '/logout', name: 'app_admin_logout', methods: ['POST'])]
     public function logout(#[CurrentUser] ?User $user, Security $security, UserService $userService): JsonResponse
     {
         if ($user) {
@@ -49,7 +49,7 @@ class LoginController extends AbstractController
     /**
      * @throws \Exception
      */
-    #[Route('/token/refresh', name: 'app_admin_token_refresh', methods: ['POST'])]
+    #[Route(path: '/token/refresh', name: 'app_admin_token_refresh', methods: ['POST'])]
     public function tokenRefresh(#[CurrentUser] ?User $user, UserService $userService): JsonResponse
     {
         $userService->checkAndRefreshUserToken($user);
