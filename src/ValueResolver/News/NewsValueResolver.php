@@ -34,8 +34,6 @@ readonly class NewsValueResolver implements ValueResolverInterface
             throw new NewsNotFoundException();
         }
 
-        dump($news);
-
         return [$news];
     }
 }

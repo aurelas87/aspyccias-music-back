@@ -33,11 +33,11 @@ class AdminProfileLinkController extends AbstractController
         return $this->json(null, Response::HTTP_CREATED);
     }
 
-    #[Route(path: '/{name}', name: 'app_admin_profile_link_details', methods: ['GET'])]
-    public function get(string $name, ProfileLinkService $profileLinkService): JsonResponse
+    #[Route(path: '/{profileLink}', name: 'app_admin_profile_link_details', methods: ['GET'])]
+    public function get(#[ValueResolver('profile_link')] ProfileLink $profileLink): JsonResponse
     {
         return $this->json(
-            data: $profileLinkService->getProfileLinkForAdmin($name),
+            data: $profileLink,
             context: ['groups' => ['default', 'admin']]
         );
     }

@@ -39,11 +39,11 @@ class AdminNewsController extends AbstractController
         return $this->json(null, Response::HTTP_CREATED);
     }
 
-    #[Route(path: '/{slug}', name: 'app_admin_news_details', methods: ['GET'])]
-    public function get(string $slug, NewsService $newsService): JsonResponse
+    #[Route(path: '/{news}', name: 'app_admin_news_details', methods: ['GET'])]
+    public function get(#[ValueResolver('news')] News $news): JsonResponse
     {
         return $this->json(
-            data: $newsService->getNewsDetailsForAdmin($slug),
+            data: $news,
             context: ['groups' => ['default', 'admin', 'details']]
         );
     }

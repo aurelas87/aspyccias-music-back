@@ -10,5 +10,7 @@ errors:
       missing: Missing release type
       invalid: Invalid release type
     not_found: Release not found
+    credit_type:
+      not_found: Release credit type not found
   contact:
     email_delivery: Email could not be sent

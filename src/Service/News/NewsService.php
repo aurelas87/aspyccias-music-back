@@ -72,16 +72,6 @@ class NewsService
         return $news;
     }
 
-    public function getNewsDetailsForAdmin(string $slug): News
-    {
-        $news = $this->newsRepository->findOneBy(['slug' => $slug]);
-        if (!$news instanceof News) {
-            throw new NewsNotFoundException();
-        }
-
-        return $news;
-    }
-
     /**
      * @throws \DateMalformedStringException
      */

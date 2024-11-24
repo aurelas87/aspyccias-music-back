@@ -19,7 +19,7 @@ class ReleaseCreditType
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin'])]
     private ?string $creditNameKey = null;
 
     /**
@@ -31,7 +31,7 @@ class ReleaseCreditType
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[Groups('details')]
+    #[Groups(['details', 'admin'])]
     private Collection $translations;
 
     public function __construct()
