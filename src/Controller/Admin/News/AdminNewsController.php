@@ -56,9 +56,20 @@ class AdminNewsController extends AbstractController
     public function edit(
         #[ValueResolver('news')] News $news,
         #[MapRequestPayload(acceptFormat: 'json')] NewsDTO $newsDTO,
-        NewsService $newsService
+        NewsService $newsService,
+        ImageService $imageService
     ): JsonResponse {
+        $oldPreviewImagePath = null;
+
+        if ($news->getDate() !== $newsDTO->date || $news->getSlug() !== $newsDTO->slug) {
+            $oldPreviewImagePath = $imageService->getImageFilePath(ResourceType::news, $news->getSlug());
+        }
+
         $newsService->editNews($news, $newsDTO);
+
+        if ($oldPreviewImagePath) {
+            $imageService->moveImageFile($oldPreviewImagePath, ResourceType::news, $news->getSlug());
+        }
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }

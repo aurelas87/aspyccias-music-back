@@ -65,7 +65,7 @@ class ImageService
     public function getImageFilePath(
         ResourceType $resourceType,
         string $resourceSlug,
-        string $prefix,
+        string $prefix = '',
         ImageAction $imageAction = ImageAction::get
     ): string {
         $filePath = $this->imageHelper->getImageDirectoryPath($resourceType);
