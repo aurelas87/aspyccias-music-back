@@ -3,6 +3,7 @@
 namespace App\Controller\Admin\News;
 
 use App\Entity\News\News;
+use App\Model\Image\ResourceType;
 use App\Model\News\NewsDTO;
 use App\Service\ImageService;
 use App\Service\News\NewsService;
@@ -68,7 +69,7 @@ class AdminNewsController extends AbstractController
         ImageService $imageService,
         NewsService $newsService
     ): JsonResponse {
-        $imageService->deleteImageFile('news', $news->getSlug());
+        $imageService->deleteImageFile(ResourceType::news, $news->getSlug());
         $newsService->deleteNews($news);
 
         return $this->json(null, Response::HTTP_NO_CONTENT);

@@ -17,18 +17,32 @@ class ReleaseCreditNormalizer implements NormalizerInterface
     public function normalize($object, ?string $format = null, array $context = []): array
     {
         $data = $this->normalizer->normalize($object, $format, $context);
+        $isAdmin = \in_array('admin', $context['groups'], true);
 
         if (!\array_key_exists('release_credit_type', $data)) {
             throw new \LogicException('The Release Credit data must have a Release Credit Type.');
         }
 
-        if (!\array_key_exists('translations', $data['release_credit_type'])
-            || \count($data['release_credit_type']['translations']) !== 1
-        ) {
-            throw new \LogicException('The Release Credit Type data must have at least one translation.');
+        if (!\array_key_exists('translations', $data['release_credit_type'])) {
+            if (!$isAdmin && !\array_key_exists('credit_name', $data['release_credit_type'])) {
+                throw new \LogicException('The Release Credit Type data must have a credit name.');
+            }
+
+            if ($isAdmin && !\array_key_exists('credit_name_fr', $data['release_credit_type'])) {
+                throw new \LogicException('The Release Credit Type data must have a "fr" credit name.');
+            }
+
+            if ($isAdmin && !\array_key_exists('credit_name_en', $data['release_credit_type'])) {
+                throw new \LogicException('The Release Credit Type data must have a "en" credit name.');
+            }
         }
 
-        $data['type'] = $data['release_credit_type']['translations'][0]['credit_name'];
+        if (!$isAdmin) {
+            $data['type'] = $data['release_credit_type']['credit_name'];
+        } else {
+            $data['type'] = $data['release_credit_type']['credit_name_en'];
+        }
+
         unset($data['release_credit_type']);
 
         return $data;

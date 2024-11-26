@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\News\News;
 use App\Entity\Profile\Profile;
 use App\Entity\Profile\ProfileLink;
+use App\Entity\Release\Release;
 use App\Entity\Release\ReleaseCreditType;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
@@ -50,6 +51,16 @@ class EntitySanitizer
 
                 foreach ($entity->getTranslations() as $releaseCreditTypeTranslations) {
                     $releaseCreditTypeTranslations->setCreditName($this->sanitizeAndKeepHTMLEntities($releaseCreditTypeTranslations->getCreditName()));
+                }
+                break;
+
+            case Release::class:
+                /** @var Release $entity */
+                $entity->setTitle($this->sanitizeAndKeepHTMLEntities($entity->getTitle()));
+                $entity->setSlug($this->sanitizeAndKeepHTMLEntities($entity->getSlug()));
+
+                foreach ($entity->getTranslations() as $releaseTranslations) {
+                    $releaseTranslations->setDescription($this->sanitizeAndKeepHTMLEntities($releaseTranslations->getDescription()));
                 }
                 break;
         }

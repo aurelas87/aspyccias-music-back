@@ -2,6 +2,8 @@
 
 namespace App\Helper;
 
+use App\Model\Image\ResourceType;
+
 readonly class ImageHelper
 {
     const DEFAULT_IMAGE_EXTENSION = '.jpg';
@@ -11,8 +13,8 @@ readonly class ImageHelper
     {
     }
 
-    public function getImageDirectoryPath(string $resourceType): string
+    public function getImageDirectoryPath(ResourceType $resourceType): string
     {
-        return $this->imagesPath.'/'.$resourceType;
+        return $this->imagesPath.'/'.$resourceType->value;
     }
 }

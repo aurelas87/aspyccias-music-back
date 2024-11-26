@@ -48,20 +48,19 @@ trait ExpectedReleasesTrait
             'slug' => $releaseSlug,
             'release_date' => $releaseDate->format(\DateTimeInterface::ATOM),
             'title' => "Release Title $releaseId",
-            'artwork_front_image' => "$releaseSlug-front-cover",
         ];
 
         if ($expectDetails) {
-            $releaseItem['artwork_back_image'] = "$releaseSlug-back-cover";
+            $releaseItem['artwork_back_image'] = true;
 
             $violinistCreditType = $locale === 'fr' ? 'Violoniste' : 'Violinist';
             $voiceCreditType = $locale === 'fr' ? 'Chant' : 'Voice';
 
             $releaseItem['credits'] = [
                 ['full_name' => 'John Composer', 'link' => 'https://www.aspyccias-music.com', 'type' => $locale === 'fr' ? 'Compositeur' : 'Composer'],
-                ['full_name' => 'John Producer', 'link' => null, 'type' => $locale === 'fr' ? 'Producteur' : 'Producer'],
-                ['full_name' => 'John Lyricist', 'link' => null, 'type' => $locale === 'fr' ? 'Parolier' : 'Lyricist'],
                 ['full_name' => 'John Editor', 'link' => null, 'type' => $locale === 'fr' ? 'Éditeur' : 'Editor'],
+                ['full_name' => 'John Lyricist', 'link' => null, 'type' => $locale === 'fr' ? 'Parolier' : 'Lyricist'],
+                ['full_name' => 'John Producer', 'link' => null, 'type' => $locale === 'fr' ? 'Producteur' : 'Producer'],
                 ['full_name' => 'John Violinist', 'link' => null, 'type' => $violinistCreditType],
                 ['full_name' => 'John Violinist 2', 'link' => null, 'type' => $violinistCreditType],
                 ['full_name' => 'John Voice', 'link' => null, 'type' => $voiceCreditType],

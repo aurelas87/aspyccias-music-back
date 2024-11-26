@@ -15,6 +15,12 @@ readonly class ImageMetadataDTO
             constraints: [new Assert\NotBlank]
         )]
         public string $resourceSlug = '',
+
+        #[Assert\When(
+            expression: 'this.resourceType === "releases"',
+            constraints: [new Assert\NotBlank]
+        )]
+        public string $prefix = '',
     ) {
     }
 }

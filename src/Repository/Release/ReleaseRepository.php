@@ -28,7 +28,7 @@ class ReleaseRepository extends ServiceEntityRepository
             ->innerJoin('r.translations', 't')
             ->where($qb->expr()->eq('r.type', ':releaseType'))
             ->andWhere($qb->expr()->eq('t.locale', ':locale'))
-            ->orderBy($qb->expr()->desc('r.release_date'))
+            ->orderBy($qb->expr()->desc('r.releaseDate'))
             ->setParameter('releaseType', $releaseType)
             ->setParameter('locale', $locale);
 
@@ -46,10 +46,29 @@ class ReleaseRepository extends ServiceEntityRepository
             ->leftJoin('ct.translations', 'ctt')
             ->where($qb->expr()->eq('r.slug', ':slug'))
             ->andWhere($qb->expr()->eq('t.locale', ':locale'))
-            ->andWhere($qb->expr()->eq('ctt.locale', ':locale'))
+            ->andWhere($qb->expr()->orX(
+                $qb->expr()->eq('ctt.locale', ':locale'),
+                $qb->expr()->isNull('ctt.locale')
+            ))
+            ->orderBy('ct.creditNameKey', 'ASC')
             ->setParameter('slug', $slug)
             ->setParameter('locale', $locale);
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function findPaginated(
+        int $offset,
+        int $limit,
+        string $sortField,
+        string $sortOrder,
+    ): array {
+        $qb = $this->createQueryBuilder('r');
+        $qb->orderBy("r.$sortField", $sortOrder);
+
+        return [
+            'items' => $qb->getQuery()->setFirstResult($offset)->setMaxResults($limit)->getResult(),
+            'total' => $this->createQueryBuilder('r')->select('COUNT(r)')->getQuery()->getSingleScalarResult(),
+        ];
     }
 }

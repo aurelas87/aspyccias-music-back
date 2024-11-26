@@ -6,7 +6,7 @@ enum ResourceType: string
 {
     case profile = 'profile';
     case news = 'news';
-    case release = 'release';
+    case releases = 'releases';
 
     public static function enumValues(): array
     {

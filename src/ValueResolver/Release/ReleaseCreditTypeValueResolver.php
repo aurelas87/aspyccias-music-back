@@ -29,11 +29,11 @@ readonly class ReleaseCreditTypeValueResolver implements ValueResolverInterface
             return [];
         }
 
-        $news = $this->releaseCreditTypeRepository->findOneBy(['creditNameKey' => $value]);
-        if (!$news) {
+        $releaseCreditType = $this->releaseCreditTypeRepository->findOneBy(['creditNameKey' => $value]);
+        if (!$releaseCreditType) {
             throw new ReleaseCreditTypeNotFoundException();
         }
 
-        return [$news];
+        return [$releaseCreditType];
     }
 }

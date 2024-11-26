@@ -198,8 +198,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
             ->setType($releaseType)
             ->setReleaseDate($releaseDate)
             ->setTitle($releaseTitle)
-            ->setArtworkFrontImage("$releaseSlug-front-cover")
-            ->setArtworkBackImage("$releaseSlug-back-cover")
+            ->setArtworkBackImage(true)
             ->addTranslation(
                 (new ReleaseTranslation())
                     ->setLocale('fr')

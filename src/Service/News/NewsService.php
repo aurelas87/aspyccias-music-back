@@ -118,13 +118,7 @@ class NewsService
             }
         }
 
-        $handle = fopen('./trace.txt', 'a');
-        fwrite($handle, $news->getTranslations()[1]->getTitle().PHP_EOL);
-
         $this->entitySanitizer->sanitizeEntity($news);
-
-        fwrite($handle, $news->getTranslations()[1]->getTitle().PHP_EOL);
-        fclose($handle);
 
         $this->entityManager->flush();
     }
