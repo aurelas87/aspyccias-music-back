@@ -239,7 +239,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             ReleaseCreditTypeFixtures::class,

@@ -6,6 +6,7 @@ use App\Entity\Release\Release;
 use App\Model\Image\ResourceType;
 use App\Model\Release\ReleaseDTO;
 use App\Model\Release\ReleaseImageType;
+use App\Model\Release\ReleaseTracksDTO;
 use App\Service\ImageService;
 use App\Service\Release\ReleaseService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -48,6 +49,26 @@ class AdminReleaseController extends AbstractController
             data: $release,
             context: ['groups' => ['default', 'admin', 'details']]
         );
+    }
+
+    #[Route(path: '/{release}/tracks', name: 'app_admin_release_tracks', methods: ['GET'])]
+    public function getTracks(#[ValueResolver('release')] Release $release): JsonResponse
+    {
+        return $this->json(
+            data: $release,
+            context: ['groups' => ['admin-tracks']]
+        );
+    }
+
+    #[Route(path: '/{release}/tracks', name: 'app_admin_release_tracks_update', methods: ['POST'])]
+    public function editTracks(
+        #[ValueResolver('release')] Release $release,
+        #[MapRequestPayload(acceptFormat: 'json')] ReleaseTracksDTO $releaseTracksDTO,
+        ReleaseService $releaseService
+    ): JsonResponse {
+        $releaseService->editTracks($release, $releaseTracksDTO);
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
     /**

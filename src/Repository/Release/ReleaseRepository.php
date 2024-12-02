@@ -50,7 +50,6 @@ class ReleaseRepository extends ServiceEntityRepository
                 $qb->expr()->eq('ctt.locale', ':locale'),
                 $qb->expr()->isNull('ctt.locale')
             ))
-            ->orderBy('ct.creditNameKey', 'ASC')
             ->setParameter('slug', $slug)
             ->setParameter('locale', $locale);
 

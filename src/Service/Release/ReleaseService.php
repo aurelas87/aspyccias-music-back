@@ -3,11 +3,13 @@
 namespace App\Service\Release;
 
 use App\Entity\Release\Release;
+use App\Entity\Release\ReleaseTrack;
 use App\Entity\Release\ReleaseTranslation;
 use App\Exception\Release\ReleaseNotFoundException;
 use App\Helper\PaginationHelper;
 use App\Model\PaginatedList;
 use App\Model\Release\ReleaseDTO;
+use App\Model\Release\ReleaseTracksDTO;
 use App\Model\Release\ReleaseType;
 use App\Repository\Release\ReleaseRepository;
 use App\Service\EntitySanitizer;
@@ -109,6 +111,26 @@ class ReleaseService
         $release->setArtworkBackImage($releaseDTO->artworkBackImage);
 
         $this->entitySanitizer->sanitizeEntity($release);
+
+        $this->entityManager->flush();
+    }
+
+    public function editTracks(Release $release, ReleaseTracksDTO $releaseTracksDTO): void
+    {
+        foreach ($release->getTracks() as $releaseTrack) {
+            $release->removeTrack($releaseTrack);
+        }
+
+        $this->entityManager->flush();
+
+        foreach ($releaseTracksDTO->tracks as $releaseTrackDTO) {
+            $release->addTrack(
+                (new ReleaseTrack())
+                    ->setTitle($releaseTrackDTO->title)
+                    ->setPosition($releaseTrackDTO->position)
+                    ->setDuration($releaseTrackDTO->duration)
+            );
+        }
 
         $this->entityManager->flush();
     }

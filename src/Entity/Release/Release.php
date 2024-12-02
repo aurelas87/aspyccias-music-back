@@ -34,7 +34,7 @@ class Release
     private ?\DateTimeInterface $releaseDate = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('default')]
+    #[Groups(['default', 'admin-tracks'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
@@ -86,7 +86,8 @@ class Release
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[Groups('details')]
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    #[Groups(['details', 'admin-tracks'])]
     private Collection $tracks;
 
     public function __construct()
