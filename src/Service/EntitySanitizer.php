@@ -7,6 +7,7 @@ use App\Entity\Profile\Profile;
 use App\Entity\Profile\ProfileLink;
 use App\Entity\Release\Release;
 use App\Entity\Release\ReleaseCreditType;
+use App\Entity\Release\ReleaseLinkName;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 class EntitySanitizer
@@ -52,6 +53,11 @@ class EntitySanitizer
                 foreach ($entity->getTranslations() as $releaseCreditTypeTranslations) {
                     $releaseCreditTypeTranslations->setCreditName($this->sanitizeAndKeepHTMLEntities($releaseCreditTypeTranslations->getCreditName()));
                 }
+                break;
+
+            case ReleaseLinkName::class:
+                /** @var ReleaseLinkName $entity */
+                $entity->setLinkName($this->sanitizeAndKeepHTMLEntities($entity->getLinkName()));
                 break;
 
             case Release::class:

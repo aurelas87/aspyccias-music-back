@@ -12,5 +12,9 @@ errors:
     not_found: Release not found
     credit_type:
       not_found: Release credit type not found
+      in_use: This release credit type is in use
+    link_name:
+      not_found: Release link name not found
+      in_use: This release link name is in use
   contact:
     email_delivery: Email could not be sent

@@ -4,7 +4,9 @@ namespace App\Service\Release;
 
 use App\Entity\Release\ReleaseCreditType;
 use App\Entity\Release\ReleaseCreditTypeTranslation;
+use App\Exception\Release\ReleaseCreditTypeInUseException;
 use App\Model\Release\ReleaseCreditTypeDTO;
+use App\Repository\Release\ReleaseCreditRepository;
 use App\Repository\Release\ReleaseCreditTypeRepository;
 use App\Service\EntitySanitizer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,15 +14,18 @@ use Doctrine\ORM\EntityManagerInterface;
 class ReleaseCreditTypeService
 {
     private ReleaseCreditTypeRepository $releaseCreditTypeRepository;
+    private ReleaseCreditRepository $releaseCreditRepository;
     private EntitySanitizer $entitySanitizer;
     private EntityManagerInterface $entityManager;
 
     public function __construct(
         ReleaseCreditTypeRepository $releaseCreditTypeRepository,
+        ReleaseCreditRepository $releaseCreditRepository,
         EntitySanitizer $entitySanitizer,
         EntityManagerInterface $entityManager
     ) {
         $this->releaseCreditTypeRepository = $releaseCreditTypeRepository;
+        $this->releaseCreditRepository = $releaseCreditRepository;
         $this->entitySanitizer = $entitySanitizer;
         $this->entityManager = $entityManager;
     }
@@ -73,6 +78,10 @@ class ReleaseCreditTypeService
 
     public function deleteReleaseCreditType(ReleaseCreditType $releaseCreditType): void
     {
+        if ($this->releaseCreditRepository->isReleaseCreditTypeInUse($releaseCreditType)) {
+            throw new ReleaseCreditTypeInUseException();
+        }
+
         $this->entityManager->remove($releaseCreditType);
         $this->entityManager->flush();
     }

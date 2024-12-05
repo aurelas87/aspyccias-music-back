@@ -17,7 +17,7 @@ class ReleaseLinkName
     private ?int $id = null;
 
     #[ORM\Column(length: 20, unique: true)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin'])]
     private ?string $linkName = null;
 
     public function getId(): ?int

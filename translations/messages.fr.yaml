@@ -12,5 +12,9 @@ errors:
     not_found: Release introuvable
     credit_type:
       not_found: Type de crédit introuvable
+      in_use: Ce type de crédit est utilisé
+    link_name:
+      not_found: Nom de lien de release introuvable
+      in_use: Ce nom de lien de release est utilisé
   contact:
     email_delivery: L'email n'a pas pu être envoyé
