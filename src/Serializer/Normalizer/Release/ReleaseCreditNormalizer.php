@@ -18,29 +18,38 @@ class ReleaseCreditNormalizer implements NormalizerInterface
     {
         $data = $this->normalizer->normalize($object, $format, $context);
         $isAdmin = \in_array('admin', $context['groups'], true);
+        $isAdminCredits = \in_array('admin-credits', $context['groups'], true);
 
         if (!\array_key_exists('release_credit_type', $data)) {
             throw new \LogicException('The Release Credit data must have a Release Credit Type.');
         }
 
         if (!\array_key_exists('translations', $data['release_credit_type'])) {
-            if (!$isAdmin && !\array_key_exists('credit_name', $data['release_credit_type'])) {
+            if (!$isAdmin && !$isAdminCredits && !\array_key_exists('credit_name', $data['release_credit_type'])) {
                 throw new \LogicException('The Release Credit Type data must have a credit name.');
             }
 
-            if ($isAdmin && !\array_key_exists('credit_name_fr', $data['release_credit_type'])) {
-                throw new \LogicException('The Release Credit Type data must have a "fr" credit name.');
+            if ($isAdmin) {
+                if (!\array_key_exists('credit_name_fr', $data['release_credit_type'])) {
+                    throw new \LogicException('The Release Credit Type data must have a "fr" credit name.');
+                }
+
+                if (!\array_key_exists('credit_name_en', $data['release_credit_type'])) {
+                    throw new \LogicException('The Release Credit Type data must have a "en" credit name.');
+                }
             }
 
-            if ($isAdmin && !\array_key_exists('credit_name_en', $data['release_credit_type'])) {
-                throw new \LogicException('The Release Credit Type data must have a "en" credit name.');
+            if ($isAdminCredits && !\array_key_exists('credit_name_key', $data['release_credit_type'])) {
+                throw new \LogicException('The Release Credit Type data must have credit name key.');
             }
         }
 
-        if (!$isAdmin) {
+        if (!$isAdmin && !$isAdminCredits) {
             $data['type'] = $data['release_credit_type']['credit_name'];
-        } else {
+        } elseif ($isAdmin) {
             $data['type'] = $data['release_credit_type']['credit_name_en'];
+        } else {
+            $data['type'] = $data['release_credit_type']['credit_name_key'];
         }
 
         unset($data['release_credit_type']);

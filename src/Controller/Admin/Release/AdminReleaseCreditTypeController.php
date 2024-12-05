@@ -12,7 +12,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/admin/releases/credit-types')]
+#[Route(path: '/admin/credit-types')]
 class AdminReleaseCreditTypeController extends AbstractController
 {
     #[Route(path: '', name: 'app_admin_release_credit_type_list', methods: ['GET'])]

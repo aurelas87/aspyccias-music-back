@@ -3,14 +3,18 @@
 namespace App\Service\Release;
 
 use App\Entity\Release\Release;
+use App\Entity\Release\ReleaseCredit;
+use App\Entity\Release\ReleaseCreditType;
 use App\Entity\Release\ReleaseTrack;
 use App\Entity\Release\ReleaseTranslation;
 use App\Exception\Release\ReleaseNotFoundException;
 use App\Helper\PaginationHelper;
 use App\Model\PaginatedList;
+use App\Model\Release\ReleaseCreditsDTO;
 use App\Model\Release\ReleaseDTO;
 use App\Model\Release\ReleaseTracksDTO;
 use App\Model\Release\ReleaseType;
+use App\Repository\Release\ReleaseCreditTypeRepository;
 use App\Repository\Release\ReleaseRepository;
 use App\Service\EntitySanitizer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,17 +22,20 @@ use Doctrine\ORM\EntityManagerInterface;
 class ReleaseService
 {
     private ReleaseRepository $releaseRepository;
+    private ReleaseCreditTypeRepository $releaseCreditTypeRepository;
     private EntityManagerInterface $entityManager;
     private EntitySanitizer $entitySanitizer;
 
     public function __construct(
         ReleaseRepository $releaseRepository,
+        ReleaseCreditTypeRepository $releaseCreditTypeRepository,
         EntityManagerInterface $entityManager,
         EntitySanitizer $entitySanitizer
     ) {
         $this->releaseRepository = $releaseRepository;
         $this->entityManager = $entityManager;
         $this->entitySanitizer = $entitySanitizer;
+        $this->releaseCreditTypeRepository = $releaseCreditTypeRepository;
     }
 
     /**
@@ -129,6 +136,33 @@ class ReleaseService
                     ->setTitle($releaseTrackDTO->title)
                     ->setPosition($releaseTrackDTO->position)
                     ->setDuration($releaseTrackDTO->duration)
+            );
+        }
+
+        $this->entityManager->flush();
+    }
+
+    public function editCredits(Release $release, ReleaseCreditsDTO $releaseCreditsDTO): void
+    {
+        foreach ($release->getCredits() as $releaseCredit) {
+            $release->removeCredit($releaseCredit);
+        }
+
+        $this->entityManager->flush();
+
+        foreach ($releaseCreditsDTO->credits as $releaseCreditDTO) {
+            $releaseCreditType = $this->releaseCreditTypeRepository
+                ->findOneBy(['creditNameKey' => $releaseCreditDTO->type]);
+
+            if (!$releaseCreditType instanceof ReleaseCreditType) {
+                continue;
+            }
+
+            $release->addCredit(
+                (new ReleaseCredit())
+                    ->setReleaseCreditType($releaseCreditType)
+                    ->setFullName($releaseCreditDTO->fullName)
+                    ->setLink($releaseCreditDTO->link)
             );
         }
 

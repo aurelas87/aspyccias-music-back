@@ -4,6 +4,7 @@ namespace App\Controller\Admin\Release;
 
 use App\Entity\Release\Release;
 use App\Model\Image\ResourceType;
+use App\Model\Release\ReleaseCreditsDTO;
 use App\Model\Release\ReleaseDTO;
 use App\Model\Release\ReleaseImageType;
 use App\Model\Release\ReleaseTracksDTO;
@@ -67,6 +68,26 @@ class AdminReleaseController extends AbstractController
         ReleaseService $releaseService
     ): JsonResponse {
         $releaseService->editTracks($release, $releaseTracksDTO);
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    #[Route(path: '/{release}/credits', name: 'app_admin_release_credits', methods: ['GET'])]
+    public function getCredits(#[ValueResolver('release')] Release $release): JsonResponse
+    {
+        return $this->json(
+            data: $release,
+            context: ['groups' => ['admin-credits']]
+        );
+    }
+
+    #[Route(path: '/{release}/credits', name: 'app_admin_release_credits_update', methods: ['POST'])]
+    public function editCredits(
+        #[ValueResolver('release')] Release $release,
+        #[MapRequestPayload(acceptFormat: 'json')] ReleaseCreditsDTO $releaseCreditsDTO,
+        ReleaseService $releaseService
+    ): JsonResponse {
+        $releaseService->editCredits($release, $releaseCreditsDTO);
 
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }

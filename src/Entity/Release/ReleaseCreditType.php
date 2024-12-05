@@ -19,7 +19,7 @@ class ReleaseCreditType
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['details', 'admin'])]
+    #[Groups(['details', 'admin', 'admin-credits'])]
     private ?string $creditNameKey = null;
 
     /**

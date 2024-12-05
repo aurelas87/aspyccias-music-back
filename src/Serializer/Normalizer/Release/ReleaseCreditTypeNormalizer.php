@@ -18,6 +18,11 @@ class ReleaseCreditTypeNormalizer implements NormalizerInterface
     {
         $data = $this->normalizer->normalize($object, $format, $context);
         $isAdmin = \in_array('admin', $context['groups'], true);
+        $isAdminCredits = \in_array('admin-credits', $context['groups'], true);
+
+        if ($isAdminCredits) {
+            return $data;
+        }
 
         if (!\array_key_exists('translations', $data) || (!$isAdmin && \count($data['translations']) !== 1)) {
             throw new \LogicException('The Release Credit Type data must have at least one translation.');

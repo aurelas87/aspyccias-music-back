@@ -19,16 +19,16 @@ class ReleaseCredit
     #[ORM\Id]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-credits'])]
     private ?ReleaseCreditType $releaseCreditType = null;
 
     #[ORM\Id]
     #[ORM\Column(length: 255)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-credits'])]
     private ?string $fullName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-credits'])]
     private ?string $link = null;
 
     public function getRelease(): ?Release

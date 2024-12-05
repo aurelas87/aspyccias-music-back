@@ -34,7 +34,7 @@ class Release
     private ?\DateTimeInterface $releaseDate = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['default', 'admin-tracks'])]
+    #[Groups(['default', 'admin-tracks', 'admin-credits'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
@@ -62,7 +62,7 @@ class Release
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-credits'])]
     private Collection $credits;
 
     /**
