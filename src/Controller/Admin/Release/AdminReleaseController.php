@@ -7,6 +7,7 @@ use App\Model\Image\ResourceType;
 use App\Model\Release\ReleaseCreditsDTO;
 use App\Model\Release\ReleaseDTO;
 use App\Model\Release\ReleaseImageType;
+use App\Model\Release\ReleaseLinksDTO;
 use App\Model\Release\ReleaseTracksDTO;
 use App\Service\ImageService;
 use App\Service\Release\ReleaseService;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\HttpKernel\Attribute\ValueResolver;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route(path: '/admin/releases')]
@@ -92,6 +94,26 @@ class AdminReleaseController extends AbstractController
         return $this->json(null, Response::HTTP_NO_CONTENT);
     }
 
+    #[Route(path: '/{release}/links', name: 'app_admin_release_links', methods: ['GET'])]
+    public function getLinks(#[ValueResolver('release')] Release $release): JsonResponse
+    {
+        return $this->json(
+            data: $release,
+            context: ['groups' => ['admin-links']]
+        );
+    }
+
+    #[Route(path: '/{release}/links', name: 'app_admin_release_links_update', methods: ['POST'])]
+    public function editLinks(
+        #[ValueResolver('release')] Release $release,
+        #[MapRequestPayload(acceptFormat: 'json')] ReleaseLinksDTO $releaseLinksDTO,
+        ReleaseService $releaseService
+    ): JsonResponse {
+        $releaseService->editLinks($release, $releaseLinksDTO);
+
+        return $this->json(null, Response::HTTP_NO_CONTENT);
+    }
+
     /**
      * @throws \DateMalformedStringException
      */
@@ -110,11 +132,15 @@ class AdminReleaseController extends AbstractController
         }
 
         if ($release->getReleaseDate() !== $releaseDTO->releaseDate || $release->getSlug() !== $releaseDTO->slug) {
-            $oldArtworkFrontImagePath = $imageService->getImageFilePath(
-                ResourceType::releases,
-                $release->getSlug(),
-                ReleaseImageType::front->value
-            );
+            try {
+                $oldArtworkFrontImagePath = $imageService->getImageFilePath(
+                    ResourceType::releases,
+                    $release->getSlug(),
+                    ReleaseImageType::front->value
+                );
+            } catch (NotFoundHttpException $e) {
+                // Keep empty so release update can work without a front image
+            }
 
             if ($release->getArtworkBackImage() && $releaseDTO->artworkBackImage) {
                 $oldArtworkBackImagePath = $imageService->getImageFilePath(

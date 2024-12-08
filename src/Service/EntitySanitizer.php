@@ -6,8 +6,11 @@ use App\Entity\News\News;
 use App\Entity\Profile\Profile;
 use App\Entity\Profile\ProfileLink;
 use App\Entity\Release\Release;
+use App\Entity\Release\ReleaseCredit;
 use App\Entity\Release\ReleaseCreditType;
+use App\Entity\Release\ReleaseLink;
 use App\Entity\Release\ReleaseLinkName;
+use App\Entity\Release\ReleaseTrack;
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 class EntitySanitizer
@@ -32,43 +35,68 @@ class EntitySanitizer
 
             case ProfileLink::class:
                 /** @var ProfileLink $entity */
-                $entity->setName($this->sanitizeAndKeepHTMLEntities($entity->getName()));
-                $entity->setLink($this->sanitizeAndKeepHTMLEntities($entity->getLink()));
+                $entity->setName($this->htmlSanitizer->sanitize($entity->getName()));
+                $entity->setLink($this->htmlSanitizer->sanitize($entity->getLink()));
                 break;
 
             case News::class:
                 /** @var News $entity */
-                $entity->setSlug($this->sanitizeAndKeepHTMLEntities($entity->getSlug()));
+                $entity->setSlug($this->htmlSanitizer->sanitize($entity->getSlug()));
 
                 foreach ($entity->getTranslations() as $newsTranslations) {
-                    $newsTranslations->setTitle($this->sanitizeAndKeepHTMLEntities($newsTranslations->getTitle()));
+                    $newsTranslations->setTitle($this->htmlSanitizer->sanitize($newsTranslations->getTitle()));
                     $newsTranslations->setContent($this->sanitizeAndKeepHTMLEntities($newsTranslations->getContent()));
                 }
                 break;
 
             case ReleaseCreditType::class:
                 /** @var ReleaseCreditType $entity */
-                $entity->setCreditNameKey($this->sanitizeAndKeepHTMLEntities($entity->getCreditNameKey()));
+                $entity->setCreditNameKey($this->htmlSanitizer->sanitize($entity->getCreditNameKey()));
 
                 foreach ($entity->getTranslations() as $releaseCreditTypeTranslations) {
-                    $releaseCreditTypeTranslations->setCreditName($this->sanitizeAndKeepHTMLEntities($releaseCreditTypeTranslations->getCreditName()));
+                    $releaseCreditTypeTranslations->setCreditName($this->htmlSanitizer->sanitize($releaseCreditTypeTranslations->getCreditName()));
                 }
                 break;
 
             case ReleaseLinkName::class:
                 /** @var ReleaseLinkName $entity */
-                $entity->setLinkName($this->sanitizeAndKeepHTMLEntities($entity->getLinkName()));
+                $entity->setLinkName($this->htmlSanitizer->sanitize($entity->getLinkName()));
                 break;
 
             case Release::class:
                 /** @var Release $entity */
-                $entity->setTitle($this->sanitizeAndKeepHTMLEntities($entity->getTitle()));
-                $entity->setSlug($this->sanitizeAndKeepHTMLEntities($entity->getSlug()));
+                $entity->setTitle($this->htmlSanitizer->sanitize($entity->getTitle()));
+                $entity->setSlug($this->htmlSanitizer->sanitize($entity->getSlug()));
 
                 foreach ($entity->getTranslations() as $releaseTranslations) {
                     $releaseTranslations->setDescription($this->sanitizeAndKeepHTMLEntities($releaseTranslations->getDescription()));
                 }
                 break;
+
+            case ReleaseTrack::class:
+                /** @var ReleaseTrack $entity */
+                $entity->setTitle($this->htmlSanitizer->sanitize($entity->getTitle()));
+                break;
+
+            case ReleaseCredit::class:
+                /** @var ReleaseCredit $entity */
+                $entity->setFullName($this->htmlSanitizer->sanitize($entity->getFullName()));
+
+                if (\is_string($entity->getLink())) {
+                    $entity->setLink($this->htmlSanitizer->sanitize($entity->getLink()));
+                }
+                break;
+
+            case ReleaseLink::class:
+                /** @var ReleaseLink $entity */
+                if (\is_string($entity->getLink())) {
+                    $entity->setLink($this->htmlSanitizer->sanitize($entity->getLink()));
+                }
+
+                // TODO: Filter embedded content properly, HtmlSanitizer is too much restrictive (try symfony/dom-crawler?)
+//                if (\is_string($entity->getEmbedded())) {
+//                    $entity->setEmbedded($this->sanitizeAndKeepHTMLEntities($entity->getEmbedded()));
+//                }
         }
     }
 

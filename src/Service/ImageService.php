@@ -38,7 +38,7 @@ class ImageService
             ResourceType::profile->value,
             ResourceType::news->value,
             ResourceType::releases->value,
-        ])) {
+        ], true)) {
             throw new BadRequestHttpException();
         }
 
@@ -123,7 +123,7 @@ class ImageService
         $filePath .= ImageHelper::DEFAULT_IMAGE_EXTENSION;
 
         if ($imageAction === ImageAction::get && !\file_exists($filePath)) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('File not found');
         }
 
         return $filePath;
@@ -136,7 +136,7 @@ class ImageService
         string $prefix = ''
     ): void {
         if (!\file_exists($oldImagePath)) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException('File not found');
         }
 
         $newImagePath = $this->getImageFilePath($resourceType, $resourceSlug, $prefix, ImageAction::move);

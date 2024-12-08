@@ -16,5 +16,7 @@ errors:
     link_name:
       not_found: Release link name not found
       in_use: This release link name is in use
+    links:
+      collision: You can add only one link of the same name "Name"
   contact:
     email_delivery: Email could not be sent
