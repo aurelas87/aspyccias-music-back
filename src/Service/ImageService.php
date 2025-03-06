@@ -166,7 +166,7 @@ class ImageService
     private function checkAndDeleteDirectory(string $filePath): void
     {
         $directory = \dirname($filePath);
-        if (\count(\scandir($directory)) === 2) {
+        if (\is_dir($directory) && \count(\scandir($directory)) === 2) {
             \rmdir($directory);
         }
     }

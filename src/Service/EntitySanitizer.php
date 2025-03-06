@@ -3,7 +3,6 @@
 namespace App\Service;
 
 use App\Entity\News\News;
-use App\Entity\Profile\Profile;
 use App\Entity\Profile\ProfileLink;
 use App\Entity\Release\Release;
 use App\Entity\Release\ReleaseCredit;
@@ -27,16 +26,10 @@ class EntitySanitizer
         $className = \get_class($entity);
 
         switch ($className) {
-            case Profile::class:
-                /** @var Profile $entity */
-                $entity->setWelcome($this->sanitizeAndKeepHTMLEntities($entity->getWelcome()));
-                $entity->setDescription($this->sanitizeAndKeepHTMLEntities($entity->getDescription()));
-                break;
-
             case ProfileLink::class:
                 /** @var ProfileLink $entity */
                 $entity->setName($this->htmlSanitizer->sanitize($entity->getName()));
-                $entity->setLink($this->htmlSanitizer->sanitize($entity->getLink()));
+                $entity->setLink($this->sanitizeAndKeepHTMLEntities($entity->getLink()));
                 break;
 
             case News::class:
@@ -44,8 +37,7 @@ class EntitySanitizer
                 $entity->setSlug($this->htmlSanitizer->sanitize($entity->getSlug()));
 
                 foreach ($entity->getTranslations() as $newsTranslations) {
-                    $newsTranslations->setTitle($this->htmlSanitizer->sanitize($newsTranslations->getTitle()));
-                    $newsTranslations->setContent($this->sanitizeAndKeepHTMLEntities($newsTranslations->getContent()));
+                    $newsTranslations->setTitle($this->sanitizeAndKeepHTMLEntities($newsTranslations->getTitle()));
                 }
                 break;
 
@@ -75,7 +67,7 @@ class EntitySanitizer
 
             case ReleaseTrack::class:
                 /** @var ReleaseTrack $entity */
-                $entity->setTitle($this->htmlSanitizer->sanitize($entity->getTitle()));
+                $entity->setTitle($this->sanitizeAndKeepHTMLEntities($entity->getTitle()));
                 break;
 
             case ReleaseCredit::class:
@@ -90,13 +82,8 @@ class EntitySanitizer
             case ReleaseLink::class:
                 /** @var ReleaseLink $entity */
                 if (\is_string($entity->getLink())) {
-                    $entity->setLink($this->htmlSanitizer->sanitize($entity->getLink()));
+                    $entity->setLink($this->sanitizeAndKeepHTMLEntities($entity->getLink()));
                 }
-
-                // TODO: Filter embedded content properly, HtmlSanitizer is too much restrictive (try symfony/dom-crawler?)
-//                if (\is_string($entity->getEmbedded())) {
-//                    $entity->setEmbedded($this->sanitizeAndKeepHTMLEntities($entity->getEmbedded()));
-//                }
         }
     }
 

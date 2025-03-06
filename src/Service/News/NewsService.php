@@ -114,7 +114,7 @@ class NewsService
                 $newsTranslation->setContent($newsDTO->fr->content);
             } else {
                 $newsTranslation->setTitle($newsDTO->en->title);
-                $newsTranslation->setContent($newsDTO->en->title);
+                $newsTranslation->setContent($newsDTO->en->content);
             }
         }
 
