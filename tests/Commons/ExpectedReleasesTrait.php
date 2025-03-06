@@ -48,11 +48,10 @@ trait ExpectedReleasesTrait
             'slug' => $releaseSlug,
             'release_date' => $releaseDate->format(\DateTimeInterface::ATOM),
             'title' => "Release Title $releaseId",
-            'artwork_front_image' => "$releaseSlug-front-cover",
         ];
 
         if ($expectDetails) {
-            $releaseItem['artwork_back_image'] = "$releaseSlug-back-cover";
+            $releaseItem['artwork_back_image'] = true;
 
             $violinistCreditType = $locale === 'fr' ? 'Violoniste' : 'Violinist';
             $voiceCreditType = $locale === 'fr' ? 'Chant' : 'Voice';

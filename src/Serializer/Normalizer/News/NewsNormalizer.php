@@ -17,15 +17,27 @@ class NewsNormalizer implements NormalizerInterface
     public function normalize($object, ?string $format = null, array $context = []): array
     {
         $data = $this->normalizer->normalize($object, $format, $context);
+        $isAdmin = \in_array('admin', $context['groups'], true);
 
-        if (!\array_key_exists('translations', $data) || \count($data['translations']) !== 1) {
+        if (!\array_key_exists('translations', $data) || (!$isAdmin && \count($data['translations']) !== 1)) {
             throw new \LogicException('The News data must have at least one translation.');
         }
 
-        $data['title'] = $data['translations'][0]['title'];
+        if (!$isAdmin) {
+            $data['title'] = $data['translations'][0]['title'];
 
-        if (\in_array('details', $context['groups'], true)) {
-            $data['content'] = $data['translations'][0]['content'];
+            if (\in_array('details', $context['groups'], true)) {
+                $data['content'] = $data['translations'][0]['content'];
+            }
+
+        } else {
+            foreach ($data['translations'] as $translation) {
+                $data['title_'.$translation['locale']] = $translation['title'];
+
+                if (\in_array('details', $context['groups'], true)) {
+                    $data['content_'.$translation['locale']] = $translation['content'];
+                }
+            }
         }
 
         unset($data['translations']);

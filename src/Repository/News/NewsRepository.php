@@ -17,21 +17,29 @@ class NewsRepository extends ServiceEntityRepository
         parent::__construct($registry, News::class);
     }
 
-    private function createFindNewsByLocaleQueryBuilder(
-        string $locale,
-        string $sortField,
-        string $sortOrder
-    ): QueryBuilder {
-
-        $qb = $this->createQueryBuilder('n');
+    private function addLocalizationToQuery(QueryBuilder $qb, ?string $locale = null): QueryBuilder
+    {
+        if (\is_null($locale)) {
+            return $qb;
+        }
 
         $qb->addSelect('t')
             ->innerJoin('n.translations', 't')
-            ->where($qb->expr()->eq('t.locale', ':locale'))
-            ->orderBy("n.$sortField", $sortOrder)
+            ->andWhere($qb->expr()->eq('t.locale', ':locale'))
             ->setParameter('locale', $locale);
 
         return $qb;
+    }
+
+    private function createFindNewsLocalizedQueryBuilder(
+        string $sortField,
+        string $sortOrder,
+        ?string $locale = null
+    ): QueryBuilder {
+        $qb = $this->createQueryBuilder('n');
+        $qb->orderBy("n.$sortField", $sortOrder);
+
+        return $this->addLocalizationToQuery($qb, $locale);
     }
 
     private function countTotal(): int
@@ -43,9 +51,14 @@ class NewsRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
-    public function findPaginatedLocalized(string $locale, int $offset, int $limit, string $sortField, string $sortOrder): array
-    {
-        $qb = $this->createFindNewsByLocaleQueryBuilder($locale, $sortField, $sortOrder);
+    public function findPaginatedLocalized(
+        int $offset,
+        int $limit,
+        string $sortField,
+        string $sortOrder,
+        ?string $locale = null
+    ): array {
+        $qb = $this->createFindNewsLocalizedQueryBuilder($sortField, $sortOrder, $locale);
 
         return [
             'items' => $qb->getQuery()->setFirstResult($offset)->setMaxResults($limit)->getResult(),
@@ -56,22 +69,20 @@ class NewsRepository extends ServiceEntityRepository
     /**
      * @return News[]
      */
-    public function findLatestLocalized(string $locale, int $limit, string $sortField, string $sortOrder): array
+    public function findLatestLocalized(int $limit, string $sortField, string $sortOrder, string $locale): array
     {
-        $qb = $this->createFindNewsByLocaleQueryBuilder($locale, $sortField, $sortOrder);
+        $qb = $this->createFindNewsLocalizedQueryBuilder($sortField, $sortOrder, $locale);
 
         return $qb->getQuery()->setMaxResults($limit)->getResult();
     }
 
-    public function findOneBySlugLocalized(string $slug, string $locale): ?News
+    public function findOneBySlugLocalized(string $slug, ?string $locale = null): ?News
     {
         $qb = $this->createQueryBuilder('n');
-        $qb->addSelect('t')
-            ->innerJoin('n.translations', 't')
-            ->where($qb->expr()->eq('n.slug', ':slug'))
-            ->andWhere($qb->expr()->eq('t.locale', ':locale'))
-            ->setParameter('slug', $slug)
-            ->setParameter('locale', $locale);
+        $qb->where($qb->expr()->eq('n.slug', ':slug'))
+            ->setParameter('slug', $slug);
+
+        $qb = $this->addLocalizationToQuery($qb, $locale);
 
         return $qb->getQuery()->getOneOrNullResult();
     }

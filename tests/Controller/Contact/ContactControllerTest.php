@@ -76,7 +76,7 @@ class ContactControllerTest extends JsonResponseTestCase
         $this->emailService->expects($this->never())->method('sendEmail');
 
         $newFaultyEmail = $this->newEmailAsJSONArray();
-        unset($newFaultyEmail['first_name']);
+        $newFaultyEmail['first_name'] = '';
         $newFaultyEmail['email_address'] = 'test@mail';
 
         $this->client->jsonRequest(

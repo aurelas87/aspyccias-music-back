@@ -14,14 +14,13 @@ trait ExpectedEmailsTrait
 
     private function newEmail(): EmailDTO
     {
-        $emailDTO = new EmailDTO();
-        $emailDTO->setFirstName('John')
-            ->setLastName('Doe')
-            ->setEmailAddress('johndoe@example.com')
-            ->setSubject('Test Subject')
-            ->setMessage(self::EMAIL_BODY);
-
-        return $emailDTO;
+        return new EmailDTO(
+            'John',
+            'Doe',
+            'johndoe@example.com',
+            'Test Subject',
+            self::EMAIL_BODY
+        );
     }
 
     private function newEmailAsJSONArray(): array
@@ -29,11 +28,11 @@ trait ExpectedEmailsTrait
         $newEmail = $this->newEmail();
 
         return [
-            'first_name' => $newEmail->getFirstName(),
-            'last_name' => $newEmail->getLastName(),
-            'email_address' => $newEmail->getEmailAddress(),
-            'subject' => $newEmail->getSubject(),
-            'message' => $newEmail->getMessage(),
+            'first_name' => $newEmail->firstName,
+            'last_name' => $newEmail->lastName,
+            'email_address' => $newEmail->emailAddress,
+            'subject' => $newEmail->subject,
+            'message' => $newEmail->message,
         ];
     }
 
@@ -42,11 +41,11 @@ trait ExpectedEmailsTrait
         return [
             'From' => \sprintf(
                 '%s %s <%s>',
-                $emailDTO->getFirstName(),
-                $emailDTO->getLastName(),
-                $emailDTO->getEmailAddress()
+                $emailDTO->firstName,
+                $emailDTO->lastName,
+                $emailDTO->emailAddress
             ),
-            'Reply-To' => $emailDTO->getEmailAddress(),
+            'Reply-To' => $emailDTO->emailAddress,
         ];
     }
 }

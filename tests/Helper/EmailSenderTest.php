@@ -30,7 +30,7 @@ class EmailSenderTest extends KernelTestCase
         $email = $this->newEmail();
         $this->emailSender->prepareEmail($email);
 
-        static::assertSame($email->getSubject(), $this->emailSender->emailSubject);
+        static::assertSame($email->subject, $this->emailSender->emailSubject);
         static::assertSame(self::SANITIZED_EMAIL_BODY, $this->emailSender->emailBody);
 
         $expectedAdditionalHeaders = $this->getExpectedHeaders($email);

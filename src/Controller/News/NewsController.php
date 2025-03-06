@@ -8,33 +8,33 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/news')]
+#[Route(path: '/news')]
 class NewsController extends AbstractController
 {
-    #[Route('', name: 'app_news_list', methods: ['GET'])]
+    #[Route(path: '', name: 'app_news_list', methods: ['GET'])]
     public function list(Request $request, NewsService $newsService): JsonResponse
     {
         return $this->json(
-            data: $newsService->listNews($request->getLocale(), $request->query->all()),
-            context: ['groups' => ['default', 'list']]
+            data: $newsService->listNews($request->query->all(), $request->getLocale()),
+            context: ['groups' => ['default', 'image', 'list']]
         );
     }
 
-    #[Route('/latest', name: 'app_news_latest', methods: ['GET'])]
+    #[Route(path: '/latest', name: 'app_news_latest', methods: ['GET'])]
     public function latest(Request $request, NewsService $newsService): JsonResponse
     {
         return $this->json(
             data: $newsService->getLatestNews($request->getLocale()),
-            context: ['groups' => ['default', 'list']]
+            context: ['groups' => ['default', 'image', 'list']]
         );
     }
 
-    #[Route('/{slug}', name: 'app_news_details', methods: ['GET'])]
+    #[Route(path: '/{slug}', name: 'app_news_details', methods: ['GET'])]
     public function newsDetails(string $slug, Request $request, NewsService $newsService): JsonResponse
     {
         return $this->json(
             data: $newsService->getNewsDetails($slug, $request->getLocale()),
-            context: ['groups' => ['default', 'details']]
+            context: ['groups' => ['default', 'image', 'details']]
         );
     }
 }

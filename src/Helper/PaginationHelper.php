@@ -10,6 +10,7 @@ class PaginationHelper
 {
     public const DEFAULT_OFFSET = 0;
     public const DEFAULT_LIMIT = 6;
+    public const DEFAULT_ADMIN_LIMIT = 10;
     public const DEFAULT_SORT_FIELD = 'date';
     public const DEFAULT_SORT_ORDER = 'desc';
 
@@ -27,7 +28,7 @@ class PaginationHelper
         return $this->limit;
     }
 
-    public function parseQueryParameters(array $queryParameters): void
+    public function parseQueryParameters(array $queryParameters, bool $isAdmin): void
     {
         $resolver = new OptionsResolver();
 
@@ -47,6 +48,10 @@ class PaginationHelper
         $options = $resolver->resolve($queryParameters);
 
         $this->offset = $options['offset'];
+
+        if ($isAdmin) {
+            $this->limit = self::DEFAULT_ADMIN_LIMIT;
+        }
     }
 
     public function calculateMaxOffset(int $total): void
@@ -71,7 +76,7 @@ class PaginationHelper
     {
         $nextOffset = $this->offset + $this->limit;
 
-        return $nextOffset > $total ? null : $nextOffset;
+        return $nextOffset >= $total ? null : $nextOffset;
     }
 
     public function mapItemsToPaginatedList($newsItems): PaginatedList

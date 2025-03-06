@@ -4,7 +4,9 @@ namespace App\DataFixtures\Release;
 
 use App\Entity\Release\Release;
 use App\Entity\Release\ReleaseCredit;
+use App\Entity\Release\ReleaseCreditType;
 use App\Entity\Release\ReleaseLink;
+use App\Entity\Release\ReleaseLinkName;
 use App\Entity\Release\ReleaseTrack;
 use App\Entity\Release\ReleaseTranslation;
 use App\Model\Release\ReleaseLinkCategory;
@@ -32,56 +34,101 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
     {
         $release->addCredit(
             (new ReleaseCredit())
-                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::COMPOSER_CREDIT_TYPE))
+                ->setReleaseCreditType(
+                    $this->getReference(
+                        ReleaseCreditTypeFixtures::COMPOSER_CREDIT_TYPE,
+                        ReleaseCreditType::class
+                    )
+                )
                 ->setFullName('John Composer')
                 ->setLink('https://www.aspyccias-music.com')
         );
 
         $release->addCredit(
             (new ReleaseCredit())
-                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::PRODUCER_CREDIT_TYPE))
+                ->setReleaseCreditType(
+                    $this->getReference(
+                        ReleaseCreditTypeFixtures::PRODUCER_CREDIT_TYPE,
+                        ReleaseCreditType::class
+                    )
+                )
                 ->setFullName('John Producer')
         );
 
         $release->addCredit(
             (new ReleaseCredit())
-                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::LYRICIST_CREDIT_TYPE))
+                ->setReleaseCreditType(
+                    $this->getReference(
+                        ReleaseCreditTypeFixtures::LYRICIST_CREDIT_TYPE,
+                        ReleaseCreditType::class
+                    )
+                )
                 ->setFullName('John Lyricist')
         );
 
         $release->addCredit(
             (new ReleaseCredit())
-                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::EDITOR_CREDIT_TYPE))
+                ->setReleaseCreditType(
+                    $this->getReference(
+                        ReleaseCreditTypeFixtures::EDITOR_CREDIT_TYPE,
+                        ReleaseCreditType::class
+                    )
+                )
                 ->setFullName('John Editor')
         );
 
         $release->addCredit(
             (new ReleaseCredit())
-                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VIOLINIST_CREDIT_TYPE))
+                ->setReleaseCreditType(
+                    $this->getReference(
+                        ReleaseCreditTypeFixtures::VIOLINIST_CREDIT_TYPE,
+                        ReleaseCreditType::class
+                    )
+                )
                 ->setFullName('John Violinist')
         );
 
         $release->addCredit(
             (new ReleaseCredit())
-                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VIOLINIST_CREDIT_TYPE))
+                ->setReleaseCreditType(
+                    $this->getReference(
+                        ReleaseCreditTypeFixtures::VIOLINIST_CREDIT_TYPE,
+                        ReleaseCreditType::class
+                    )
+                )
                 ->setFullName('John Violinist 2')
         );
 
         $release->addCredit(
             (new ReleaseCredit())
-                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE))
+                ->setReleaseCreditType(
+                    $this->getReference(
+                        ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE,
+                        ReleaseCreditType::class
+                    )
+                )
                 ->setFullName('John Voice')
         );
 
         $release->addCredit(
             (new ReleaseCredit())
-                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE))
+                ->setReleaseCreditType(
+                    $this->getReference(
+                        ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE,
+                        ReleaseCreditType::class
+                    )
+                )
                 ->setFullName('John Voice 2')
         );
 
         $release->addCredit(
             (new ReleaseCredit())
-                ->setReleaseCreditType($this->getReference(ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE))
+                ->setReleaseCreditType(
+                    $this->getReference(
+                        ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE,
+                        ReleaseCreditType::class
+                    )
+                )
                 ->setFullName('John Voice 3')
         );
 
@@ -92,63 +139,105 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
     {
         $release->addLink(
             (new ReleaseLink())
-                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::YOUTUBE_LINK_NAME))
+                ->setReleaseLinkName(
+                    $this->getReference(
+                        ReleaseLinkNameFixtures::YOUTUBE_LINK_NAME,
+                        ReleaseLinkName::class
+                    )
+                )
                 ->setCategory(ReleaseLinkCategory::listen)
                 ->setLink('https://www.youtube.com/watch?v=kQWUmBwZCKY')
         );
 
         $release->addLink(
             (new ReleaseLink())
-                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::SPOTIFY_LINK_NAME))
+                ->setReleaseLinkName(
+                    $this->getReference(
+                        ReleaseLinkNameFixtures::SPOTIFY_LINK_NAME,
+                        ReleaseLinkName::class
+                    )
+                )
                 ->setCategory(ReleaseLinkCategory::listen)
                 ->setLink('https://www.spotify.com')
         );
 
         $release->addLink(
             (new ReleaseLink())
-                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::DEEZER_LINK_NAME))
+                ->setReleaseLinkName(
+                    $this->getReference(
+                        ReleaseLinkNameFixtures::DEEZER_LINK_NAME,
+                        ReleaseLinkName::class
+                    )
+                )
                 ->setCategory(ReleaseLinkCategory::listen)
                 ->setLink('https://www.deezer.com')
         );
 
         $release->addLink(
             (new ReleaseLink())
-                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::BANDCAMP_LINK_NAME))
+                ->setReleaseLinkName(
+                    $this->getReference(
+                        ReleaseLinkNameFixtures::BANDCAMP_LINK_NAME,
+                        ReleaseLinkName::class
+                    )
+                )
                 ->setCategory(ReleaseLinkCategory::listen)
                 ->setLink('https://www.bandcamp.com')
         );
 
         $release->addLink(
             (new ReleaseLink())
-                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::BANDCAMP_LINK_NAME))
+                ->setReleaseLinkName(
+                    $this->getReference(
+                        ReleaseLinkNameFixtures::BANDCAMP_LINK_NAME,
+                        ReleaseLinkName::class
+                    )
+                )
                 ->setCategory(ReleaseLinkCategory::buy)
                 ->setLink('https://aspyccias.bandcamp.com/track/in-a-spaceship')
         );
 
         $release->addLink(
             (new ReleaseLink())
-                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::APPLE_LINK_NAME))
+                ->setReleaseLinkName(
+                    $this->getReference(
+                        ReleaseLinkNameFixtures::APPLE_LINK_NAME,
+                        ReleaseLinkName::class
+                    )
+                )
                 ->setCategory(ReleaseLinkCategory::buy)
                 ->setLink('https://music.apple.com')
         );
 
         $release->addLink(
             (new ReleaseLink())
-                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::AMAZON_LINK_NAME))
+                ->setReleaseLinkName(
+                    $this->getReference(
+                        ReleaseLinkNameFixtures::AMAZON_LINK_NAME,
+                        ReleaseLinkName::class
+                    )
+                )
                 ->setCategory(ReleaseLinkCategory::buy)
                 ->setLink('https://www.amazon.com')
         );
 
         $release->addLink(
             (new ReleaseLink())
-                ->setReleaseLinkName($this->getReference(ReleaseLinkNameFixtures::ODESLI_LINK_NAME))
+                ->setReleaseLinkName(
+                    $this->getReference(
+                        ReleaseLinkNameFixtures::ODESLI_LINK_NAME,
+                        ReleaseLinkName::class
+                    )
+                )
                 ->setCategory(ReleaseLinkCategory::smart_link)
-                ->setEmbedded('<div style="max-width:100%;">' .
-                    '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">' .
-                    '<iframe style="position:absolute;top:0;left:0;" width="100%" height="100%" ' .
-                    'src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fcxdvh54nmjqct&theme=dark" frameborder="0" ' .
-                    'allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation allow-popups allow-popups-to-escape-sandbox" ' .
-                    'allow="clipboard-read; clipboard-write"></iframe></div></div>')
+                ->setEmbedded(
+                    '<div style="max-width:100%;">'.
+                    '<div style="position:relative;padding-bottom:calc(56.25% + 52px);height: 0;">'.
+                    '<iframe style="position:absolute;top:0;left:0;" width="100%" height="100%" '.
+                    'src="https://odesli.co/embed/?url=https%3A%2F%2Fsong.link%2Fcxdvh54nmjqct&theme=dark" frameborder="0" '.
+                    'allowfullscreen sandbox="allow-same-origin allow-scripts allow-presentation allow-popups allow-popups-to-escape-sandbox" '.
+                    'allow="clipboard-read; clipboard-write"></iframe></div></div>'
+                )
         );
 
         return $release;
@@ -198,8 +287,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
             ->setType($releaseType)
             ->setReleaseDate($releaseDate)
             ->setTitle($releaseTitle)
-            ->setArtworkFrontImage("$releaseSlug-front-cover")
-            ->setArtworkBackImage("$releaseSlug-back-cover")
+            ->setArtworkBackImage(true)
             ->addTranslation(
                 (new ReleaseTranslation())
                     ->setLocale('fr')
@@ -213,6 +301,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
 
         $release = $this->addCreditsToRelease($release);
         $release = $this->addLinksToRelease($release);
+
         return $this->addTracksToRelease($release, $indexRelease);
     }
 
@@ -240,7 +329,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    public function getDependencies()
+    public function getDependencies(): array
     {
         return [
             ReleaseCreditTypeFixtures::class,

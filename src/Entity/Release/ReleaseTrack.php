@@ -19,15 +19,15 @@ class ReleaseTrack
 
     #[ORM\Id]
     #[ORM\Column(length: 255)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-tracks'])]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-tracks'])]
     private ?int $position = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-tracks'])]
     private ?int $duration = null;
 
     public function getRelease(): ?Release

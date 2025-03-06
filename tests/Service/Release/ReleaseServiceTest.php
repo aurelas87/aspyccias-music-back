@@ -49,7 +49,6 @@ class ReleaseServiceTest extends KernelTestCase
             static::assertSame($item['slug'], $currentItem->getSlug());
             static::assertSame($item['release_date'], $currentItem->getReleaseDate()->format(\DateTimeInterface::ATOM));
             static::assertSame($item['title'], $currentItem->getTitle());
-            static::assertSame($item['artwork_front_image'], $currentItem->getArtworkFrontImage());
         }
     }
 
@@ -93,7 +92,6 @@ class ReleaseServiceTest extends KernelTestCase
             $releaseDetails->getReleaseDate()->format(\DateTimeInterface::ATOM)
         );
         static::assertSame($release['title'], $releaseDetails->getTitle());
-        static::assertSame($release['artwork_front_image'], $releaseDetails->getArtworkFrontImage());
         static::assertSame($release['artwork_back_image'], $releaseDetails->getArtworkBackImage());
 
         static::assertCount(1, $releaseDetails->getTranslations());

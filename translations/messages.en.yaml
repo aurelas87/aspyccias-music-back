@@ -1,6 +1,8 @@
 errors:
   profile:
     not_found: Profile not found
+    link:
+      not_found: Profile link not found
   news:
     not_found: News not found
   release:
@@ -8,5 +10,13 @@ errors:
       missing: Missing release type
       invalid: Invalid release type
     not_found: Release not found
+    credit_type:
+      not_found: Release credit type not found
+      in_use: This release credit type is in use
+    link_name:
+      not_found: Release link name not found
+      in_use: This release link name is in use
+    links:
+      collision: You can add only one link of the same name "Name"
   contact:
     email_delivery: Email could not be sent

@@ -19,7 +19,7 @@ class ReleaseTranslation
 
     #[ORM\Id]
     #[ORM\Column(length: 2)]
-    #[Ignore]
+    #[Groups('admin')]
     private ?string $locale = null;
 
     #[ORM\Column(type: Types::TEXT)]

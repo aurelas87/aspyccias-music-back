@@ -35,8 +35,7 @@ class NewsFixtures extends Fixture
 
             $news = new News();
             $news->setDate($newsDate)
-                ->setSlug($this->slugger->slug($newsDate->format('Y-m-d').'-'.$englishNewsTitle)->lower())
-                ->setPreviewImage("preview-news-$indexNews")
+                ->setSlug($this->slugger->slug($englishNewsTitle)->lower())
                 ->addTranslation(
                     (new NewsTranslation())
                         ->setLocale('fr')

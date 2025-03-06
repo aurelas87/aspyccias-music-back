@@ -1,6 +1,8 @@
 errors:
   profile:
     not_found: Profile introuvable
+    link:
+      not_found: Lien de profile introuvable
   news:
     not_found: Actualité introuvable
   release:
@@ -8,5 +10,13 @@ errors:
       missing: Type de release manquant
       invalid: Type de release invalide
     not_found: Release introuvable
+    credit_type:
+      not_found: Type de crédit introuvable
+      in_use: Ce type de crédit est utilisé
+    link_name:
+      not_found: Nom de lien de release introuvable
+      in_use: Ce nom de lien de release est utilisé
+    links:
+      collision: Vous ne pouvez ajouter qu'un seul lien du même nom "Name"
   contact:
     email_delivery: L'email n'a pas pu être envoyé

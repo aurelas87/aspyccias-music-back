@@ -21,29 +21,25 @@ class Release
     #[Ignore]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Groups('default')]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::SMALLINT, enumType: ReleaseType::class)]
-    #[Ignore]
+    #[Groups('admin')]
     private ?ReleaseType $type = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Groups('default')]
-    private ?\DateTimeInterface $release_date = null;
+    private ?\DateTimeInterface $releaseDate = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups('default')]
+    #[Groups(['default', 'admin-tracks', 'admin-credits', 'admin-links'])]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups('default')]
-    private ?string $artwork_front_image = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN)]
     #[Groups('details')]
-    private ?string $artwork_back_image = null;
+    private ?bool $artworkBackImage = false;
 
     /**
      * @var Collection<int, ReleaseTranslation>
@@ -66,7 +62,7 @@ class Release
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-credits'])]
     private Collection $credits;
 
     /**
@@ -78,7 +74,7 @@ class Release
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-links'])]
     private Collection $links;
 
     /**
@@ -90,7 +86,8 @@ class Release
         cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
-    #[Groups('details')]
+    #[ORM\OrderBy(['position' => 'ASC'])]
+    #[Groups(['details', 'admin-tracks'])]
     private Collection $tracks;
 
     public function __construct()
@@ -132,12 +129,12 @@ class Release
 
     public function getReleaseDate(): ?\DateTimeInterface
     {
-        return $this->release_date;
+        return $this->releaseDate;
     }
 
-    public function setReleaseDate(\DateTimeInterface $release_date): static
+    public function setReleaseDate(\DateTimeInterface $releaseDate): static
     {
-        $this->release_date = $release_date;
+        $this->releaseDate = $releaseDate;
 
         return $this;
     }
@@ -154,26 +151,14 @@ class Release
         return $this;
     }
 
-    public function getArtworkFrontImage(): ?string
+    public function getArtworkBackImage(): ?bool
     {
-        return $this->artwork_front_image;
+        return $this->artworkBackImage;
     }
 
-    public function setArtworkFrontImage(string $artwork_front_image): static
+    public function setArtworkBackImage(bool $artworkBackImage): static
     {
-        $this->artwork_front_image = $artwork_front_image;
-
-        return $this;
-    }
-
-    public function getArtworkBackImage(): ?string
-    {
-        return $this->artwork_back_image;
-    }
-
-    public function setArtworkBackImage(?string $artwork_back_image): static
-    {
-        $this->artwork_back_image = $artwork_back_image;
+        $this->artworkBackImage = $artworkBackImage;
 
         return $this;
     }

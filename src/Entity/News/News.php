@@ -19,17 +19,13 @@ class News
     #[Ignore]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
     #[Groups('default')]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Groups('default')]
     private ?\DateTimeInterface $date = null;
-
-    #[ORM\Column(length: 30)]
-    #[Groups('default')]
-    private ?string $preview_image = null;
 
     /**
      * @var Collection<int, NewsTranslation>
@@ -73,18 +69,6 @@ class News
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getPreviewImage(): ?string
-    {
-        return $this->preview_image;
-    }
-
-    public function setPreviewImage(string $preview_image): static
-    {
-        $this->preview_image = $preview_image;
 
         return $this;
     }

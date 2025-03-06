@@ -20,21 +20,21 @@ class ReleaseLink
 
     #[ORM\Id]
     #[ORM\Column(type: Types::SMALLINT, enumType: ReleaseLinkCategory::class)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-links'])]
     private ?ReleaseLinkCategory $category = null;
 
     #[ORM\Id]
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-links'])]
     private ?ReleaseLinkName $releaseLinkName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-links'])]
     private ?string $link = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups('details')]
+    #[Groups(['details', 'admin-links'])]
     private ?string $embedded = null;
 
     public function getRelease(): ?Release

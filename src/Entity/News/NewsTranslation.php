@@ -19,7 +19,7 @@ class NewsTranslation
 
     #[ORM\Id]
     #[ORM\Column(length: 2)]
-    #[Ignore]
+    #[Groups('admin')]
     private ?string $locale = null;
 
     #[ORM\Column(length: 255)]

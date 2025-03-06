@@ -22,7 +22,7 @@ class EmailService
         try {
             $this->emailSender->prepareEmail($emailDTO);
             $acceptedForDelivery = $this->emailSender->sendEmail($this->aspycciasEmail);
-        } catch (\Throwable $throwable) {
+        } catch (\Throwable) {
             throw new EmailDeliveryException();
         }
 

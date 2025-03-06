@@ -62,7 +62,7 @@ class PaginationHelperTest extends TestCase
      */
     public function testParseQueryParameters(array $queryParameters, int $expected): void
     {
-        $this->paginationHelper->parseQueryParameters($queryParameters);
+        $this->paginationHelper->parseQueryParameters($queryParameters, false);
 
         static::assertSame($expected, $this->paginationHelper->getOffset());
         static::assertSame(PaginationHelper::DEFAULT_LIMIT, $this->paginationHelper->getLimit());
@@ -96,7 +96,7 @@ class PaginationHelperTest extends TestCase
         static::expectException(InvalidOptionsException::class);
         static::expectExceptionMessage($expectedExceptionMessage);
 
-        $this->paginationHelper->parseQueryParameters($queryParameters);
+        $this->paginationHelper->parseQueryParameters($queryParameters, false);
     }
 
     public function dataProviderMapItemsToPaginatedList(): array
@@ -147,7 +147,7 @@ class PaginationHelperTest extends TestCase
         ?int $expectedPreviousOffset,
         ?int $expectedNextOffset
     ): void {
-        $this->paginationHelper->parseQueryParameters(['offset' => $offset]);
+        $this->paginationHelper->parseQueryParameters(['offset' => $offset], false);
 
         $items = [];
         for ($indexItem = 1; $indexItem <= $nbItems; $indexItem++) {

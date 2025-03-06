@@ -19,5 +19,5 @@
 ###< phpunit/phpunit ###
 
 ###> image uploads folder ###
-/public/uploads
+/images
 ###< image uploads folder ###

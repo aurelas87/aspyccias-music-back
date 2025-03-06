@@ -12,7 +12,7 @@ class ValidationErrorsParser
         $reducedViolations = [];
 
         foreach ($violations as $violation) {
-            $words = \preg_split('/(?=[A-Z])/', $violation->getPropertyPath(), null, PREG_SPLIT_NO_EMPTY);
+            $words = \preg_split('/(?=[A-Z])/', $violation->getPropertyPath(), -1, PREG_SPLIT_NO_EMPTY);
             $jsonPropertyPath = \strtolower(\implode('_', $words));
 
             $reducedViolations[$jsonPropertyPath] = $violation->getMessage();
