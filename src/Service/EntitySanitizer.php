@@ -87,7 +87,7 @@ class EntitySanitizer
         }
     }
 
-    private function sanitizeAndKeepHTMLEntities(string $value): string
+    public function sanitizeAndKeepHTMLEntities(string $value): string
     {
         $value = $this->htmlSanitizer->sanitize($value);
 

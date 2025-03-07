@@ -3,9 +3,9 @@
 namespace App\Tests\Helper;
 
 use App\Helper\EmailSender;
+use App\Service\EntitySanitizer;
 use App\Tests\Commons\ExpectedEmailsTrait;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
 
 class EmailSenderTest extends KernelTestCase
 {
@@ -17,7 +17,7 @@ class EmailSenderTest extends KernelTestCase
     {
         parent::setUp();
 
-        $this->emailSender = new EmailSender($this->getContainer()->get(HtmlSanitizerInterface::class));
+        $this->emailSender = new EmailSender($this->getContainer()->get(EntitySanitizer::class));
     }
 
     public function testPrepareEmail(): void

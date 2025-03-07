@@ -3,19 +3,19 @@
 namespace App\Helper;
 
 use App\Model\Contact\EmailDTO;
-use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
+use App\Service\EntitySanitizer;
 
 class EmailSender
 {
-    private HtmlSanitizerInterface $htmlSanitizer;
+    private EntitySanitizer $entitySanitizer;
 
     public ?string $emailSubject = null;
     public ?string $emailBody = null;
     public array $additionalHeaders = [];
 
-    public function __construct(HtmlSanitizerInterface $htmlSanitizer)
+    public function __construct(EntitySanitizer $entitySanitizer)
     {
-        $this->htmlSanitizer = $htmlSanitizer;
+        $this->entitySanitizer = $entitySanitizer;
     }
 
     public function prepareEmail(EmailDTO $emailDTO): void
@@ -23,7 +23,7 @@ class EmailSender
         $this->emailSubject = $emailDTO->subject;
         $this->emailBody = $emailDTO->message;
 
-        $this->emailBody = $this->htmlSanitizer->sanitize($this->emailBody);
+        $this->emailBody = $this->entitySanitizer->sanitizeAndKeepHTMLEntities($this->emailBody);
         $this->emailBody = \preg_replace('/((?<!\r)\n|\r(?!\n))/', "\r\n", $this->emailBody);
 
         $this->additionalHeaders = [
