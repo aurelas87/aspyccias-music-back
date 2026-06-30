@@ -7,6 +7,7 @@ use App\Model\Release\ReleaseType;
 use App\Repository\Release\ReleaseRepository;
 use App\Tests\Commons\ExpectedReleasesTrait;
 use App\Tests\Controller\JsonResponseTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class ReleaseControllerTest extends JsonResponseTestCase
 {
@@ -15,14 +16,12 @@ class ReleaseControllerTest extends JsonResponseTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderListReleases(): array
+    public static function dataProviderListReleases(): array
     {
-        return $this->buildReleaseListUseCases();
+        return self::buildReleaseListUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderListReleases
-     */
+    #[DataProvider('dataProviderListReleases')]
     public function testListReleases(
         string $locale,
         ReleaseType $type,
@@ -59,7 +58,7 @@ class ReleaseControllerTest extends JsonResponseTestCase
         $this->serializeAndAssertJsonResponse([]);
     }
 
-    public function dataProviderListReleasesWithInvalidType(): array
+    public static function dataProviderListReleasesWithInvalidType(): array
     {
         $useCases = [];
         foreach (['en', 'fr'] as $locale) {
@@ -71,9 +70,7 @@ class ReleaseControllerTest extends JsonResponseTestCase
         return $useCases;
     }
 
-    /**
-     * @dataProvider dataProviderListReleasesWithInvalidType
-     */
+    #[DataProvider('dataProviderListReleasesWithInvalidType')]
     public function testListReleasesWithInvalidType(
         string $locale,
         ?string $type,
@@ -99,14 +96,12 @@ class ReleaseControllerTest extends JsonResponseTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderReleaseDetails(): array
+    public static function dataProviderReleaseDetails(): array
     {
-        return $this->buildReleaseDetailsUseCases();
+        return self::buildReleaseDetailsUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderReleaseDetails
-     */
+    #[DataProvider('dataProviderReleaseDetails')]
     public function testReleaseDetails(string $locale, array $release): void
     {
         $this->client->request(
@@ -121,9 +116,7 @@ class ReleaseControllerTest extends JsonResponseTestCase
         );
     }
 
-    /**
-     * @dataProvider dataProviderNotFound
-     */
+    #[DataProvider('dataProviderNotFound')]
     public function testReleaseDetailsNotFound(string $locale): void
     {
         $this->client->request(

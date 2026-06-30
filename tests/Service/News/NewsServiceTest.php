@@ -7,6 +7,7 @@ use App\Exception\News\NewsNotFoundException;
 use App\Repository\News\NewsRepository;
 use App\Service\News\NewsService;
 use App\Tests\Commons\ExpectedNewsTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class NewsServiceTest extends KernelTestCase
@@ -25,14 +26,12 @@ class NewsServiceTest extends KernelTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderNewsList(): array
+    public static function dataProviderNewsList(): array
     {
-        return $this->buildNewsListPagesUseCases();
+        return self::buildNewsListPagesUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderNewsList
-     */
+    #[DataProvider('dataProviderNewsList')]
     public function testListNews(
         string $locale,
         int $offset,
@@ -77,14 +76,12 @@ class NewsServiceTest extends KernelTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderLatestNews(): array
+    public static function dataProviderLatestNews(): array
     {
-        return $this->buildLatestNewsUseCases();
+        return self::buildLatestNewsUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderLatestNews
-     */
+    #[DataProvider('dataProviderLatestNews')]
     public function testLatestNews(string $locale, int $nbItems, array $items): void
     {
         $latestNews = $this->newsService->getLatestNews($locale);
@@ -118,14 +115,12 @@ class NewsServiceTest extends KernelTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderGetNewsDetails(): array
+    public static function dataProviderGetNewsDetails(): array
     {
-        return $this->buildNewsDetailsUseCases();
+        return self::buildNewsDetailsUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderGetNewsDetails
-     */
+    #[DataProvider('dataProviderGetNewsDetails')]
     public function testGetNewsDetails(string $locale, array $news): void
     {
         $newsDetails = $this->newsService->getNewsDetails($news['slug'], $locale);

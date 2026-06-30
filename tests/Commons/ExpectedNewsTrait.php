@@ -10,7 +10,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    private function buildNewsItem(int $newsId, string $locale, bool $expectDetails = false): array
+    private static function buildNewsItem(int $newsId, string $locale, bool $expectDetails = false): array
     {
         $newsDate = new \DateTimeImmutable(NewsFixtures::START_DATE);
         if ($newsId > 1) {
@@ -33,7 +33,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    private function buildNewsItemsArray(string $locale, int $nbItems, ?int $offset = null): array
+    private static function buildNewsItemsArray(string $locale, int $nbItems, ?int $offset = null): array
     {
         $newsItems = [];
 
@@ -43,7 +43,7 @@ trait ExpectedNewsTrait
                 $itemId -= $offset;
             }
 
-            $newsItems[] = $this->buildNewsItem($itemId, $locale);
+            $newsItems[] = self::buildNewsItem($itemId, $locale);
         }
 
         return $newsItems;
@@ -52,7 +52,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    private function buildNewsListPagesUseCases(): array
+    private static function buildNewsListPagesUseCases(): array
     {
         $useCases = [];
 
@@ -69,9 +69,9 @@ trait ExpectedNewsTrait
                     'locale' => $locale,
                     'offset' => $offset,
                     'nbItems' => $nbItems,
-                    'items' => $this->buildNewsItemsArray($locale, $nbItems, $offset),
-                    'previous_offset' => $indexPage > 1 ? $offset - PaginationHelper::DEFAULT_LIMIT : null,
-                    'next_offset' => $indexPage < $nbPages ? $offset + PaginationHelper::DEFAULT_LIMIT : null,
+                    'items' => self::buildNewsItemsArray($locale, $nbItems, $offset),
+                    'previousOffset' => $indexPage > 1 ? $offset - PaginationHelper::DEFAULT_LIMIT : null,
+                    'nextOffset' => $indexPage < $nbPages ? $offset + PaginationHelper::DEFAULT_LIMIT : null,
                 ];
             }
         }
@@ -82,7 +82,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    private function buildLatestNewsUseCases(): array
+    private static function buildLatestNewsUseCases(): array
     {
         $useCases = [];
 
@@ -95,7 +95,7 @@ trait ExpectedNewsTrait
             $useCases[$useCaseName] = [
                 'locale' => $locale,
                 'nbItems' => $nbItems,
-                'items' => $this->buildNewsItemsArray($locale, $nbItems),
+                'items' => self::buildNewsItemsArray($locale, $nbItems),
             ];
         }
 
@@ -105,7 +105,7 @@ trait ExpectedNewsTrait
     /**
      * @throws \Exception
      */
-    private function buildNewsDetailsUseCases(): array
+    private static function buildNewsDetailsUseCases(): array
     {
         $useCases = [];
 
@@ -113,7 +113,7 @@ trait ExpectedNewsTrait
             foreach ([13, 6, 1] as $newsId) {
                 $useCases["News $newsId $locale"] = [
                     'locale' => $locale,
-                    'news' => $this->buildNewsItem($newsId, $locale, true),
+                    'news' => self::buildNewsItem($newsId, $locale, true),
                 ];
             }
         }

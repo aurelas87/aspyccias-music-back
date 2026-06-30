@@ -12,22 +12,22 @@ trait ExpectedReleasesTrait
     private const INVALID_TYPE_USE_CASES = [
         'No type sent' => [
             'type' => null,
-            'expectedException' => NotFoundHttpException::class,
+            'expectedExceptionClass' => NotFoundHttpException::class,
             'expectedExceptionMessage' => 'No route found for "GET http://localhost/releases/"',
         ],
         'Empty type' => [
             'type' => '',
-            'expectedException' => NotFoundHttpException::class,
+            'expectedExceptionClass' => NotFoundHttpException::class,
             'expectedExceptionMessage' => 'No route found for "GET http://localhost/releases/"',
         ],
         'Unknown type' => [
             'type' => 'unknown',
-            'expectedException' => ReleaseNotFoundException::class,
+            'expectedExceptionClass' => ReleaseNotFoundException::class,
             'expectedExceptionMessage' => 'errors.release.not_found',
         ],
         'Invalid type' => [
             'type' => '21',
-            'expectedException' => ReleaseNotFoundException::class,
+            'expectedExceptionClass' => ReleaseNotFoundException::class,
             'expectedExceptionMessage' => 'errors.release.not_found',
         ],
     ];
@@ -35,7 +35,7 @@ trait ExpectedReleasesTrait
     /**
      * @throws \Exception
      */
-    private function buildReleaseItem(int $releaseId, string $locale, bool $expectDetails = false): array
+    private static function buildReleaseItem(int $releaseId, string $locale, bool $expectDetails = false): array
     {
         $releaseDate = new \DateTimeImmutable(ReleaseFixture::START_DATE);
         if ($releaseId > 1) {
@@ -125,7 +125,7 @@ trait ExpectedReleasesTrait
     /**
      * @throws \Exception
      */
-    private function buildReleaseListUseCases(): array
+    private static function buildReleaseListUseCases(): array
     {
         $useCases = [];
 
@@ -161,7 +161,7 @@ trait ExpectedReleasesTrait
                     $releaseTypeName = ReleaseType::single->name;
                 }
 
-                $useCases["$releaseTypeName $locale"]['items'][] = $this->buildReleaseItem($indexRelease, $locale);
+                $useCases["$releaseTypeName $locale"]['items'][] = self::buildReleaseItem($indexRelease, $locale);
             }
         }
 
@@ -171,7 +171,7 @@ trait ExpectedReleasesTrait
     /**
      * @throws \Exception
      */
-    private function buildReleaseDetailsUseCases(): array
+    private static function buildReleaseDetailsUseCases(): array
     {
         $useCases = [];
 
@@ -179,7 +179,7 @@ trait ExpectedReleasesTrait
             foreach ([9, 6, 1] as $releaseId) {
                 $useCases["Release $releaseId $locale"] = [
                     'locale' => $locale,
-                    'release' => $this->buildReleaseItem($releaseId, $locale, true),
+                    'release' => self::buildReleaseItem($releaseId, $locale, true),
                 ];
             }
         }

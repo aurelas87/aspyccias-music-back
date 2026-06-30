@@ -8,13 +8,13 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Translation\Translator;
 
 class JsonResponseTestCase extends WebTestCase
 {
     protected KernelBrowser $client;
-    protected Serializer $serializer;
+    protected SerializerInterface $serializer;
 
     protected function setUp(): void
     {
@@ -85,7 +85,7 @@ class JsonResponseTestCase extends WebTestCase
         );
     }
 
-    public function dataProviderNotFound(): array
+    public static function dataProviderNotFound(): array
     {
         return [
             'Not found in en' => ['locale' => 'en'],

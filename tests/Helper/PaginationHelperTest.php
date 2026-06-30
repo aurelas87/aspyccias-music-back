@@ -3,6 +3,7 @@
 namespace App\Tests\Helper;
 
 use App\Helper\PaginationHelper;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Random\RandomException;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
@@ -21,7 +22,7 @@ class PaginationHelperTest extends TestCase
     /**
      * @throws RandomException
      */
-    public function dataProviderParseQueryParameters(): array
+    public static function dataProviderParseQueryParameters(): array
     {
         $validOffset = \random_int(0, PHP_INT_MAX);
 
@@ -57,9 +58,7 @@ class PaginationHelperTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderParseQueryParameters
-     */
+    #[DataProvider('dataProviderParseQueryParameters')]
     public function testParseQueryParameters(array $queryParameters, int $expected): void
     {
         $this->paginationHelper->parseQueryParameters($queryParameters, false);
@@ -68,27 +67,25 @@ class PaginationHelperTest extends TestCase
         static::assertSame(PaginationHelper::DEFAULT_LIMIT, $this->paginationHelper->getLimit());
     }
 
-    public function dataProviderInvalidType(): array
+    public static function dataProviderInvalidType(): array
     {
         return [
             'offset as float' => [
                 ['offset' => 1.2],
-                'expected_exception_message' => '"offset"',
+                'expectedExceptionMessage' => '"offset"',
             ],
             'offset above max int' => [
                 ['offset' => PHP_INT_MAX + 2], // will be transformed to float
-                'expected_exception_message' => '"offset"',
+                'expectedExceptionMessage' => '"offset"',
             ],
             'offset as array' => [
                 ['offset' => []],
-                'expected_exception_message' => '"offset"',
+                'expectedExceptionMessage' => '"offset"',
             ],
         ];
     }
 
-    /**
-     * @dataProvider dataProviderInvalidType
-     */
+    #[DataProvider('dataProviderInvalidType')]
     public function testParseQueryParametersInvalidTypeThrowsException(
         array $queryParameters,
         $expectedExceptionMessage
@@ -99,7 +96,7 @@ class PaginationHelperTest extends TestCase
         $this->paginationHelper->parseQueryParameters($queryParameters, false);
     }
 
-    public function dataProviderMapItemsToPaginatedList(): array
+    public static function dataProviderMapItemsToPaginatedList(): array
     {
         $useCases = [];
 
@@ -113,8 +110,8 @@ class PaginationHelperTest extends TestCase
                 'total' => $total,
                 'offset' => $offset,
                 'nbItems' => \min($total - $offset, PaginationHelper::DEFAULT_LIMIT),
-                'expected_previous_offset' => $indexPage > 1 ? $offset - PaginationHelper::DEFAULT_LIMIT : null,
-                'expected_next_offset' => $indexPage < $nbPages ? $offset + PaginationHelper::DEFAULT_LIMIT : null,
+                'expectedPreviousOffset' => $indexPage > 1 ? $offset - PaginationHelper::DEFAULT_LIMIT : null,
+                'expectedNextOffset' => $indexPage < $nbPages ? $offset + PaginationHelper::DEFAULT_LIMIT : null,
             ];
         }
 
@@ -122,24 +119,22 @@ class PaginationHelperTest extends TestCase
             'total' => 0,
             'offset' => 0,
             'nbItems' => 0,
-            'expected_previous_offset' => null,
-            'expected_next_offset' => null,
+            'expectedPreviousOffset' => null,
+            'expectedNextOffset' => null,
         ];
 
         $useCases['Offset above total'] = [
             'total' => $total,
             'offset' => $total + 1,
             'nbItems' => 0,
-            'expected_previous_offset' => 12,
-            'expected_next_offset' => null,
+            'expectedPreviousOffset' => 12,
+            'expectedNextOffset' => null,
         ];
 
         return $useCases;
     }
 
-    /**
-     * @dataProvider dataProviderMapItemsToPaginatedList
-     */
+    #[DataProvider('dataProviderMapItemsToPaginatedList')]
     public function testMapItemsToPaginatedList(
         int $total,
         int $offset,

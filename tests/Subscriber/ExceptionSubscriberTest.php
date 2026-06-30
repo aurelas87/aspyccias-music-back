@@ -35,14 +35,16 @@ class ExceptionSubscriberTest extends KernelTestCase
     {
         parent::setUp();
 
-        $this->kernelMock = $this->getMockBuilder(KernelInterface::class)->getMock();
-        $this->subscriber = new ExceptionSubscriber(
-            $this->getContainer()->get(ValidationErrorsParser::class),
-            $this->getContainer()->get(TranslatorInterface::class)
-        );
-        $this->serializer = $this->getContainer()->get('serializer');
+        $container = static::getContainer();
 
-        $this->translator = $this->getContainer()->get('translator');
+        $this->subscriber = new ExceptionSubscriber(
+            $container->get(ValidationErrorsParser::class),
+            $container->get(TranslatorInterface::class)
+        );
+
+        $this->serializer = $container->get('serializer');
+
+        $this->translator = $container->get('translator');
         $this->translator->setLocale('fr');
 
         $this->validationErrorsParser = new ValidationErrorsParser();
@@ -51,7 +53,7 @@ class ExceptionSubscriberTest extends KernelTestCase
     protected function createEvent(\Throwable $expectedException): ExceptionEvent
     {
         return new ExceptionEvent(
-            $this->kernelMock,
+            self::getContainer()->get('kernel'),
             new Request(),
             HttpKernelInterface::MAIN_REQUEST,
             $expectedException

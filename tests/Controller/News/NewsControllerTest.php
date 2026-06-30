@@ -7,6 +7,7 @@ use App\Repository\News\NewsRepository;
 use App\Service\News\NewsService;
 use App\Tests\Commons\ExpectedNewsTrait;
 use App\Tests\Controller\JsonResponseTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class NewsControllerTest extends JsonResponseTestCase
 {
@@ -24,14 +25,12 @@ class NewsControllerTest extends JsonResponseTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderListNews(): array
+    public static function dataProviderListNews(): array
     {
-        return $this->buildNewsListPagesUseCases();
+        return self::buildNewsListPagesUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderListNews
-     */
+    #[DataProvider('dataProviderListNews')]
     public function testListNews(
         string $locale,
         ?int $offset,
@@ -59,8 +58,8 @@ class NewsControllerTest extends JsonResponseTestCase
 
     public function testListNewsEmpty(): void
     {
-        $manager = $this->getContainer()->get('doctrine')->getManager();
-        $allNews = $this->getContainer()->get(NewsRepository::class)->findAll();
+        $manager = self::getContainer()->get('doctrine')->getManager();
+        $allNews = self::getContainer()->get(NewsRepository::class)->findAll();
         foreach ($allNews as $news) {
             $manager->remove($news);
         }
@@ -78,14 +77,12 @@ class NewsControllerTest extends JsonResponseTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderLatestNews(): array
+    public static function dataProviderLatestNews(): array
     {
-        return $this->buildLatestNewsUseCases();
+        return self::buildLatestNewsUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderLatestNews
-     */
+    #[DataProvider('dataProviderLatestNews')]
     public function testLatestNews(string $locale, int $nbItems, array $items): void
     {
         $this->client->request(method: 'GET', uri: '/news/latest', server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
@@ -113,14 +110,12 @@ class NewsControllerTest extends JsonResponseTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderNewsDetails(): array
+    public static function dataProviderNewsDetails(): array
     {
-        return $this->buildNewsDetailsUseCases();
+        return self::buildNewsDetailsUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderNewsDetails
-     */
+    #[DataProvider('dataProviderNewsDetails')]
     public function testNewsDetails(string $locale, array $news): void
     {
         $this->client->request(method: 'GET', uri: '/news/'.$news['slug'], server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);
@@ -131,9 +126,7 @@ class NewsControllerTest extends JsonResponseTestCase
         );
     }
 
-    /**
-     * @dataProvider dataProviderNotFound
-     */
+    #[DataProvider('dataProviderNotFound')]
     public function testNewsDetailsNotFound(string $locale): void
     {
         $this->client->request(method: 'GET', uri: '/news/news-title-14', server: ['HTTP_ACCEPT_LANGUAGE' => $locale]);

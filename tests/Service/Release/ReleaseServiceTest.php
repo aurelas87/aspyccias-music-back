@@ -7,6 +7,7 @@ use App\Model\Release\ReleaseType;
 use App\Repository\Release\ReleaseRepository;
 use App\Service\Release\ReleaseService;
 use App\Tests\Commons\ExpectedReleasesTrait;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
 class ReleaseServiceTest extends KernelTestCase
@@ -25,14 +26,12 @@ class ReleaseServiceTest extends KernelTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderListReleases(): array
+    public static function dataProviderListReleases(): array
     {
-        return $this->buildReleaseListUseCases();
+        return self::buildReleaseListUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderListReleases
-     */
+    #[DataProvider('dataProviderListReleases')]
     public function testListReleases(
         string $locale,
         ReleaseType $type,
@@ -74,14 +73,12 @@ class ReleaseServiceTest extends KernelTestCase
     /**
      * @throws \Exception
      */
-    public function dataProviderGetReleaseDetails(): array
+    public static function dataProviderGetReleaseDetails(): array
     {
-        return $this->buildReleaseDetailsUseCases();
+        return self::buildReleaseDetailsUseCases();
     }
 
-    /**
-     * @dataProvider dataProviderGetReleaseDetails
-     */
+    #[DataProvider('dataProviderGetReleaseDetails')]
     public function testGetReleaseDetails(string $locale, array $release): void
     {
         $releaseDetails = $this->releaseService->getReleaseDetails($release['slug'], $locale);

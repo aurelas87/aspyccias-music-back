@@ -8,6 +8,8 @@ use App\Exception\Contact\EmailDeliveryException;
 use App\Service\Contact\EmailService;
 use App\Tests\Commons\ExpectedEmailsTrait;
 use App\Tests\Controller\JsonResponseTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -42,7 +44,7 @@ class ContactControllerTest extends JsonResponseTestCase
         static::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
-    public function dataProviderSendEmailInvalidPayload(): array
+    public static function dataProviderSendEmailInvalidPayload(): array
     {
         return [
             'Send email with invalid payload in en' => [
@@ -58,9 +60,7 @@ class ContactControllerTest extends JsonResponseTestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderSendEmailInvalidPayload
-     */
+    #[DataProvider('dataProviderSendEmailInvalidPayload')]
     public function testSendEmailInvalidPayload(
         string $locale,
         string $firstNameMessage,
@@ -93,6 +93,8 @@ class ContactControllerTest extends JsonResponseTestCase
      * @testWith ["en"]
      *           ["fr"]
      */
+    #[TestWith(["en"])]
+    #[TestWith(["fr"])]
     public function testSendEmailFailed(string $locale): void
     {
         $expectedException = new EmailDeliveryException();

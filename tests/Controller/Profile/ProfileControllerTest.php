@@ -5,6 +5,7 @@ namespace App\Tests\Controller\Profile;
 use App\Exception\Profile\ProfileNotFoundException;
 use App\Service\Profile\ProfileService;
 use App\Tests\Controller\JsonResponseTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProfileControllerTest extends JsonResponseTestCase
@@ -42,9 +43,7 @@ class ProfileControllerTest extends JsonResponseTestCase
         $this->serializeAndAssertJsonResponse($expectedProfile);
     }
 
-    /**
-     * @dataProvider dataProviderNotFound
-     */
+    #[DataProvider('dataProviderNotFound')]
     public function testGetProfileNotFound(string $locale): void
     {
         // Remove profile in "fr" version

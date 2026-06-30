@@ -3,6 +3,7 @@
 namespace App\Tests\Helper;
 
 use App\Helper\ValidationErrorsParser;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -41,7 +42,7 @@ class ValidationErrorsParserTest extends TestCase
         static::assertSame(self::EXPECTED_REDUCED_VIOLATIONS, $reducedViolations);
     }
 
-    public function dataProviderGetValidationErrors(): array
+    public static function dataProviderGetValidationErrors(): array
     {
         return [
             'From main exception' => ['previous' => false],
@@ -49,9 +50,7 @@ class ValidationErrorsParserTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider dataProviderGetValidationErrors
-     */
+    #[DataProvider('dataProviderGetValidationErrors')]
     public function testGetValidationErrors(bool $previous): void
     {
         $mainException = new ValidationFailedException(null, $this->createConstraintViolationList());
