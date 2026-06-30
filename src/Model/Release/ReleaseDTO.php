@@ -21,10 +21,10 @@ readonly class ReleaseDTO
         public string $slug = '',
 
         #[Assert\NotNull]
-        public ?ReleaseTranslationsDTO $fr,
+        public ?ReleaseTranslationsDTO $fr = null,
 
         #[Assert\NotNull]
-        public ?ReleaseTranslationsDTO $en,
+        public ?ReleaseTranslationsDTO $en = null,
 
         public bool $artworkBackImage = false
     ) {

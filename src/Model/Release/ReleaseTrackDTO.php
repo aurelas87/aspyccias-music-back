@@ -12,11 +12,11 @@ readonly class ReleaseTrackDTO
 
         #[Assert\NotNull]
         #[Assert\GreaterThan(value: 0)]
-        public ?int $position,
+        public ?int $position = null,
 
         #[Assert\NotNull]
         #[Assert\GreaterThan(value: 0)]
-        public ?int $duration
+        public ?int $duration = null
     ) {
     }
 }

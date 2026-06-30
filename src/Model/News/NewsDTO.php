@@ -15,10 +15,10 @@ readonly class NewsDTO
         public string $slug = '',
 
         #[Assert\NotNull]
-        public ?NewsTranslationsDTO $fr,
+        public ?NewsTranslationsDTO $fr = null,
 
         #[Assert\NotNull]
-        public ?NewsTranslationsDTO $en,
+        public ?NewsTranslationsDTO $en = null,
     ) {
     }
 }
