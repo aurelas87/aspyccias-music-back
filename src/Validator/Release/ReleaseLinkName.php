@@ -2,9 +2,10 @@
 
 namespace App\Validator\Release;
 
+use Attribute;
 use Symfony\Component\Validator\Constraint;
 
-#[\Attribute]
+#[Attribute]
 class ReleaseLinkName extends Constraint
 {
     public string $message = '"{{ string }} " is not a valid link name.';

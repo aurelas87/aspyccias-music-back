@@ -5,6 +5,7 @@ namespace App\Service\User;
 use App\Entity\User\User;
 use App\Helper\TokenHelper;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
 class UserService
@@ -19,7 +20,7 @@ class UserService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkAndCreateUserToken(User $user): void
     {
@@ -40,7 +41,7 @@ class UserService
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function checkAndRefreshUserToken(User $user): void
     {

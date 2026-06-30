@@ -11,6 +11,7 @@ use App\Model\Release\ReleaseLinksDTO;
 use App\Model\Release\ReleaseTracksDTO;
 use App\Service\ImageService;
 use App\Service\Release\ReleaseService;
+use DateMalformedStringException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,7 @@ class AdminReleaseController extends AbstractController
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     #[Route(path: '', name: 'app_admin_release_add', methods: ['POST'])]
     public function add(
@@ -115,7 +116,7 @@ class AdminReleaseController extends AbstractController
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     #[Route(path: '/{release}', name: 'app_admin_release_edit', methods: ['PUT'])]
     public function edit(

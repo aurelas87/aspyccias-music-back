@@ -24,10 +24,10 @@ class EmailSender
         $this->emailBody = $emailDTO->message;
 
         $this->emailBody = $this->entitySanitizer->sanitizeAndKeepHTMLEntities($this->emailBody);
-        $this->emailBody = \preg_replace('/((?<!\r)\n|\r(?!\n))/', "\r\n", $this->emailBody);
+        $this->emailBody = preg_replace('/((?<!\r)\n|\r(?!\n))/', "\r\n", $this->emailBody);
 
         $this->additionalHeaders = [
-            'From' => \sprintf(
+            'From' => sprintf(
                 '%s %s <%s>',
                 $emailDTO->firstName,
                 $emailDTO->lastName,
@@ -39,15 +39,15 @@ class EmailSender
 
     public function isEmailPrepared(): bool
     {
-        if (\is_null($this->emailSubject)) {
+        if (is_null($this->emailSubject)) {
             return false;
         }
 
-        if (\is_null($this->emailBody)) {
+        if (is_null($this->emailBody)) {
             return false;
         }
 
-        if (\count($this->additionalHeaders) === 0) {
+        if (count($this->additionalHeaders) === 0) {
             return false;
         }
 
@@ -60,7 +60,7 @@ class EmailSender
             return false;
         }
 
-        return \mail(
+        return mail(
             to: $sendTo,
             subject: $this->emailSubject,
             message: $this->emailBody,

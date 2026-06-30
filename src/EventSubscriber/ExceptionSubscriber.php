@@ -49,7 +49,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             'message' => $validationErrors ?: $this->translator->trans($errorMessage),
         ];
 
-        $response = \is_null($status)
+        $response = is_null($status)
             ? new JsonResponse($responseData)
             : new JsonResponse($responseData, $status);
 

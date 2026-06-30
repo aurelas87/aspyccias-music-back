@@ -10,6 +10,8 @@ use App\Model\News\NewsDTO;
 use App\Model\PaginatedList;
 use App\Repository\News\NewsRepository;
 use App\Service\EntitySanitizer;
+use DateMalformedStringException;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
 class NewsService
@@ -73,13 +75,13 @@ class NewsService
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public function addNews(NewsDTO $newsDTO): void
     {
         $news = new News();
 
-        $news->setDate(new \DateTimeImmutable($newsDTO->date));
+        $news->setDate(new DateTimeImmutable($newsDTO->date));
         $news->setSlug($newsDTO->slug);
         $news->addTranslation(
             new NewsTranslation()
@@ -101,11 +103,11 @@ class NewsService
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public function editNews(News $news, NewsDTO $newsDTO): void
     {
-        $news->setDate(new \DateTimeImmutable($newsDTO->date));
+        $news->setDate(new DateTimeImmutable($newsDTO->date));
         $news->setSlug($newsDTO->slug);
 
         foreach ($news->getTranslations() as $newsTranslation) {

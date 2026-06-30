@@ -11,6 +11,8 @@ use App\Entity\Release\ReleaseTrack;
 use App\Entity\Release\ReleaseTranslation;
 use App\Model\Release\ReleaseLinkCategory;
 use App\Model\Release\ReleaseType;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -261,7 +263,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         $duration = 150; //2min30 and add 1sec to next tracks
 
         for ($indexTrack = 1; $indexTrack <= $nbTracks; $indexTrack++) {
-            $strTrackPosition = \str_pad($indexTrack, 2, '0', STR_PAD_LEFT);
+            $strTrackPosition = str_pad($indexTrack, 2, '0', STR_PAD_LEFT);
 
             $release->addTrack(
                 new ReleaseTrack()
@@ -277,7 +279,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
     private function createRelease(
         int $indexRelease,
         ReleaseType $releaseType,
-        \DateTimeImmutable $releaseDate
+        DateTimeImmutable $releaseDate
     ): Release {
         $releaseTitle = "Release Title $indexRelease";
         $releaseSlug = $this->slugger->slug($releaseTitle)->lower();
@@ -307,12 +309,12 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $releaseDate = new \DateTimeImmutable(self::START_DATE);
+        $releaseDate = new DateTimeImmutable(self::START_DATE);
         $releaseType = ReleaseType::single;
 
         for ($indexRelease = 1; $indexRelease <= self::TOTAL_RELEASES; $indexRelease++) {
             if ($indexRelease > 1) {
-                $releaseDate = $releaseDate->add(new \DateInterval('P1M'));
+                $releaseDate = $releaseDate->add(new DateInterval('P1M'));
             }
 
             if ($indexRelease > self::TOTAL_SINGLES) {

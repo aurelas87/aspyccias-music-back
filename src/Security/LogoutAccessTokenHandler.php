@@ -8,6 +8,6 @@ class LogoutAccessTokenHandler extends AdminAccessTokenHandler
 {
     public function isTokenValid(?UserToken $userToken): bool
     {
-        return !\is_null($userToken);
+        return !is_null($userToken);
     }
 }

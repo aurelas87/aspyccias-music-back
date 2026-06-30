@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\User\User;
 use App\Service\User\UserService;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +16,7 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class LoginController extends AbstractController
 {
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: '/login', name: 'app_admin_login', methods: ['POST'])]
     public function login(#[CurrentUser] ?User $user, UserService $userService): JsonResponse
@@ -47,7 +48,7 @@ class LoginController extends AbstractController
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     #[Route(path: '/token/refresh', name: 'app_admin_token_refresh', methods: ['POST'])]
     public function tokenRefresh(#[CurrentUser] ?User $user, UserService $userService): JsonResponse

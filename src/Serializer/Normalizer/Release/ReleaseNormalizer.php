@@ -4,6 +4,7 @@ namespace App\Serializer\Normalizer\Release;
 
 use App\Entity\Release\Release;
 use App\Model\Release\ReleaseType;
+use LogicException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -18,11 +19,11 @@ readonly class ReleaseNormalizer implements NormalizerInterface
     public function normalize($data, ?string $format = null, array $context = []): array
     {
         $normalizedData = $this->normalizer->normalize($data, $format, $context);
-        $isAdmin = \in_array('admin', $context['groups'], true);
+        $isAdmin = in_array('admin', $context['groups'], true);
 
-        if (\in_array('details', $context['groups'], true)) {
-            if (!\array_key_exists('translations', $normalizedData) || (!$isAdmin && \count($normalizedData['translations']) !== 1)) {
-                throw new \LogicException('The Release data must have at least one translation.');
+        if (in_array('details', $context['groups'], true)) {
+            if (!array_key_exists('translations', $normalizedData) || (!$isAdmin && count($normalizedData['translations']) !== 1)) {
+                throw new LogicException('The Release data must have at least one translation.');
             }
 
             if (!$isAdmin) {
@@ -37,13 +38,13 @@ readonly class ReleaseNormalizer implements NormalizerInterface
         }
 
         if ($isAdmin) {
-            if (!\array_key_exists('type', $normalizedData)) {
-                throw new \LogicException('The Release data must have a type.');
+            if (!array_key_exists('type', $normalizedData)) {
+                throw new LogicException('The Release data must have a type.');
             }
 
             $normalizedData['type'] = ReleaseType::tryFrom($normalizedData['type']);
             if (!$normalizedData['type'] instanceof ReleaseType) {
-                throw new \LogicException('The Release data type is unknown.');
+                throw new LogicException('The Release data type is unknown.');
             }
 
             $normalizedData['type'] = $normalizedData['type']->name;

@@ -3,6 +3,7 @@
 namespace App\Entity\User;
 
 use App\Repository\User\UserTokenRepository;
+use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Ignore;
@@ -20,13 +21,13 @@ class UserToken
     private ?string $accessToken = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $accessTokenExpirationDate = null;
+    private ?DateTimeInterface $accessTokenExpirationDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $refreshToken = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $refreshTokenExpirationDate = null;
+    private ?DateTimeInterface $refreshTokenExpirationDate = null;
 
     public function getUser(): ?User
     {
@@ -52,12 +53,12 @@ class UserToken
         return $this;
     }
 
-    public function getAccessTokenExpirationDate(): ?\DateTimeInterface
+    public function getAccessTokenExpirationDate(): ?DateTimeInterface
     {
         return $this->accessTokenExpirationDate;
     }
 
-    public function setAccessTokenExpirationDate(?\DateTimeInterface $accessTokenExpirationDate): static
+    public function setAccessTokenExpirationDate(?DateTimeInterface $accessTokenExpirationDate): static
     {
         $this->accessTokenExpirationDate = $accessTokenExpirationDate;
 
@@ -76,12 +77,12 @@ class UserToken
         return $this;
     }
 
-    public function getRefreshTokenExpirationDate(): ?\DateTimeInterface
+    public function getRefreshTokenExpirationDate(): ?DateTimeInterface
     {
         return $this->refreshTokenExpirationDate;
     }
 
-    public function setRefreshTokenExpirationDate(?\DateTimeInterface $refreshTokenExpirationDate): static
+    public function setRefreshTokenExpirationDate(?DateTimeInterface $refreshTokenExpirationDate): static
     {
         $this->refreshTokenExpirationDate = $refreshTokenExpirationDate;
 

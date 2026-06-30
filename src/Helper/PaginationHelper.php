@@ -42,7 +42,7 @@ class PaginationHelper
                     $intValue = PaginationHelper::DEFAULT_OFFSET;
                 }
 
-                return \max($intValue, 0);
+                return max($intValue, 0);
             });
 
         $options = $resolver->resolve($queryParameters);
@@ -57,7 +57,7 @@ class PaginationHelper
     public function calculateMaxOffset(int $total): void
     {
         $this->maxOffset = $total > $this->limit
-            ? $this->limit * ((int)\floor($total / $this->limit))
+            ? $this->limit * ((int)floor($total / $this->limit))
             : self::DEFAULT_OFFSET;
     }
 

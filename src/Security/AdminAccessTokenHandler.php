@@ -5,6 +5,7 @@ namespace App\Security;
 use App\Entity\User\UserToken;
 use App\Helper\TokenHelper;
 use App\Repository\User\UserTokenRepository;
+use SensitiveParameter;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Http\AccessToken\AccessTokenHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -23,7 +24,7 @@ class AdminAccessTokenHandler implements AccessTokenHandlerInterface
     /**
      * @inheritDoc
      */
-    public function getUserBadgeFrom(#[\SensitiveParameter] string $accessToken): UserBadge
+    public function getUserBadgeFrom(#[SensitiveParameter] string $accessToken): UserBadge
     {
         $userToken = $this->userTokenRepository->findOneBy(['accessToken' => $accessToken]);
 

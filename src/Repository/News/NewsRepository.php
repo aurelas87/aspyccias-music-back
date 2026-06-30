@@ -19,7 +19,7 @@ class NewsRepository extends ServiceEntityRepository
 
     private function addLocalizationToQuery(QueryBuilder $qb, ?string $locale = null): QueryBuilder
     {
-        if (\is_null($locale)) {
+        if (is_null($locale)) {
             return $qb;
         }
 

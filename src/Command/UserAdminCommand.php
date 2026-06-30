@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Throwable;
 
 #[AsCommand(
     name: 'user:admin',
@@ -78,7 +79,7 @@ class UserAdminCommand extends Command
             $io->success("User with email $this->aspycciasEmail has been saved!");
 
             return Command::SUCCESS;
-        } catch (\Throwable $exception) {
+        } catch (Throwable $exception) {
             $io->error('Command failed with error: '.$exception->getMessage());
 
             return Command::FAILURE;

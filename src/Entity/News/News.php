@@ -3,6 +3,7 @@
 namespace App\Entity\News;
 
 use App\Repository\News\NewsRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -25,7 +26,7 @@ class News
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Groups('default')]
-    private ?\DateTimeInterface $date = null;
+    private ?DateTimeInterface $date = null;
 
     /**
      * @var Collection<int, NewsTranslation>
@@ -61,12 +62,12 @@ class News
         return $this;
     }
 
-    public function getDate(): ?\DateTimeInterface
+    public function getDate(): ?DateTimeInterface
     {
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(DateTimeInterface $date): static
     {
         $this->date = $date;
 

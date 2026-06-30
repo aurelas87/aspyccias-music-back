@@ -7,6 +7,7 @@ use App\Model\Image\ResourceType;
 use App\Model\News\NewsDTO;
 use App\Service\ImageService;
 use App\Service\News\NewsService;
+use DateMalformedStringException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +29,7 @@ class AdminNewsController extends AbstractController
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     #[Route(path: '', name: 'app_admin_news_add', methods: ['POST'])]
     public function add(
@@ -50,7 +51,7 @@ class AdminNewsController extends AbstractController
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     #[Route(path: '/{news}', name: 'app_admin_news_edit', methods: ['PUT'])]
     public function edit(

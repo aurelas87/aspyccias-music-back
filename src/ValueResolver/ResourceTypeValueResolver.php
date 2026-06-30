@@ -19,7 +19,7 @@ class ResourceTypeValueResolver implements ValueResolverInterface
         }
 
         $value = $request->attributes->get($argument->getName());
-        if (!\is_string($value)) {
+        if (!is_string($value)) {
             return [];
         }
 

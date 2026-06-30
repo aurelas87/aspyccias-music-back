@@ -22,6 +22,8 @@ use App\Repository\Release\ReleaseCreditTypeRepository;
 use App\Repository\Release\ReleaseLinkNameRepository;
 use App\Repository\Release\ReleaseRepository;
 use App\Service\EntitySanitizer;
+use DateMalformedStringException;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ReleaseService
@@ -80,13 +82,13 @@ class ReleaseService
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public function addRelease(ReleaseDTO $releaseDTO): void
     {
         $release = new Release();
 
-        $release->setReleaseDate(new \DateTimeImmutable($releaseDTO->releaseDate));
+        $release->setReleaseDate(new DateTimeImmutable($releaseDTO->releaseDate));
         $release->setTitle($releaseDTO->title);
         $release->setType(ReleaseType::tryFromName($releaseDTO->type));
         $release->setSlug($releaseDTO->slug);
@@ -109,11 +111,11 @@ class ReleaseService
     }
 
     /**
-     * @throws \DateMalformedStringException
+     * @throws DateMalformedStringException
      */
     public function editRelease(Release $release, ReleaseDTO $releaseDTO): void
     {
-        $release->setReleaseDate(new \DateTimeImmutable($releaseDTO->releaseDate));
+        $release->setReleaseDate(new DateTimeImmutable($releaseDTO->releaseDate));
         $release->setTitle($releaseDTO->title);
         $release->setType(ReleaseType::tryFromName($releaseDTO->type));
         $release->setSlug($releaseDTO->slug);
@@ -145,7 +147,7 @@ class ReleaseService
 
         foreach ($releaseTracksDTO->tracks as $releaseTrackDTO) {
             $uniqueKey = strtolower($releaseTrackDTO->title);
-            if (\in_array($uniqueKey, $releaseTracksAdded, true)) {
+            if (in_array($uniqueKey, $releaseTracksAdded, true)) {
                 continue;
             }
 
@@ -183,7 +185,7 @@ class ReleaseService
             }
 
             $uniqueKey = $releaseCreditDTO->type.'_'.strtolower($releaseCreditDTO->fullName);
-            if (\in_array($uniqueKey, $releaseCreditsAdded, true)) {
+            if (in_array($uniqueKey, $releaseCreditsAdded, true)) {
                 continue;
             }
 
@@ -221,7 +223,7 @@ class ReleaseService
             }
 
             $uniqueKey = $releaseLinkDTO->category.'_'.$releaseLinkDTO->name;
-            if (\in_array($uniqueKey, $releaseLinksAdded, true)) {
+            if (in_array($uniqueKey, $releaseLinksAdded, true)) {
                 continue;
             }
 

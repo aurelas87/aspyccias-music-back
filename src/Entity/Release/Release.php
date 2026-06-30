@@ -4,6 +4,7 @@ namespace App\Entity\Release;
 
 use App\Model\Release\ReleaseType;
 use App\Repository\Release\ReleaseRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -31,7 +32,7 @@ class Release
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Groups('default')]
-    private ?\DateTimeInterface $releaseDate = null;
+    private ?DateTimeInterface $releaseDate = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['default', 'admin-tracks', 'admin-credits', 'admin-links'])]
@@ -127,12 +128,12 @@ class Release
         return $this;
     }
 
-    public function getReleaseDate(): ?\DateTimeInterface
+    public function getReleaseDate(): ?DateTimeInterface
     {
         return $this->releaseDate;
     }
 
-    public function setReleaseDate(\DateTimeInterface $releaseDate): static
+    public function setReleaseDate(DateTimeInterface $releaseDate): static
     {
         $this->releaseDate = $releaseDate;
 

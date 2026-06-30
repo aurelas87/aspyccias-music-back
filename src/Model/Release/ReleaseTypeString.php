@@ -10,6 +10,6 @@ enum ReleaseTypeString: string
 
     public static function enumValues(): array
     {
-        return \array_column(self::cases(), 'value');
+        return array_column(self::cases(), 'value');
     }
 }

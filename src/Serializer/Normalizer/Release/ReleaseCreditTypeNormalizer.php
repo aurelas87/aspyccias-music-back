@@ -3,6 +3,7 @@
 namespace App\Serializer\Normalizer\Release;
 
 use App\Entity\Release\ReleaseCreditType;
+use LogicException;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
@@ -17,15 +18,15 @@ readonly class ReleaseCreditTypeNormalizer implements NormalizerInterface
     public function normalize($data, ?string $format = null, array $context = []): array
     {
         $normalizedData = $this->normalizer->normalize($data, $format, $context);
-        $isAdmin = \in_array('admin', $context['groups'], true);
-        $isAdminCredits = \in_array('admin-credits', $context['groups'], true);
+        $isAdmin = in_array('admin', $context['groups'], true);
+        $isAdminCredits = in_array('admin-credits', $context['groups'], true);
 
         if ($isAdminCredits) {
             return $normalizedData;
         }
 
-        if (!\array_key_exists('translations', $normalizedData) || (!$isAdmin && \count($normalizedData['translations']) !== 1)) {
-            throw new \LogicException('The Release Credit Type data must have at least one translation.');
+        if (!array_key_exists('translations', $normalizedData) || (!$isAdmin && count($normalizedData['translations']) !== 1)) {
+            throw new LogicException('The Release Credit Type data must have at least one translation.');
         }
 
         if (!$isAdmin) {

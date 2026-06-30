@@ -4,8 +4,11 @@ namespace App\DataFixtures\News;
 
 use App\Entity\News\News;
 use App\Entity\News\NewsTranslation;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Exception;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
 class NewsFixtures extends Fixture
@@ -20,15 +23,15 @@ class NewsFixtures extends Fixture
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function load(ObjectManager $manager): void
     {
-        $newsDate = new \DateTimeImmutable(self::START_DATE);
+        $newsDate = new DateTimeImmutable(self::START_DATE);
 
         for ($indexNews = 1; $indexNews <= self::TOTAL_NEWS; $indexNews++) {
             if ($indexNews > 1) {
-                $newsDate = $newsDate->add(new \DateInterval('P1D'));
+                $newsDate = $newsDate->add(new DateInterval('P1D'));
             }
 
             $englishNewsTitle = "News Title $indexNews";

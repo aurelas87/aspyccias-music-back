@@ -5,6 +5,7 @@ namespace App\Helper;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Throwable;
 
 class ValidationErrorsParser
 {
@@ -12,8 +13,8 @@ class ValidationErrorsParser
         $reducedViolations = [];
 
         foreach ($violations as $violation) {
-            $words = \preg_split('/(?=[A-Z])/', $violation->getPropertyPath(), -1, PREG_SPLIT_NO_EMPTY);
-            $jsonPropertyPath = \strtolower(\implode('_', $words));
+            $words = preg_split('/(?=[A-Z])/', $violation->getPropertyPath(), -1, PREG_SPLIT_NO_EMPTY);
+            $jsonPropertyPath = strtolower(implode('_', $words));
 
             $reducedViolations[$jsonPropertyPath] = $violation->getMessage();
         }
@@ -21,7 +22,7 @@ class ValidationErrorsParser
         return $reducedViolations;
     }
 
-    public function getValidationErrors(\throwable $throwable): ?array
+    public function getValidationErrors(Throwable $throwable): ?array
     {
         $throwableToCheck = $throwable;
 

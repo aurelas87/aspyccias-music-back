@@ -34,7 +34,7 @@ class AdminAccessTokenExtractor implements AccessTokenExtractorInterface
             return null;
         }
 
-        if (!$request->headers->has($this->headerParameter) || !\is_string($header = $request->headers->get($this->headerParameter))) {
+        if (!$request->headers->has($this->headerParameter) || !is_string($header = $request->headers->get($this->headerParameter))) {
             throw new BadCredentialsException('Invalid credentials');
         }
 

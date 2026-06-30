@@ -23,7 +23,7 @@ class EntitySanitizer
 
     public function sanitizeEntity($entity): void
     {
-        $className = \get_class($entity);
+        $className = get_class($entity);
 
         switch ($className) {
             case ProfileLink::class:
@@ -74,14 +74,14 @@ class EntitySanitizer
                 /** @var ReleaseCredit $entity */
                 $entity->setFullName($this->htmlSanitizer->sanitize($entity->getFullName()));
 
-                if (\is_string($entity->getLink())) {
+                if (is_string($entity->getLink())) {
                     $entity->setLink($this->htmlSanitizer->sanitize($entity->getLink()));
                 }
                 break;
 
             case ReleaseLink::class:
                 /** @var ReleaseLink $entity */
-                if (\is_string($entity->getLink())) {
+                if (is_string($entity->getLink())) {
                     $entity->setLink($this->sanitizeAndKeepHTMLEntities($entity->getLink()));
                 }
         }
@@ -91,6 +91,6 @@ class EntitySanitizer
     {
         $value = $this->htmlSanitizer->sanitize($value);
 
-        return \html_entity_decode($value);
+        return html_entity_decode($value);
     }
 }

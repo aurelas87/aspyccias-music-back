@@ -12,6 +12,8 @@ use App\Model\Image\ImageMetadataDTO;
 use App\Model\Image\ResourceType;
 use App\Repository\News\NewsRepository;
 use App\Repository\Release\ReleaseRepository;
+use LogicException;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -34,7 +36,7 @@ class ImageService
 
     public function createImageFile(ImageMetadataDTO $imageDTO, UploadedFile $image): void
     {
-        if (!\in_array($imageDTO->resourceType, [
+        if (!in_array($imageDTO->resourceType, [
             ResourceType::profile->value,
             ResourceType::news->value,
             ResourceType::releases->value,
@@ -47,7 +49,7 @@ class ImageService
         $filePath = $this->imageHelper->getImageDirectoryPath($resourceType);
 
         if (!file_exists($filePath) && !mkdir($filePath, 0777, true) && !is_dir($filePath)) {
-            throw new \RuntimeException(sprintf('Directory "%s" was not created', $filePath));
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $filePath));
         }
 
         $filePath = $this->getImageFilePath(
@@ -57,9 +59,9 @@ class ImageService
             ImageAction::create
         );
 
-        $handle = \fopen($filePath, 'wb');
-        \fwrite($handle, $image->getContent());
-        \fclose($handle);
+        $handle = fopen($filePath, 'wb');
+        fwrite($handle, $image->getContent());
+        fclose($handle);
     }
 
     public function getImageFilePath(
@@ -97,7 +99,7 @@ class ImageService
             }
 
             if (!$year || !$formattedDate) {
-                throw new \LogicException('Release date is invalid');
+                throw new LogicException('Release date is invalid');
             }
 
             $filePath .= "/$year";
@@ -106,10 +108,10 @@ class ImageService
                     $imageAction === ImageAction::create
                     || $imageAction === ImageAction::move
                 )
-                && !\file_exists($filePath)
+                && !file_exists($filePath)
                 && !mkdir($filePath, 0777, true) && !is_dir($filePath)
             ) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $filePath));
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $filePath));
             }
 
             $filePath .= "/$formattedDate-$resourceSlug";
@@ -123,7 +125,7 @@ class ImageService
 
         $filePath .= ImageHelper::DEFAULT_IMAGE_EXTENSION;
 
-        if ($imageAction === ImageAction::get && !\file_exists($filePath)) {
+        if ($imageAction === ImageAction::get && !file_exists($filePath)) {
             throw new NotFoundHttpException('File not found');
         }
 
@@ -136,12 +138,12 @@ class ImageService
         string $resourceSlug,
         string $prefix = ''
     ): void {
-        if (!\file_exists($oldImagePath)) {
+        if (!file_exists($oldImagePath)) {
             throw new NotFoundHttpException('File not found');
         }
 
         $newImagePath = $this->getImageFilePath($resourceType, $resourceSlug, $prefix, ImageAction::move);
-        \rename($oldImagePath, $newImagePath);
+        rename($oldImagePath, $newImagePath);
 
         $this->checkAndDeleteDirectory($oldImagePath);
     }
@@ -153,22 +155,22 @@ class ImageService
         }
 
         $filePath = $this->getImageFilePath($resourceType, $resourceSlug, $prefix, ImageAction::delete);
-        if (!\file_exists($filePath)) {
+        if (!file_exists($filePath)) {
             $this->checkAndDeleteDirectory($filePath);
 
             return;
         }
 
-        \unlink($filePath);
+        unlink($filePath);
 
         $this->checkAndDeleteDirectory($filePath);
     }
 
     private function checkAndDeleteDirectory(string $filePath): void
     {
-        $directory = \dirname($filePath);
-        if (\is_dir($directory) && \count(\scandir($directory)) === 2) {
-            \rmdir($directory);
+        $directory = dirname($filePath);
+        if (is_dir($directory) && count(scandir($directory)) === 2) {
+            rmdir($directory);
         }
     }
 }

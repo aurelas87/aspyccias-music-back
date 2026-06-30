@@ -5,6 +5,7 @@ namespace App\Service\Contact;
 use App\Exception\Contact\EmailDeliveryException;
 use App\Helper\EmailSender;
 use App\Model\Contact\EmailDTO;
+use Throwable;
 
 class EmailService
 {
@@ -22,7 +23,7 @@ class EmailService
         try {
             $this->emailSender->prepareEmail($emailDTO);
             $acceptedForDelivery = $this->emailSender->sendEmail($this->aspycciasEmail);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             throw new EmailDeliveryException();
         }
 
