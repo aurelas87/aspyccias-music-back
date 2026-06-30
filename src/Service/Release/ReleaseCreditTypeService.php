@@ -43,12 +43,12 @@ class ReleaseCreditTypeService
         $releaseCreditType = new ReleaseCreditType();
         $releaseCreditType->setCreditNameKey($releaseCreditTypeDTO->creditNameKey);
         $releaseCreditType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('fr')
                 ->setCreditName($releaseCreditTypeDTO->creditNameFr)
         );
         $releaseCreditType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('en')
                 ->setCreditName($releaseCreditTypeDTO->creditNameEn)
         );

@@ -76,11 +76,9 @@ class ReleaseCreditType
 
     public function removeTranslation(ReleaseCreditTypeTranslation $translation): static
     {
-        if ($this->translations->removeElement($translation)) {
+        if ($this->translations->removeElement($translation) && $translation->getReleaseCreditType() === $this) {
             // set the owning side to null (unless already changed)
-            if ($translation->getReleaseCreditType() === $this) {
-                $translation->setReleaseCreditType(null);
-            }
+            $translation->setReleaseCreditType(null);
         }
 
         return $this;

@@ -6,7 +6,7 @@ use App\Entity\News\News;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class NewsNormalizer implements NormalizerInterface
+readonly class NewsNormalizer implements NormalizerInterface
 {
     public function __construct(
         #[Autowire(service: 'serializer.normalizer.object')]
@@ -14,35 +14,35 @@ class NewsNormalizer implements NormalizerInterface
     ) {
     }
 
-    public function normalize($object, ?string $format = null, array $context = []): array
+    public function normalize($data, ?string $format = null, array $context = []): array
     {
-        $data = $this->normalizer->normalize($object, $format, $context);
+        $normalizedData = $this->normalizer->normalize($data, $format, $context);
         $isAdmin = \in_array('admin', $context['groups'], true);
 
-        if (!\array_key_exists('translations', $data) || (!$isAdmin && \count($data['translations']) !== 1)) {
+        if (!\array_key_exists('translations', $normalizedData) || (!$isAdmin && \count($normalizedData['translations']) !== 1)) {
             throw new \LogicException('The News data must have at least one translation.');
         }
 
         if (!$isAdmin) {
-            $data['title'] = $data['translations'][0]['title'];
+            $normalizedData['title'] = $normalizedData['translations'][0]['title'];
 
             if (\in_array('details', $context['groups'], true)) {
-                $data['content'] = $data['translations'][0]['content'];
+                $normalizedData['content'] = $normalizedData['translations'][0]['content'];
             }
 
         } else {
-            foreach ($data['translations'] as $translation) {
-                $data['title_'.$translation['locale']] = $translation['title'];
+            foreach ($normalizedData['translations'] as $translation) {
+                $normalizedData['title_'.$translation['locale']] = $translation['title'];
 
                 if (\in_array('details', $context['groups'], true)) {
-                    $data['content_'.$translation['locale']] = $translation['content'];
+                    $normalizedData['content_'.$translation['locale']] = $translation['content'];
                 }
             }
         }
 
-        unset($data['translations']);
+        unset($normalizedData['translations']);
 
-        return $data;
+        return $normalizedData;
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

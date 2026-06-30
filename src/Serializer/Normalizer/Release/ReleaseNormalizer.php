@@ -7,7 +7,7 @@ use App\Model\Release\ReleaseType;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ReleaseNormalizer implements NormalizerInterface
+readonly class ReleaseNormalizer implements NormalizerInterface
 {
     public function __construct(
         #[Autowire(service: 'serializer.normalizer.object')]
@@ -15,41 +15,41 @@ class ReleaseNormalizer implements NormalizerInterface
     ) {
     }
 
-    public function normalize($object, ?string $format = null, array $context = []): array
+    public function normalize($data, ?string $format = null, array $context = []): array
     {
-        $data = $this->normalizer->normalize($object, $format, $context);
+        $normalizedData = $this->normalizer->normalize($data, $format, $context);
         $isAdmin = \in_array('admin', $context['groups'], true);
 
         if (\in_array('details', $context['groups'], true)) {
-            if (!\array_key_exists('translations', $data) || (!$isAdmin && \count($data['translations']) !== 1)) {
+            if (!\array_key_exists('translations', $normalizedData) || (!$isAdmin && \count($normalizedData['translations']) !== 1)) {
                 throw new \LogicException('The Release data must have at least one translation.');
             }
 
             if (!$isAdmin) {
-                $data['description'] = $data['translations'][0]['description'];
+                $normalizedData['description'] = $normalizedData['translations'][0]['description'];
             } else {
-                foreach ($data['translations'] as $translation) {
-                    $data['description_'.$translation['locale']] = $translation['description'];
+                foreach ($normalizedData['translations'] as $translation) {
+                    $normalizedData['description_'.$translation['locale']] = $translation['description'];
                 }
             }
 
-            unset($data['translations']);
+            unset($normalizedData['translations']);
         }
 
         if ($isAdmin) {
-            if (!\array_key_exists('type', $data)) {
+            if (!\array_key_exists('type', $normalizedData)) {
                 throw new \LogicException('The Release data must have a type.');
             }
 
-            $data['type'] = ReleaseType::tryFrom($data['type']);
-            if (!$data['type'] instanceof ReleaseType) {
+            $normalizedData['type'] = ReleaseType::tryFrom($normalizedData['type']);
+            if (!$normalizedData['type'] instanceof ReleaseType) {
                 throw new \LogicException('The Release data type is unknown.');
             }
 
-            $data['type'] = $data['type']->name;
+            $normalizedData['type'] = $normalizedData['type']->name;
         }
 
-        return $data;
+        return $normalizedData;
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

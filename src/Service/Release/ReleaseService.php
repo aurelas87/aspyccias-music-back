@@ -91,12 +91,12 @@ class ReleaseService
         $release->setType(ReleaseType::tryFromName($releaseDTO->type));
         $release->setSlug($releaseDTO->slug);
         $release->addTranslation(
-            (new ReleaseTranslation())
+            new ReleaseTranslation()
                 ->setLocale('fr')
                 ->setDescription($releaseDTO->fr->description)
         );
         $release->addTranslation(
-            (new ReleaseTranslation())
+            new ReleaseTranslation()
                 ->setLocale('en')
                 ->setDescription($releaseDTO->en->description)
         );
@@ -108,6 +108,9 @@ class ReleaseService
         $this->entityManager->flush();
     }
 
+    /**
+     * @throws \DateMalformedStringException
+     */
     public function editRelease(Release $release, ReleaseDTO $releaseDTO): void
     {
         $release->setReleaseDate(new \DateTimeImmutable($releaseDTO->releaseDate));
@@ -148,7 +151,7 @@ class ReleaseService
 
             $releaseTracksAdded[] = $uniqueKey;
 
-            $newReleaseTrack = (new ReleaseTrack())
+            $newReleaseTrack = new ReleaseTrack()
                 ->setTitle($releaseTrackDTO->title)
                 ->setPosition($releaseTrackDTO->position)
                 ->setDuration($releaseTrackDTO->duration);

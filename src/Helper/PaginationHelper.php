@@ -8,11 +8,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class PaginationHelper
 {
-    public const DEFAULT_OFFSET = 0;
-    public const DEFAULT_LIMIT = 6;
-    public const DEFAULT_ADMIN_LIMIT = 10;
-    public const DEFAULT_SORT_FIELD = 'date';
-    public const DEFAULT_SORT_ORDER = 'desc';
+    public const int DEFAULT_OFFSET = 0;
+    public const int DEFAULT_LIMIT = 6;
+    public const int DEFAULT_ADMIN_LIMIT = 10;
+    public const string DEFAULT_SORT_FIELD = 'date';
+    public const string DEFAULT_SORT_ORDER = 'desc';
 
     private int $offset = self::DEFAULT_OFFSET;
     private int $maxOffset = self::DEFAULT_OFFSET;
@@ -38,11 +38,11 @@ class PaginationHelper
             ->addNormalizer('offset', function (Options $options, string $value) {
                 $intValue = (int)$value;
 
-                if ($value != $intValue) {
-                    $value = PaginationHelper::DEFAULT_OFFSET;
+                if ($value !== (string)$intValue) {
+                    $intValue = PaginationHelper::DEFAULT_OFFSET;
                 }
 
-                return \max($value, 0);
+                return \max($intValue, 0);
             });
 
         $options = $resolver->resolve($queryParameters);

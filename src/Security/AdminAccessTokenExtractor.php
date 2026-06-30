@@ -10,7 +10,6 @@ use Symfony\Component\Security\Http\AccessToken\AccessTokenExtractorInterface;
 class AdminAccessTokenExtractor implements AccessTokenExtractorInterface
 {
     private readonly string $headerParameter;
-    private readonly string $tokenType;
     private string $regex;
 
     private RouterInterface $router;
@@ -22,11 +21,10 @@ class AdminAccessTokenExtractor implements AccessTokenExtractorInterface
     ) {
         $this->router = $router;
 
-        $this->tokenType = $tokenType;
         $this->headerParameter = $headerParameter;
         $this->regex = sprintf(
             '/^%s([a-zA-Z0-9\-_\+~\/\.]+=*)$/',
-            '' === $this->tokenType ? '' : preg_quote($this->tokenType).'\s+'
+            '' === $tokenType ? '' : preg_quote($tokenType).'\s+'
         );
     }
 
@@ -50,10 +48,7 @@ class AdminAccessTokenExtractor implements AccessTokenExtractorInterface
     protected function isRouteSupported(Request $request): bool
     {
         $routeAdminLogin = $this->router->getRouteCollection()->get('app_admin_login');
-        if ($routeAdminLogin && $request->getPathInfo() === $routeAdminLogin->getPath()) {
-            return false;
-        }
 
-        return true;
+        return !($routeAdminLogin && $request->getPathInfo() === $routeAdminLogin->getPath());
     }
 }

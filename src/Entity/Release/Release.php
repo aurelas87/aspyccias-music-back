@@ -183,11 +183,9 @@ class Release
 
     public function removeTranslation(ReleaseTranslation $translation): static
     {
-        if ($this->translations->removeElement($translation)) {
+        if ($this->translations->removeElement($translation) && $translation->getRelease() === $this) {
             // set the owning side to null (unless already changed)
-            if ($translation->getRelease() === $this) {
-                $translation->setRelease(null);
-            }
+            $translation->setRelease(null);
         }
 
         return $this;
@@ -213,11 +211,9 @@ class Release
 
     public function removeCredit(ReleaseCredit $credit): static
     {
-        if ($this->credits->removeElement($credit)) {
+        if ($this->credits->removeElement($credit) && $credit->getRelease() === $this) {
             // set the owning side to null (unless already changed)
-            if ($credit->getRelease() === $this) {
-                $credit->setRelease(null);
-            }
+            $credit->setRelease(null);
         }
 
         return $this;
@@ -243,11 +239,9 @@ class Release
 
     public function removeLink(ReleaseLink $link): static
     {
-        if ($this->links->removeElement($link)) {
+        if ($this->links->removeElement($link) && $link->getRelease() === $this) {
             // set the owning side to null (unless already changed)
-            if ($link->getRelease() === $this) {
-                $link->setRelease(null);
-            }
+            $link->setRelease(null);
         }
 
         return $this;
@@ -273,11 +267,9 @@ class Release
 
     public function removeTrack(ReleaseTrack $track): static
     {
-        if ($this->tracks->removeElement($track)) {
+        if ($this->tracks->removeElement($track) && $track->getRelease() === $this) {
             // set the owning side to null (unless already changed)
-            if ($track->getRelease() === $this) {
-                $track->setRelease(null);
-            }
+            $track->setRelease(null);
         }
 
         return $this;

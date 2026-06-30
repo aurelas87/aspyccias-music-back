@@ -46,8 +46,8 @@ class ImageService
 
         $filePath = $this->imageHelper->getImageDirectoryPath($resourceType);
 
-        if (!file_exists($filePath)) {
-            mkdir($filePath, 0777, true);
+        if (!file_exists($filePath) && !mkdir($filePath, 0777, true) && !is_dir($filePath)) {
+            throw new \RuntimeException(sprintf('Directory "%s" was not created', $filePath));
         }
 
         $filePath = $this->getImageFilePath(
@@ -57,7 +57,7 @@ class ImageService
             ImageAction::create
         );
 
-        $handle = \fopen($filePath, 'w');
+        $handle = \fopen($filePath, 'wb');
         \fwrite($handle, $image->getContent());
         \fclose($handle);
     }
@@ -97,7 +97,7 @@ class ImageService
             }
 
             if (!$year || !$formattedDate) {
-                throw new \LogicException();
+                throw new \LogicException('Release date is invalid');
             }
 
             $filePath .= "/$year";
@@ -107,8 +107,9 @@ class ImageService
                     || $imageAction === ImageAction::move
                 )
                 && !\file_exists($filePath)
+                && !mkdir($filePath, 0777, true) && !is_dir($filePath)
             ) {
-                mkdir($filePath, 0777, true);
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $filePath));
             }
 
             $filePath .= "/$formattedDate-$resourceSlug";

@@ -82,13 +82,13 @@ class NewsService
         $news->setDate(new \DateTimeImmutable($newsDTO->date));
         $news->setSlug($newsDTO->slug);
         $news->addTranslation(
-            (new NewsTranslation())
+            new NewsTranslation()
                 ->setLocale('fr')
                 ->setTitle($newsDTO->fr->title)
                 ->setContent($newsDTO->fr->content)
         );
         $news->addTranslation(
-            (new NewsTranslation())
+            new NewsTranslation()
                 ->setLocale('en')
                 ->setTitle($newsDTO->en->title)
                 ->setContent($newsDTO->en->content)

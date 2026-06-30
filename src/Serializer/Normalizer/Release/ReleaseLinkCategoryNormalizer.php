@@ -7,9 +7,9 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ReleaseLinkCategoryNormalizer implements NormalizerInterface
 {
-    public function normalize($object, ?string $format = null, array $context = []): string
+    public function normalize($data, ?string $format = null, array $context = []): string
     {
-        return $object->name;
+        return $data->name;
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

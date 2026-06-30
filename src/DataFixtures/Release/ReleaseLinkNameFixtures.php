@@ -8,13 +8,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class ReleaseLinkNameFixtures extends Fixture
 {
-    public const YOUTUBE_LINK_NAME = 'youtube';
-    public const SPOTIFY_LINK_NAME = 'spotify';
-    public const DEEZER_LINK_NAME = 'deezer';
-    public const BANDCAMP_LINK_NAME = 'bandcamp';
-    public const APPLE_LINK_NAME = 'apple';
-    public const AMAZON_LINK_NAME = 'amazon';
-    public const ODESLI_LINK_NAME = 'odesli';
+    public const string YOUTUBE_LINK_NAME = 'youtube';
+    public const string SPOTIFY_LINK_NAME = 'spotify';
+    public const string DEEZER_LINK_NAME = 'deezer';
+    public const string BANDCAMP_LINK_NAME = 'bandcamp';
+    public const string APPLE_LINK_NAME = 'apple';
+    public const string AMAZON_LINK_NAME = 'amazon';
+    public const string ODESLI_LINK_NAME = 'odesli';
 
     public function load(ObjectManager $manager): void
     {

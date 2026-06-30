@@ -8,7 +8,7 @@ enum ReleaseType: int
     case ep = 2;
     case album = 3;
 
-    public static function tryFromName(string $typeName): ?static
+    public static function tryFromName(string $typeName): ?self
     {
         return match ($typeName) {
             self::single->name => self::single,

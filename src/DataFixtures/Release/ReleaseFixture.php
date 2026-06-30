@@ -18,11 +18,11 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ReleaseFixture extends Fixture implements DependentFixtureInterface
 {
-    public const TOTAL_SINGLES = 4;
-    public const TOTAL_EPS = 3;
-    public const TOTAL_ALBUMS = 2;
-    public const TOTAL_RELEASES = self::TOTAL_SINGLES + self::TOTAL_EPS + self::TOTAL_ALBUMS;
-    public const START_DATE = '2023-01-01T00:00:00Z';
+    public const int TOTAL_SINGLES = 4;
+    public const int TOTAL_EPS = 3;
+    public const int TOTAL_ALBUMS = 2;
+    public const int TOTAL_RELEASES = self::TOTAL_SINGLES + self::TOTAL_EPS + self::TOTAL_ALBUMS;
+    public const string START_DATE = '2023-01-01T00:00:00Z';
     private SluggerInterface $slugger;
 
     public function __construct(SluggerInterface $slugger)
@@ -33,7 +33,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
     private function addCreditsToRelease(Release $release): Release
     {
         $release->addCredit(
-            (new ReleaseCredit())
+            new ReleaseCredit()
                 ->setReleaseCreditType(
                     $this->getReference(
                         ReleaseCreditTypeFixtures::COMPOSER_CREDIT_TYPE,
@@ -45,7 +45,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addCredit(
-            (new ReleaseCredit())
+            new ReleaseCredit()
                 ->setReleaseCreditType(
                     $this->getReference(
                         ReleaseCreditTypeFixtures::PRODUCER_CREDIT_TYPE,
@@ -56,7 +56,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addCredit(
-            (new ReleaseCredit())
+            new ReleaseCredit()
                 ->setReleaseCreditType(
                     $this->getReference(
                         ReleaseCreditTypeFixtures::LYRICIST_CREDIT_TYPE,
@@ -67,7 +67,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addCredit(
-            (new ReleaseCredit())
+            new ReleaseCredit()
                 ->setReleaseCreditType(
                     $this->getReference(
                         ReleaseCreditTypeFixtures::EDITOR_CREDIT_TYPE,
@@ -78,7 +78,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addCredit(
-            (new ReleaseCredit())
+            new ReleaseCredit()
                 ->setReleaseCreditType(
                     $this->getReference(
                         ReleaseCreditTypeFixtures::VIOLINIST_CREDIT_TYPE,
@@ -89,7 +89,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addCredit(
-            (new ReleaseCredit())
+            new ReleaseCredit()
                 ->setReleaseCreditType(
                     $this->getReference(
                         ReleaseCreditTypeFixtures::VIOLINIST_CREDIT_TYPE,
@@ -100,7 +100,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addCredit(
-            (new ReleaseCredit())
+            new ReleaseCredit()
                 ->setReleaseCreditType(
                     $this->getReference(
                         ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE,
@@ -111,7 +111,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addCredit(
-            (new ReleaseCredit())
+            new ReleaseCredit()
                 ->setReleaseCreditType(
                     $this->getReference(
                         ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE,
@@ -122,7 +122,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addCredit(
-            (new ReleaseCredit())
+            new ReleaseCredit()
                 ->setReleaseCreditType(
                     $this->getReference(
                         ReleaseCreditTypeFixtures::VOICE_CREDIT_TYPE,
@@ -138,7 +138,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
     private function addLinksToRelease(Release $release): Release
     {
         $release->addLink(
-            (new ReleaseLink())
+            new ReleaseLink()
                 ->setReleaseLinkName(
                     $this->getReference(
                         ReleaseLinkNameFixtures::YOUTUBE_LINK_NAME,
@@ -150,7 +150,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addLink(
-            (new ReleaseLink())
+            new ReleaseLink()
                 ->setReleaseLinkName(
                     $this->getReference(
                         ReleaseLinkNameFixtures::SPOTIFY_LINK_NAME,
@@ -162,7 +162,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addLink(
-            (new ReleaseLink())
+            new ReleaseLink()
                 ->setReleaseLinkName(
                     $this->getReference(
                         ReleaseLinkNameFixtures::DEEZER_LINK_NAME,
@@ -174,7 +174,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addLink(
-            (new ReleaseLink())
+            new ReleaseLink()
                 ->setReleaseLinkName(
                     $this->getReference(
                         ReleaseLinkNameFixtures::BANDCAMP_LINK_NAME,
@@ -186,7 +186,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addLink(
-            (new ReleaseLink())
+            new ReleaseLink()
                 ->setReleaseLinkName(
                     $this->getReference(
                         ReleaseLinkNameFixtures::BANDCAMP_LINK_NAME,
@@ -198,7 +198,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addLink(
-            (new ReleaseLink())
+            new ReleaseLink()
                 ->setReleaseLinkName(
                     $this->getReference(
                         ReleaseLinkNameFixtures::APPLE_LINK_NAME,
@@ -210,7 +210,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addLink(
-            (new ReleaseLink())
+            new ReleaseLink()
                 ->setReleaseLinkName(
                     $this->getReference(
                         ReleaseLinkNameFixtures::AMAZON_LINK_NAME,
@@ -222,7 +222,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
         );
 
         $release->addLink(
-            (new ReleaseLink())
+            new ReleaseLink()
                 ->setReleaseLinkName(
                     $this->getReference(
                         ReleaseLinkNameFixtures::ODESLI_LINK_NAME,
@@ -264,7 +264,7 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
             $strTrackPosition = \str_pad($indexTrack, 2, '0', STR_PAD_LEFT);
 
             $release->addTrack(
-                (new ReleaseTrack())
+                new ReleaseTrack()
                     ->setTitle("Release Track $indexRelease-$strTrackPosition")
                     ->setPosition($indexTrack)
                     ->setDuration($indexTrack > 1 ? ++$duration : $duration)
@@ -289,12 +289,12 @@ class ReleaseFixture extends Fixture implements DependentFixtureInterface
             ->setTitle($releaseTitle)
             ->setArtworkBackImage(true)
             ->addTranslation(
-                (new ReleaseTranslation())
+                new ReleaseTranslation()
                     ->setLocale('fr')
                     ->setDescription("Description de la sortie $indexRelease")
             )
             ->addTranslation(
-                (new ReleaseTranslation())
+                new ReleaseTranslation()
                     ->setLocale('en')
                     ->setDescription("Release description $indexRelease")
             );

@@ -10,8 +10,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 
 class NewsFixtures extends Fixture
 {
-    public const TOTAL_NEWS = 13;
-    public const START_DATE = '2024-06-01T00:00:0Z';
+    public const int TOTAL_NEWS = 13;
+    public const string START_DATE = '2024-06-01T00:00:0Z';
     private SluggerInterface $slugger;
 
     public function __construct(SluggerInterface $slugger)
@@ -37,13 +37,13 @@ class NewsFixtures extends Fixture
             $news->setDate($newsDate)
                 ->setSlug($this->slugger->slug($englishNewsTitle)->lower())
                 ->addTranslation(
-                    (new NewsTranslation())
+                    new NewsTranslation()
                         ->setLocale('fr')
                         ->setTitle("Titre de l'actualité $indexNews")
                         ->setContent("Contenu de l'actualité $indexNews")
                 )
                 ->addTranslation(
-                    (new NewsTranslation())
+                    new NewsTranslation()
                         ->setLocale('en')
                         ->setTitle($englishNewsTitle)
                         ->setContent("News Content $indexNews")

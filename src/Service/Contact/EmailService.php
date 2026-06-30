@@ -17,7 +17,7 @@ class EmailService
         $this->aspycciasEmail = $aspycciasEmail;
     }
 
-    function sendEmail(EmailDTO $emailDTO): void
+    public function sendEmail(EmailDTO $emailDTO): void
     {
         try {
             $this->emailSender->prepareEmail($emailDTO);

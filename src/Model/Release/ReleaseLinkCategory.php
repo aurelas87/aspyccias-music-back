@@ -13,7 +13,7 @@ enum ReleaseLinkCategory: int
         return \array_column(self::cases(), 'name');
     }
 
-    public static function tryFromName(string $typeName): ?static
+    public static function tryFromName(string $typeName): ?self
     {
         return match ($typeName) {
             self::listen->name => self::listen,

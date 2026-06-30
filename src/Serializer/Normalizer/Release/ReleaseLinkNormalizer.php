@@ -6,7 +6,7 @@ use App\Entity\Release\ReleaseLink;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class ReleaseLinkNormalizer implements NormalizerInterface
+readonly class ReleaseLinkNormalizer implements NormalizerInterface
 {
     public function __construct(
         #[Autowire(service: 'serializer.normalizer.object')]
@@ -14,14 +14,14 @@ class ReleaseLinkNormalizer implements NormalizerInterface
     ) {
     }
 
-    public function normalize($object, ?string $format = null, array $context = []): array
+    public function normalize($data, ?string $format = null, array $context = []): array
     {
-        $data = $this->normalizer->normalize($object, $format, $context);
+        $normalizedData = $this->normalizer->normalize($data, $format, $context);
 
-        $data['name'] = $data['release_link_name']['link_name'];
-        unset($data['release_link_name']);
+        $normalizedData['name'] = $normalizedData['release_link_name']['link_name'];
+        unset($normalizedData['release_link_name']);
 
-        return $data;
+        return $normalizedData;
     }
 
     public function supportsNormalization($data, ?string $format = null, array $context = []): bool

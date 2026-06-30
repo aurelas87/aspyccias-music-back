@@ -138,11 +138,11 @@ class AdminReleaseController extends AbstractController
                     $release->getSlug(),
                     ReleaseImageType::front->value
                 );
-            } catch (NotFoundHttpException $e) {
+            } catch (NotFoundHttpException) {
                 // Keep empty so release update can work without a front image
             }
 
-            if ($release->getArtworkBackImage() && $releaseDTO->artworkBackImage) {
+            if ($releaseDTO->artworkBackImage && $release->getArtworkBackImage()) {
                 $oldArtworkBackImagePath = $imageService->getImageFilePath(
                     ResourceType::releases,
                     $release->getSlug(),

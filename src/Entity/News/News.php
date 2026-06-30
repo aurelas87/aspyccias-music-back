@@ -93,11 +93,9 @@ class News
 
     public function removeTranslation(NewsTranslation $translation): static
     {
-        if ($this->translations->removeElement($translation)) {
+        if ($this->translations->removeElement($translation) && $translation->getNews() === $this) {
             // set the owning side to null (unless already changed)
-            if ($translation->getNews() === $this) {
-                $translation->setNews(null);
-            }
+            $translation->setNews(null);
         }
 
         return $this;

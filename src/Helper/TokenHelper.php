@@ -6,8 +6,8 @@ use App\Entity\User\UserToken;
 
 class TokenHelper
 {
-    public const ACCESS_TOKEN_LIVE_TIME = 3600; // 1 hour
-    public const REFRESH_TOKEN_LIVE_TIME = self::ACCESS_TOKEN_LIVE_TIME + 1800; // 1 hour and 30 minutes
+    public const int ACCESS_TOKEN_LIVE_TIME = 3600; // 1 hour
+    public const int REFRESH_TOKEN_LIVE_TIME = self::ACCESS_TOKEN_LIVE_TIME + 1800; // 1 hour and 30 minutes
 
     public function isAccessTokenValid(?UserToken $token): bool
     {
@@ -36,13 +36,13 @@ class TokenHelper
 
             $userToken->setAccessToken(\bin2hex(\random_bytes(64)));
             $userToken->setAccessTokenExpirationDate(
-                (new \DateTimeImmutable())
+                new \DateTimeImmutable()
                     ->add(new \DateInterval('PT'.self::ACCESS_TOKEN_LIVE_TIME.'S'))
             );
 
             $userToken->setRefreshToken(\bin2hex(\random_bytes(64)));
             $userToken->setRefreshTokenExpirationDate(
-                (new \DateTimeImmutable())
+                new \DateTimeImmutable()
                     ->add(new \DateInterval('PT'.self::REFRESH_TOKEN_LIVE_TIME.'S'))
             );
 

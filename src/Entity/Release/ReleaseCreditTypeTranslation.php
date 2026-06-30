@@ -43,7 +43,7 @@ class ReleaseCreditTypeTranslation
         return $this->locale;
     }
 
-    public function setLocale(string $locale): ReleaseCreditTypeTranslation
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
 

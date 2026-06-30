@@ -9,24 +9,24 @@ use Doctrine\Persistence\ObjectManager;
 
 class ReleaseCreditTypeFixtures extends Fixture
 {
-    public const COMPOSER_CREDIT_TYPE = 'composer';
-    public const PRODUCER_CREDIT_TYPE = 'producer';
-    public const LYRICIST_CREDIT_TYPE = 'lyricist';
-    public const EDITOR_CREDIT_TYPE = 'editor';
-    public const VIOLINIST_CREDIT_TYPE = 'violinist';
-    public const VOICE_CREDIT_TYPE = 'voice';
+    public const string COMPOSER_CREDIT_TYPE = 'composer';
+    public const string PRODUCER_CREDIT_TYPE = 'producer';
+    public const string LYRICIST_CREDIT_TYPE = 'lyricist';
+    public const string EDITOR_CREDIT_TYPE = 'editor';
+    public const string VIOLINIST_CREDIT_TYPE = 'violinist';
+    public const string VOICE_CREDIT_TYPE = 'voice';
 
     public function load(ObjectManager $manager): void
     {
         $composerType = new ReleaseCreditType();
         $composerType->setCreditNameKey(self::COMPOSER_CREDIT_TYPE);
         $composerType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('en')
                 ->setCreditName('Composer')
         );
         $composerType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('fr')
                 ->setCreditName('Compositeur')
         );
@@ -34,12 +34,12 @@ class ReleaseCreditTypeFixtures extends Fixture
         $producerType = new ReleaseCreditType();
         $producerType->setCreditNameKey(self::PRODUCER_CREDIT_TYPE);
         $producerType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('en')
                 ->setCreditName('Producer')
         );
         $producerType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('fr')
                 ->setCreditName('Producteur')
         );
@@ -47,12 +47,12 @@ class ReleaseCreditTypeFixtures extends Fixture
         $lyricistType = new ReleaseCreditType();
         $lyricistType->setCreditNameKey(self::LYRICIST_CREDIT_TYPE);
         $lyricistType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('en')
                 ->setCreditName('Lyricist')
         );
         $lyricistType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('fr')
                 ->setCreditName('Parolier')
         );
@@ -60,12 +60,12 @@ class ReleaseCreditTypeFixtures extends Fixture
         $editorType = new ReleaseCreditType();
         $editorType->setCreditNameKey(self::EDITOR_CREDIT_TYPE);
         $editorType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('en')
                 ->setCreditName('Editor')
         );
         $editorType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('fr')
                 ->setCreditName('Éditeur')
         );
@@ -73,12 +73,12 @@ class ReleaseCreditTypeFixtures extends Fixture
         $violinistType = new ReleaseCreditType();
         $violinistType->setCreditNameKey(self::VIOLINIST_CREDIT_TYPE);
         $violinistType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('en')
                 ->setCreditName('Violinist')
         );
         $violinistType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('fr')
                 ->setCreditName('Violoniste')
         );
@@ -86,12 +86,12 @@ class ReleaseCreditTypeFixtures extends Fixture
         $voiceType = new ReleaseCreditType();
         $voiceType->setCreditNameKey(self::VOICE_CREDIT_TYPE);
         $voiceType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('en')
                 ->setCreditName('Voice')
         );
         $voiceType->addTranslation(
-            (new ReleaseCreditTypeTranslation())
+            new ReleaseCreditTypeTranslation()
                 ->setLocale('fr')
                 ->setCreditName('Chant')
         );
